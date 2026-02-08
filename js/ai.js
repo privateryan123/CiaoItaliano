@@ -29,142 +29,88 @@ const AI = {
   },
 
   // ==========================================
-  // OPENAI - Generate Sentences
+  // OPENAI - Generate Sentences (via Backend)
   // ==========================================
   async generateSentences(count, level, topics) {
-    const apiKey = Store.getSettings().openaiKey;
-    if (!apiKey) return null;
-
-    const topicStr = topics.length > 0 ? topics.join(', ') : 'Alltag, Reisen, Kultur';
-    const prompt = `Generiere genau ${count} praktische, alltagstaugliche italienische Sätze für einen deutschen Muttersprachler auf dem Niveau ${level}.
-
-Themen: ${topicStr}
-
-Für jeden Satz liefere:
-- "italian": den italienischen Satz
-- "german": die deutsche Übersetzung
-- "explanation": eine kurze Erklärung (Grammatik, Nuance oder Verwendung) auf Deutsch
-- "keywords": Array mit 1-3 Schlüsselwörtern aus dem italienischen Satz
-
-Antworte NUR mit einem JSON-Array, kein zusätzlicher Text. Beispiel:
-[{"italian":"...","german":"...","explanation":"...","keywords":["..."]}]
-
-Die Sätze sollen natürlich, warm und nützlich klingen — nicht wie ein Lehrbuch.`;
-
-    return this._callOpenAI(apiKey, prompt);
-  },
-
-  // ==========================================
-  // OPENAI - Generate Story
-  // ==========================================
-  async generateStory(level, topics) {
-    const apiKey = Store.getSettings().openaiKey;
-    if (!apiKey) return null;
-
-    const topicStr = topics.length > 0 ? topics[Math.floor(Math.random() * topics.length)] : 'Alltag';
-    const prompt = `Schreibe eine ausführliche, immersive italienische Geschichte zum Thema "${topicStr}" für Lernende auf dem Niveau ${level}.
-
-Die Geschichte soll 16-20 Sätze haben, aufgeteilt in 4-5 Seiten (je 4 Sätze pro Seite). Die Geschichte soll einen echten Handlungsbogen haben — mit Einleitung, Höhepunkt und einem befriedigenden Ende. Beschreibe Szenen lebendig mit Details, Dialogen und Gefühlen.
-
-Liefere das Ergebnis als JSON-Objekt:
-{
-  "title": "Titel der Geschichte auf Italienisch",
-  "topic": "${topicStr}",
-  "level": "${level}",
-  "readingTime": "5 min",
-  "pages": [
-    [
-      {"italian":"...","german":"...","note":"kurze Erklärung oder Grammatikhinweis auf Deutsch"},
-      ...
-    ],
-    ...
-  ]
-}
-
-Antworte NUR mit dem JSON-Objekt. Die Geschichte soll menschlich, warm und realistisch sein — wie ein Kapitel aus einem kleinen Roman.`;
-
-    return this._callOpenAI(apiKey, prompt);
-  },
-
-  // ==========================================
-  // OPENAI - Generate News
-  // ==========================================
-  async generateNews(level) {
-    const apiKey = Store.getSettings().openaiKey;
-    if (!apiKey) return null;
-
-    const prompt = `Erstelle 3 ausführliche, lernfreundliche Nachrichtenartikel-Zusammenfassungen auf Italienisch, geeignet für Lernende auf dem Niveau ${level}.
-Die Nachrichten sollen aktuelle, realistische Themen behandeln (Kultur, Reisen, Gesellschaft, Technologie, etc.).
-
-Jede Zusammenfassung soll 5-7 Sätze lang sein — genug um den Artikel wirklich zu verstehen und verschiedene Vokabeln und Strukturen zu lernen. Verwende abwechslungsreiche Satzstrukturen.
-
-Liefere als JSON-Array:
-[{
-  "category": "Thema auf Deutsch",
-  "headline": "Überschrift auf Deutsch",
-  "italianSummary": "Ausführliche Zusammenfassung auf Italienisch (5-7 Sätze)",
-  "german": "Deutsche Übersetzung der Zusammenfassung",
-  "source": "https://www.ansa.it",
-  "sourceName": "ANSA"
-}]
-
-Antworte NUR mit dem JSON-Array.`;
-
-    return this._callOpenAI(apiKey, prompt);
-  },
-
-  // ==========================================
-  // OPENAI — Low-level call
-  // ==========================================
-  async _callOpenAI(apiKey, prompt) {
     try {
-      const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      const res = await fetch('/api/sentences', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: 'gpt-4o-mini',
-          messages: [
-            { role: 'system', content: 'Du bist ein Italienisch-Lernassistent für deutsche Muttersprachler. Antworte immer nur mit validem JSON — kein Markdown, kein ```.' },
-            { role: 'user', content: prompt }
-          ],
-          temperature: 0.8,
-          max_tokens: 4000
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ count, level, topics })
       });
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        console.error('OpenAI error:', res.status, err);
-        if (res.status === 401) throw new Error('API-Schlüssel ungültig');
+        console.error('Sentences API error:', res.status, err);
         if (res.status === 429) throw new Error('Rate-Limit erreicht. Bitte warte kurz.');
-        throw new Error(`OpenAI Fehler: ${res.status}`);
+        throw new Error(`API Fehler: ${res.status}`);
       }
 
       const data = await res.json();
-      const raw = data.choices?.[0]?.message?.content?.trim();
-      if (!raw) throw new Error('Leere Antwort von OpenAI');
-
-      // Parse JSON — strip potential markdown fences
-      const cleaned = raw.replace(/^```json?\s*\n?/i, '').replace(/\n?```\s*$/i, '').trim();
-      return JSON.parse(cleaned);
+      return data;
     } catch (err) {
-      console.error('AI generation error:', err);
+      console.error('Sentence generation error:', err);
       throw err;
     }
   },
 
   // ==========================================
-  // WORDREFERENCE URL
+  // OPENAI - Generate Story (via Backend)
   // ==========================================
-  getWordReferenceUrl(word, direction = 'iten') {
-    // Supported: iten (IT→EN, most complete), enit, itde, deit
-    const validDirs = ['iten', 'enit', 'itde', 'deit'];
-    const dir = validDirs.includes(direction) ? direction : 'iten';
-    // Don't use encodeURIComponent — WordReference handles raw UTF-8 paths.
-    // The browser will percent-encode as needed when navigating.
-    return `https://www.wordreference.com/${dir}/${word}`;
+  async generateStory(level, topics) {
+    try {
+      const res = await fetch('/api/story', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ level, topics })
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        console.error('Story API error:', res.status, err);
+        if (res.status === 429) throw new Error('Rate-Limit erreicht. Bitte warte kurz.');
+        throw new Error(`API Fehler: ${res.status}`);
+      }
+
+      const data = await res.json();
+      return data;
+    } catch (err) {
+      console.error('Story generation error:', err);
+      throw err;
+    }
+  },
+
+  // ==========================================
+  // OPENAI - Generate News (via Backend)
+  // ==========================================
+  async generateNews(level) {
+    try {
+      const res = await fetch('/api/news', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ level })
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        console.error('News API error:', res.status, err);
+        if (res.status === 429) throw new Error('Rate-Limit erreicht. Bitte warte kurz.');
+        throw new Error(`API Fehler: ${res.status}`);
+      }
+
+      const data = await res.json();
+      return data;
+    } catch (err) {
+      console.error('News generation error:', err);
+      throw err;
+    }
+  },
+
+  // ==========================================
+  // WORDREFERENCE URL (IT-GER only)
+  // ==========================================
+  getWordReferenceUrl(word, direction = 'itde') {
+    // Only support IT-GER dictionary
+    return `https://www.wordreference.com/itde/${word}`;
   }
 };

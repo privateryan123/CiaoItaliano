@@ -35,8 +35,6 @@ const Views = {
     console.log('Displayed sentences:', displayed);
     console.log('Displayed count:', displayed.length);
 
-    const hasApiKey = !!settings.openaiKey;
-
     let html = `
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-md);">
         <div>
@@ -46,19 +44,17 @@ const Views = {
         <span class="section-badge">${displayed.length} / ${sentenceCount}</span>
       </div>`;
 
-    if (hasApiKey) {
-      html += `
-        <button class="ai-generate-btn" onclick="App.aiGenerateSentences()" id="btn-ai-sentences">
-          <span class="ai-btn-icon">✨</span> Neue Sätze mit AI generieren
-        </button>`;
-    }
+    html += `
+      <button class="ai-generate-btn" onclick="App.aiGenerateSentences()" id="btn-ai-sentences">
+        <span class="ai-btn-icon">✨</span> Neue Sätze mit AI generieren
+      </button>`;
 
     if (displayed.length === 0) {
       html += `
         <div class="vocab-empty">
           <div class="vocab-empty-icon">✏️</div>
           <div class="vocab-empty-text">
-            ${hasApiKey ? 'Tippe auf den Button oben, um neue Sätze zu generieren.' : 'Kein Inhalt für heute. Füge einen OpenAI API-Schlüssel unter Mehr → Einstellungen hinzu, um täglich neue Sätze zu generieren.'}
+            Tippe auf den Button oben, um neue Sätze zu generieren.
           </div>
         </div>`;
     } else {
@@ -126,8 +122,6 @@ const Views = {
     const dateInfo = formatDateDisplay(dateStr);
 
     const storyData = story || (content ? content.story : null);
-    const hasApiKey = !!settings.openaiKey;
-
     let html = `
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-md);">
         <div>
@@ -136,19 +130,17 @@ const Views = {
         </div>
       </div>`;
 
-    if (hasApiKey) {
-      html += `
-        <button class="ai-generate-btn" onclick="App.aiGenerateStory()" id="btn-ai-story">
-          <span class="ai-btn-icon">✨</span> Neue Geschichte mit AI generieren
-        </button>`;
-    }
+    html += `
+      <button class="ai-generate-btn" onclick="App.aiGenerateStory()" id="btn-ai-story">
+        <span class="ai-btn-icon">✨</span> Neue Geschichte mit AI generieren
+      </button>`;
 
     if (!storyData) {
       html += `
         <div class="vocab-empty">
           <div class="vocab-empty-icon">📖</div>
           <div class="vocab-empty-text">
-            ${hasApiKey ? 'Tippe auf den Button oben, um eine neue Geschichte zu generieren.' : 'Kein Inhalt für heute. Füge einen OpenAI API-Schlüssel unter Mehr → Einstellungen hinzu.'}
+            Tippe auf den Button oben, um eine neue Geschichte zu generieren.
           </div>
         </div>`;
     } else {
@@ -254,7 +246,6 @@ const Views = {
     const settings = Store.getSettings();
 
     const newsList = news || (content ? content.news : []);
-    const hasApiKey = !!settings.openaiKey;
 
     let html = `
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-md);">
@@ -265,19 +256,17 @@ const Views = {
         <span class="section-badge">${newsList.length} Artikel</span>
       </div>`;
 
-    if (hasApiKey) {
-      html += `
-        <button class="ai-generate-btn" onclick="App.aiGenerateNews()" id="btn-ai-news">
-          <span class="ai-btn-icon">✨</span> Neue Nachrichten mit AI generieren
-        </button>`;
-    }
+    html += `
+      <button class="ai-generate-btn" onclick="App.aiGenerateNews()" id="btn-ai-news">
+        <span class="ai-btn-icon">✨</span> Neue Nachrichten mit AI generieren
+      </button>`;
 
     if (newsList.length === 0) {
       html += `
         <div class="vocab-empty">
           <div class="vocab-empty-icon">🗞️</div>
           <div class="vocab-empty-text">
-            ${hasApiKey ? 'Tippe oben, um aktuelle Nachrichten zu generieren.' : 'Kein Inhalt für heute verfügbar.'}
+            Tippe oben, um aktuelle Nachrichten zu generieren.
           </div>
         </div>`;
     } else {
@@ -371,11 +360,8 @@ const Views = {
           <input type="text" class="translator-input" id="wr-input" placeholder="Italienisches Wort eingeben…" style="height: auto; padding: 12px 40px 12px 16px;">
         </div>
         <div class="wr-buttons">
-          <button class="translator-btn wr-btn" onclick="App.lookupWordReference('iten')">
-            🇮🇹→🇬🇧 Nachschlagen
-          </button>
-          <button class="translator-btn wr-btn secondary" onclick="App.lookupWordReference('itde')">
-            🇮🇹→🇩🇪 Deutsch
+          <button class="translator-btn wr-btn" onclick="App.lookupWordReference()">
+            🇮🇹→🇩🇪 Nachschlagen
           </button>
         </div>
       </div>
@@ -417,7 +403,7 @@ const Views = {
     wrInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
-        App.lookupWordReference('iten');
+        App.lookupWordReference();
       }
     });
   },
@@ -735,29 +721,6 @@ const Views = {
         <div class="settings-item" style="border-radius: var(--radius-md);" onclick="App.toggleExplanations()">
           <span class="settings-item-label">Erklärungen anzeigen</span>
           <button class="toggle ${settings.showExplanations ? 'active' : ''}" id="toggle-explanations"></button>
-        </div>
-      </div>
-
-      <!-- OpenAI API Key -->
-      <div class="settings-group">
-        <div class="settings-group-title">AI-Inhalte (OpenAI)</div>
-        <div class="settings-item" style="border-radius: var(--radius-md) var(--radius-md) 0 0; flex-direction: column; align-items: stretch; gap: var(--space-sm);">
-          <span class="settings-item-label">OpenAI API-Schlüssel</span>
-          <p style="font-size: 0.78rem; color: var(--text-tertiary); line-height: 1.4;">
-            Für AI-generierte Sätze, Geschichten & Nachrichten. Dein Schlüssel bleibt lokal auf deinem Gerät.
-          </p>
-          <div class="translator-input-wrap">
-            <input type="password" class="translator-input" id="openai-key-input"
-              placeholder="sk-..." value="${settings.openaiKey || ''}"
-              style="height: auto; padding: 12px 16px; font-size: 0.85rem;">
-          </div>
-          <button class="translator-btn" onclick="App.saveApiKey()" style="margin-top: 4px;">
-            Schlüssel speichern
-          </button>
-        </div>
-        <div class="settings-item" style="border-radius: 0 0 var(--radius-md) var(--radius-md);">
-          <span class="settings-item-label">Status</span>
-          <span class="settings-item-value">${settings.openaiKey ? '✅ Konfiguriert' : '⚠️ Nicht gesetzt'}</span>
         </div>
       </div>
 

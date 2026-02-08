@@ -199,11 +199,6 @@ const App = {
     if (!btn) return;
     
     const settings = Store.getSettings();
-    if (!settings.openaiKey) {
-      this.showToast('⚙️ Bitte füge einen OpenAI API-Schlüssel in den Einstellungen hinzu.');
-      this.switchView('settings', true);
-      return;
-    }
     
     btn.disabled = true;
     btn.innerHTML = '<span class="ai-spinner"></span> Sätze werden generiert…';
@@ -240,11 +235,6 @@ const App = {
     if (!btn) return;
     
     const settings = Store.getSettings();
-    if (!settings.openaiKey) {
-      this.showToast('⚙️ Bitte füge einen OpenAI API-Schlüssel in den Einstellungen hinzu.');
-      this.switchView('settings', true);
-      return;
-    }
     
     btn.disabled = true;
     btn.innerHTML = '<span class="ai-spinner"></span> Geschichte wird generiert…';
@@ -281,11 +271,6 @@ const App = {
     if (!btn) return;
     
     const settings = Store.getSettings();
-    if (!settings.openaiKey) {
-      this.showToast('⚙️ Bitte füge einen OpenAI API-Schlüssel in den Einstellungen hinzu.');
-      this.switchView('settings', true);
-      return;
-    }
     
     btn.disabled = true;
     btn.innerHTML = '<span class="ai-spinner"></span> Nachrichten werden generiert…';
@@ -383,14 +368,14 @@ const App = {
   // ==========================================
   // WORDREFERENCE
   // ==========================================
-  lookupWordReference(direction) {
+  lookupWordReference() {
     const input = document.getElementById('wr-input');
     const word = (input.value || '').trim();
     if (!word) {
       this.showToast('Bitte ein Wort eingeben');
       return;
     }
-    const url = AI.getWordReferenceUrl(word, direction);
+    const url = AI.getWordReferenceUrl(word);
     window.open(url, '_blank');
   },
 
@@ -575,16 +560,6 @@ const App = {
     Views.renderSettings();
     const labels = { light: 'Hell', dark: 'Dunkel', auto: 'Automatisch' };
     this.showToast(`Design: ${labels[theme]}`);
-  },
-
-  saveApiKey() {
-    const input = document.getElementById('openai-key-input');
-    const key = (input.value || '').trim();
-    const settings = Store.getSettings();
-    settings.openaiKey = key;
-    Store.saveSettings(settings);
-    Views.renderSettings();
-    this.showToast(key ? 'API-Schlüssel gespeichert ✅' : 'API-Schlüssel entfernt');
   },
 
   // ==========================================
