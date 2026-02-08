@@ -440,14 +440,6 @@ const Views = {
       <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-lg);">Mehr</h2>
 
       <div class="more-menu">
-        <div class="library-item" onclick="App.switchSubView('vocabulary')">
-          <div class="more-menu-icon">💬</div>
-          <div class="library-item-content">
-            <div class="library-item-title">Vokabeln</div>
-            <div class="library-item-preview">${vocab.words.length} Wörter · ${vocab.sentences.length} Sätze</div>
-          </div>
-          <div class="library-item-arrow">›</div>
-        </div>
         <div class="library-item" onclick="App.switchSubView('library')">
           <div class="more-menu-icon">📅</div>
           <div class="library-item-content">
@@ -609,7 +601,6 @@ const Views = {
     const vocab = Store.getVocabulary();
 
     let html = `
-      <button class="back-btn" onclick="App.switchView('more', true)">← Zurück</button>
       <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-lg);">Vokabeln</h2>
       <div class="vocab-tabs">
         <button class="vocab-tab ${tab === 'sentences' ? 'active' : ''}" onclick="App.vocabTab('sentences')">Sätze (${vocab.sentences.length})</button>
