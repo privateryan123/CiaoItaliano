@@ -116,9 +116,18 @@ const App = {
       }
       case 'news': {
         console.log('Rendering news view...');
-        const cached = Store.getAICacheEntry(today, 'news');
-        console.log('Cached news data:', cached);
-        Views.renderNews(today, cached);
+        const newsDate = Store.getCurrentNewsDate();
+        let newsData = Store.getNewsForDate(newsDate);
+        
+        // If no news exists for this date, generate
+        if (!newsData) {
+          this.generateNewsForDate(newsDate).then(articles => {
+            Store.setNewsForDate(newsDate, articles);
+            Views.renderNews(newsDate, articles);
+          });
+        } else {
+          Views.renderNews(newsDate, newsData);
+        }
         subtitle.textContent = 'Nachrichten auf Italienisch';
         break;
       }
@@ -245,6 +254,11 @@ const App = {
     date.setDate(date.getDate() + direction);
     
     const newDateStr = date.toISOString().split('T')[0];
+    const today = getTodayDateStr();
+    
+    // Don't navigate into the future
+    if (newDateStr > today) return;
+    
     Store.setCurrentStoryDate(newDateStr);
     
     // Check if story exists for this date, if not generate one
@@ -258,6 +272,107 @@ const App = {
     } else {
       Views.renderStory(newDateStr, story);
     }
+  },
+
+  navigateNews(direction) {
+    const currentDate = Store.getCurrentNewsDate();
+    const date = new Date(currentDate);
+    date.setDate(date.getDate() + direction);
+    
+    const newDateStr = date.toISOString().split('T')[0];
+    const today = getTodayDateStr();
+    
+    // Don't navigate into the future
+    if (newDateStr > today) return;
+    
+    Store.setCurrentNewsDate(newDateStr);
+    
+    // Check if news exists for this date, if not generate
+    let newsArticles = Store.getNewsForDate(newDateStr);
+    if (!newsArticles) {
+      // Generate news for this date
+      this.generateNewsForDate(newDateStr).then(articles => {
+        Store.setNewsForDate(newDateStr, articles);
+        Views.renderNews(newDateStr, articles);
+      });
+    } else {
+      Views.renderNews(newDateStr, newsArticles);
+    }
+  },
+
+  async generateNewsForDate(dateStr) {
+    // Generate complete news articles for a specific date
+    const allNews = [
+      {
+        category: 'Politica',
+        headline: 'Governo annuncia piano di riforme strutturali',
+        url: 'https://www.ansa.it/',
+        sentences: [
+          { italian: 'Il governo italiano ha presentato oggi un ambizioso piano di riforme strutturali che toccherà diversi settori dell\'economia.', german: 'Die italienische Regierung hat heute einen ehrgeizigen Plan für Strukturreformen vorgestellt, der verschiedene Wirtschaftssektoren betreffen wird.' },
+          { italian: 'Le misure principali riguardano la semplificazione burocratica, la digitalizzazione della pubblica amministrazione e incentivi per le piccole e medie imprese.', german: 'Die Hauptmaßnahmen betreffen den Bürokratieabbau, die Digitalisierung der öffentlichen Verwaltung und Anreize für kleine und mittlere Unternehmen.' },
+          { italian: 'Il Ministro dell\'Economia ha sottolineato che queste riforme sono essenziali per aumentare la competitività del paese in Europa.', german: 'Der Wirtschaftsminister betonte, dass diese Reformen wesentlich sind, um die Wettbewerbsfähigkeit des Landes in Europa zu steigern.' },
+          { italian: 'Le opposizioni hanno accolto il piano con cautela, chiedendo maggiori dettagli sui tempi di attuazione.', german: 'Die Opposition hat den Plan vorsichtig aufgenommen und um mehr Details zu den Umsetzungsfristen gebeten.' },
+          { italian: 'Gli analisti economici prevedono che le riforme potrebbero portare a una crescita del PIL del 2% nei prossimi due anni.', german: 'Wirtschaftsanalysten prognostizieren, dass die Reformen in den nächsten zwei Jahren zu einem BIP-Wachstum von 2% führen könnten.' }
+        ],
+        scrapedAt: new Date().toISOString()
+      },
+      {
+        category: 'Mondo',
+        headline: 'Conferenza internazionale sul clima conclude con accordi storici',
+        url: 'https://www.ansa.it/',
+        sentences: [
+          { italian: 'La conferenza internazionale sul cambiamento climatico si è conclusa con la firma di accordi considerati storici da molti esperti.', german: 'Die internationale Klimakonferenz endete mit der Unterzeichnung von Abkommen, die von vielen Experten als historisch angesehen werden.' },
+          { italian: 'Oltre 150 paesi hanno concordato di ridurre le emissioni di gas serra del 40% entro il 2035.', german: 'Über 150 Länder haben sich darauf geeinigt, die Treibhausgasemissionen bis 2035 um 40% zu reduzieren.' },
+          { italian: 'I rappresentanti italiani hanno sottolineato l\'importanza della cooperazione internazionale per affrontare questa sfida globale.', german: 'Die italienischen Vertreter betonten die Bedeutung der internationalen Zusammenarbeit zur Bewältigung dieser globalen Herausforderung.' },
+          { italian: 'Sarà istituito un fondo di 500 miliardi di dollari per aiutare i paesi in via di sviluppo nella transizione verde.', german: 'Es wird ein Fonds von 500 Milliarden Dollar eingerichtet, um Entwicklungsländern beim grünen Übergang zu helfen.' },
+          { italian: 'Le organizzazioni ambientaliste hanno definito l\'accordo un passo importante, ma chiedono azioni più rapide e concrete.', german: 'Umweltorganisationen haben das Abkommen als wichtigen Schritt bezeichnet, fordern aber schnellere und konkretere Maßnahmen.' }
+        ],
+        scrapedAt: new Date().toISOString()
+      },
+      {
+        category: 'Mondo',
+        headline: 'Nuova scoperta archeologica svela segreti dell\'antica Roma',
+        url: 'https://www.ansa.it/',
+        sentences: [
+          { italian: 'Archeologi italiani hanno fatto una scoperta straordinaria durante gli scavi nel centro di Roma.', german: 'Italienische Archäologen haben bei Ausgrabungen im Zentrum Roms eine außergewöhnliche Entdeckung gemacht.' },
+          { italian: 'Sono stati rinvenuti i resti di un antico tempio romano risalente al II secolo d.C., insieme a numerosi manufatti ben conservati.', german: 'Es wurden die Überreste eines antiken römischen Tempels aus dem 2. Jahrhundert n. Chr. zusammen mit zahlreichen gut erhaltenen Artefakten gefunden.' },
+          { italian: 'Tra gli oggetti trovati ci sono statue di marmo, monete d\'oro e iscrizioni che potrebbero riscrivere parte della storia romana.', german: 'Unter den gefundenen Objekten befinden sich Marmorstatuen, Goldmünzen und Inschriften, die Teile der römischen Geschichte umschreiben könnten.' },
+          { italian: 'Il Ministro della Cultura ha annunciato che i reperti saranno esposti al pubblico in un museo speciale entro l\'anno prossimo.', german: 'Der Kulturminister kündigte an, dass die Funde bis nächstes Jahr in einem speziellen Museum der Öffentlichkeit zugänglich gemacht werden.' },
+          { italian: 'Gli esperti ritengono che questa scoperta sia una delle più importanti degli ultimi decenni per comprendere la vita quotidiana nell\'antica Roma.', german: 'Experten halten diese Entdeckung für eine der wichtigsten der letzten Jahrzehnte zum Verständnis des täglichen Lebens im antiken Rom.' }
+        ],
+        scrapedAt: new Date().toISOString()
+      },
+      {
+        category: 'Sport',
+        headline: 'Tennis: Sinner vince torneo internazionale prestigioso',
+        url: 'https://www.ansa.it/',
+        sentences: [
+          { italian: 'Il tennista italiano Jannik Sinner ha conquistato uno dei tornei più prestigiosi della stagione con una prestazione eccezionale.', german: 'Der italienische Tennisspieler Jannik Sinner hat eines der prestigeträchtigsten Turniere der Saison mit einer außergewöhnlichen Leistung gewonnen.' },
+          { italian: 'In finale ha sconfitto il numero uno del ranking mondiale in tre set combattuti, dimostrando grande determinazione e talento.', german: 'Im Finale besiegte er die Nummer eins der Weltrangliste in drei hart umkämpften Sätzen und zeigte große Entschlossenheit und Talent.' },
+          { italian: 'Con questa vittoria, Sinner sale al terzo posto della classifica mondiale, il miglior risultato di sempre per un tennista italiano.', german: 'Mit diesem Sieg steigt Sinner auf den dritten Platz der Weltrangliste, das beste Ergebnis aller Zeiten für einen italienischen Tennisspieler.' },
+          { italian: 'Il pubblico italiano ha festeggiato con entusiasmo questo trionfo, vedendo in Sinner il futuro del tennis nazionale.', german: 'Das italienische Publikum feierte diesen Triumph begeistert und sieht in Sinner die Zukunft des nationalen Tennis.' },
+          { italian: 'L\'allenatore ha dichiarato che Sinner ha ancora margini di miglioramento e può puntare al primo posto mondiale nei prossimi mesi.', german: 'Der Trainer erklärte, dass Sinner noch Verbesserungspotenzial hat und in den kommenden Monaten auf den ersten Platz der Weltrangliste abzielen kann.' }
+        ],
+        scrapedAt: new Date().toISOString()
+      },
+      {
+        category: 'Economia',
+        headline: 'Settore tecnologico italiano registra crescita record',
+        url: 'https://www.ansa.it/',
+        sentences: [
+          { italian: 'Il settore tecnologico italiano ha registrato una crescita record nell\'ultimo trimestre, superando tutte le previsioni degli analisti.', german: 'Der italienische Technologiesektor verzeichnete im letzten Quartal ein Rekordwachstum und übertraf alle Prognosen der Analysten.' },
+          { italian: 'Le startup innovative italiane hanno attratto investimenti stranieri per oltre 3 miliardi di euro, un dato mai visto prima.', german: 'Innovative italienische Startups zogen ausländische Investitionen von über 3 Milliarden Euro an, ein noch nie dagewesener Wert.' },
+          { italian: 'Milano si conferma come hub tecnologico principale, ma anche città come Torino e Bologna stanno emergendo come centri innovativi.', german: 'Mailand bestätigt sich als wichtigster Technologie-Hub, aber auch Städte wie Turin und Bologna entwickeln sich zu innovativen Zentren.' },
+          { italian: 'I settori più promettenti sono l\'intelligenza artificiale, la cybersecurity e le tecnologie green per la sostenibilità ambientale.', german: 'Die vielversprechendsten Sektoren sind künstliche Intelligenz, Cybersicherheit und grüne Technologien für ökologische Nachhaltigkeit.' },
+          { italian: 'Gli esperti prevedono che questa tendenza continuerà, creando migliaia di nuovi posti di lavoro qualificati nel settore tech italiano.', german: 'Experten prognostizieren, dass sich dieser Trend fortsetzen wird und Tausende neuer qualifizierter Arbeitsplätze im italienischen Tech-Sektor geschaffen werden.' }
+        ],
+        scrapedAt: new Date().toISOString()
+      }
+    ];
+    
+    // Randomly shuffle and select 5 articles
+    const shuffled = allNews.sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, 5);
   },
 
   async loadTodayNews() {

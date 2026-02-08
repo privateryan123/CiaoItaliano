@@ -140,6 +140,38 @@ const Store = {
     }
   },
 
+  // --- News Archive ---
+  CURRENT_NEWS_DATE_KEY: 'current_news_date',
+  NEWS_ARCHIVE_KEY: 'news_archive',
+
+  getCurrentNewsDate() {
+    return localStorage.getItem(this.CURRENT_NEWS_DATE_KEY) || getTodayDateStr();
+  },
+
+  setCurrentNewsDate(dateStr) {
+    localStorage.setItem(this.CURRENT_NEWS_DATE_KEY, dateStr);
+  },
+
+  getNewsForDate(dateStr) {
+    const archive = this.getNewsArchive();
+    return archive[dateStr] || null;
+  },
+
+  setNewsForDate(dateStr, newsArticles) {
+    const archive = this.getNewsArchive();
+    archive[dateStr] = newsArticles;
+    localStorage.setItem(this.NEWS_ARCHIVE_KEY, JSON.stringify(archive));
+  },
+
+  getNewsArchive() {
+    try {
+      const data = localStorage.getItem(this.NEWS_ARCHIVE_KEY);
+      return data ? JSON.parse(data) : {};
+    } catch (e) {
+      return {};
+    }
+  },
+
   // --- Theme ---
   getTheme() {
     return localStorage.getItem(this.THEME_KEY) || 'auto';

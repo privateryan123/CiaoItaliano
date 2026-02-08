@@ -221,32 +221,42 @@ const Views = {
   // ==========================================
   renderNews(dateStr, news) {
     const container = document.getElementById('news-content');
+    
+    // Get or create news for this date
+    let newsData = news;
+    if (!newsData) {
+      const cachedNews = Store.getNewsForDate(dateStr);
+      if (cachedNews) {
+        newsData = cachedNews;
+      }
+    }
+    
     const dateInfo = formatDateDisplay(dateStr);
-
-    // Check if we have scraped news for today
-    const scrapedNews = Store.getScrapedNews(dateStr);
-    const newsList = scrapedNews || (news || []);
+    const newsList = newsData || [];
+    const today = getTodayDateStr();
+    const canGoForward = dateStr < today;
 
     let html = `
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-md);">
-        <div>
-          <h2 style="font-family: var(--font-serif); font-size: 1.3rem;">Nachrichten aus Italien</h2>
-          <p style="color: var(--text-tertiary); font-size: 0.82rem; margin-top: 2px;">${dateInfo.full}</p>
+      <div class="story-nav-header">
+        <button class="story-nav-btn" onclick="App.navigateNews(-1)" title="Vorheriger Tag">
+          <span>←</span>
+        </button>
+        <div style="text-align: center; flex: 1;">
+          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">Nachrichten aus Italien</h2>
+          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;">${dateInfo.full}</p>
         </div>
-        <span class="section-badge">${newsList.length} Artikel</span>
+        <button class="story-nav-btn" onclick="App.navigateNews(1)" title="Nächster Tag" ${!canGoForward ? 'disabled' : ''}>
+          <span>→</span>
+        </button>
       </div>`;
-
-    html += `
-      <button class="ai-generate-btn" onclick="App.loadTodayNews()" id="btn-load-news">
-        <span class="ai-btn-icon">📰</span> Aktuelle Nachrichten laden
-      </button>`;
 
     if (newsList.length === 0) {
       html += `
         <div class="vocab-empty">
           <div class="vocab-empty-icon">🗞️</div>
           <div class="vocab-empty-text">
-            Lade aktuelle Artikel von ANSA.it mit dem Button oben.
+            Für diesen Tag gibt es noch keine Nachrichten.<br>
+            Nutze die Pfeile, um zu anderen Tagen zu navigieren.
           </div>
         </div>`;
     } else {
