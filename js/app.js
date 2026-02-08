@@ -204,6 +204,36 @@ const App = {
     }
   },
 
+  navigateSentences(direction) {
+    const currentDate = Store.getCurrentSentenceDate();
+    const date = new Date(currentDate);
+    date.setDate(date.getDate() + direction);
+    
+    const newDateStr = date.toISOString().split('T')[0];
+    const today = getTodayDateStr();
+    
+    // Don't navigate into the future
+    if (newDateStr > today) return;
+    
+    Store.setCurrentSentenceDate(newDateStr);
+    
+    // Check if sentences exist for this date, if not generate
+    let sentences = Store.getSentencesForDate(newDateStr);
+    if (!sentences) {
+      this.generateSentencesForDate(newDateStr).then(generatedSentences => {
+        Store.setSentencesForDate(newDateStr, generatedSentences);
+        Views.renderSentences(newDateStr, generatedSentences);
+      });
+    } else {
+      Views.renderSentences(newDateStr, sentences);
+    }
+  },
+
+  async generateSentencesForDate(dateStr) {
+    const settings = Store.getSettings();
+    return AI.generateSentences(settings.sentenceCount, settings.level, settings.topics);
+  },
+
   navigateStory(direction) {
     const currentDate = Store.getCurrentStoryDate();
     const date = new Date(currentDate);
