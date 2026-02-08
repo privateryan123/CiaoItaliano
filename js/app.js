@@ -279,7 +279,16 @@ const App = {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to load news');
+        const text = await response.text();
+        console.error('API error response:', text);
+        throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+      }
+
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        console.error('Non-JSON response:', text.substring(0, 500));
+        throw new Error('API returned HTML instead of JSON. Function may not be deployed.');
       }
 
       const data = await response.json();
