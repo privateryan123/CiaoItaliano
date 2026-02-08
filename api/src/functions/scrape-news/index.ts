@@ -194,7 +194,8 @@ async function translateText(
 }
 
 app.http('scrape-news', {
-  methods: ['POST', 'GET'],
+  methods: ['GET'],
   authLevel: 'anonymous',
+  route: 'scrape-news',
   handler: scrapeNews
 });

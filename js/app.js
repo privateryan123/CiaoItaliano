@@ -275,8 +275,7 @@ const App = {
 
     try {
       const response = await fetch('/api/scrape-news', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        method: 'GET'
       });
 
       if (!response.ok) {
