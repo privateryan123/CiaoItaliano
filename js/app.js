@@ -149,7 +149,7 @@ const App = {
         break;
       case 'translator':
         console.log('Rendering translator view...');
-        Views.renderTranslator();
+        Views.renderTranslator(this.currentTranslatorTab || 'sentences');
         subtitle.textContent = 'Übersetzer & Wörterbuch';
         break;
       case 'more':
@@ -561,19 +561,34 @@ const App = {
 
   removeSentence(italian) {
     Store.removeSentence(italian);
-    Views.renderVocabulary('sentences');
+    // Check which view is currently active
+    if (this.currentView === 'translator') {
+      Views.renderTranslator('sentences');
+    } else {
+      Views.renderVocabulary('sentences');
+    }
     this.showToast('Satz entfernt');
   },
 
   removeWord(italian) {
     Store.removeWord(italian);
-    Views.renderVocabulary('words');
+    // Check which view is currently active
+    if (this.currentView === 'translator') {
+      Views.renderTranslator('words');
+    } else {
+      Views.renderVocabulary('words');
+    }
     this.showToast('Wort entfernt');
   },
 
   vocabTab(tab) {
     this.currentVocabTab = tab;
     Views.renderVocabulary(tab);
+  },
+
+  translatorTab(tab) {
+    this.currentTranslatorTab = tab;
+    Views.renderTranslator(tab);
   },
 
   refreshSaveButtons() {

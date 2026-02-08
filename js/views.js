@@ -40,8 +40,8 @@ const Views = {
       <div class="story-nav-header">
         <button class="nav-arrow" onclick="App.navigateSentences(-1)" title="Vorheriger Tag">←</button>
         <div class="nav-date">
-          <div class="nav-date-main">${dateInfo.full}</div>
-          <div class="nav-date-sub">${dateInfo.weekday}</div>
+          <div class="nav-date-main">Tagessätze</div>
+          <div class="nav-date-sub">${dateInfo.full}</div>
         </div>
         <button class="nav-arrow" onclick="App.navigateSentences(1)" ${!canGoForward ? 'disabled' : ''} title="Nächster Tag">→</button>
       </div>`;
@@ -330,7 +330,7 @@ const Views = {
   // ==========================================
   // TRANSLATOR VIEW
   // ==========================================
-  renderTranslator() {
+  renderTranslator(tab = 'sentences') {
     const container = document.getElementById('translator-content');
     const vocab = Store.getVocabulary();
 
@@ -377,69 +377,78 @@ const Views = {
         </div>
       </div>
 
+      <!-- Vocabulary Tabs -->
+      <div class="vocab-tabs" style="margin-top: var(--space-md);">
+        <button class="vocab-tab ${tab === 'sentences' ? 'active' : ''}" onclick="App.translatorTab('sentences')">Sätze (${vocab.sentences.length})</button>
+        <button class="vocab-tab ${tab === 'words' ? 'active' : ''}" onclick="App.translatorTab('words')">Wörter (${vocab.words.length})</button>
+      </div>`;
+
+    if (tab === 'sentences') {
+      html += `
       <!-- Saved Sentences -->
-      <div class="card" style="margin-top: var(--space-md);">
+      <div class="card">
         <div class="section-header" style="margin-bottom: var(--space-md);">
           <span class="section-icon">🔖</span>
-          <span class="section-title">Gespeicherte Sätze (${vocab.sentences.length})</span>
+          <span class="section-title">Gespeicherte Sätze</span>
         </div>`;
 
-    if (vocab.sentences.length === 0) {
-      html += `
-        <div class="vocab-empty">
-          <div class="vocab-empty-icon">🔖</div>
-          <div class="vocab-empty-text">
-            Noch keine Sätze gespeichert.
-          </div>
-        </div>`;
-    } else {
-      vocab.sentences.forEach(s => {
+      if (vocab.sentences.length === 0) {
         html += `
-          <div class="vocab-item">
-            <div>
-              <div class="vocab-italian">${s.italian}</div>
-              <div class="vocab-german">${s.german}</div>
+          <div class="vocab-empty">
+            <div class="vocab-empty-icon">🔖</div>
+            <div class="vocab-empty-text">
+              Noch keine Sätze gespeichert.
             </div>
-            <button class="vocab-delete" onclick="App.removeSentence('${this.esc(s.italian)}')" title="Entfernen">✕</button>
           </div>`;
-      });
-    }
+      } else {
+        vocab.sentences.forEach(s => {
+          html += `
+            <div class="vocab-item">
+              <div>
+                <div class="vocab-italian">${s.italian}</div>
+                <div class="vocab-german">${s.german}</div>
+              </div>
+              <button class="vocab-delete" onclick="App.removeSentence('${this.esc(s.italian)}')" title="Entfernen">✕</button>
+            </div>`;
+        });
+      }
 
-    html += `
-      </div>
-
+      html += `</div>`;
+    } else {
+      html += `
       <!-- Saved Words -->
-      <div class="card" style="margin-top: var(--space-md);">
+      <div class="card">
         <div class="section-header" style="margin-bottom: var(--space-md);">
           <span class="section-icon">💬</span>
-          <span class="section-title">Gespeicherte Wörter (${vocab.words.length})</span>
+          <span class="section-title">Gespeicherte Wörter</span>
         </div>`;
 
-    if (vocab.words.length === 0) {
-      html += `
-        <div class="vocab-empty">
-          <div class="vocab-empty-icon">💬</div>
-          <div class="vocab-empty-text">
-            Noch keine Wörter gespeichert.
-          </div>
-        </div>`;
-    } else {
-      vocab.words.forEach(w => {
+      if (vocab.words.length === 0) {
         html += `
-          <div class="vocab-item">
-            <div>
-              <div class="vocab-italian">${w.italian}</div>
-              <div class="vocab-german">${w.german}</div>
-            </div>
-            <div style="display:flex; gap: 4px; align-items: center;">
-              <button class="vocab-wr-btn" onclick="window.open('${AI.getWordReferenceUrl(w.italian)}', '_blank')" title="In WordReference nachschlagen">📘</button>
-              <button class="vocab-delete" onclick="App.removeWord('${this.esc(w.italian)}')" title="Entfernen">✕</button>
+          <div class="vocab-empty">
+            <div class="vocab-empty-icon">💬</div>
+            <div class="vocab-empty-text">
+              Noch keine Wörter gespeichert.
             </div>
           </div>`;
-      });
-    }
+      } else {
+        vocab.words.forEach(w => {
+          html += `
+            <div class="vocab-item">
+              <div>
+                <div class="vocab-italian">${w.italian}</div>
+                <div class="vocab-german">${w.german}</div>
+              </div>
+              <div style="display:flex; gap: 4px; align-items: center;">
+                <button class="vocab-wr-btn" onclick="window.open('${AI.getWordReferenceUrl(w.italian)}', '_blank')" title="In WordReference nachschlagen">📘</button>
+                <button class="vocab-delete" onclick="App.removeWord('${this.esc(w.italian)}')" title="Entfernen">✕</button>
+              </div>
+            </div>`;
+        });
+      }
 
-    html += `</div>`;
+      html += `</div>`;
+    }
 
     container.innerHTML = html;
 
