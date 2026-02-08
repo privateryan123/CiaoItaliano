@@ -7,6 +7,203 @@
 
 const DAILY_CONTENT = {
 
+  "2026-02-03": {
+    date: "2026-02-03",
+    weekday: "Dienstag",
+    greeting: "Buongiorno! 🌅",
+    sentences: [
+      {
+        italian: "Ciao, come stai?",
+        german: "Hallo, wie geht es dir?",
+        explanation: "«Ciao» ist informell für «Hallo». «Come stai?» = Wie geht es dir?",
+        keywords: ["ciao", "come", "stai"]
+      },
+      {
+        italian: "Mi chiamo Marco.",
+        german: "Ich heiße Marco.",
+        explanation: "«Chimarsi» = heißen. «Mi chiamo» = Ich heiße. Das klassische Vorstellungssatz.",
+        keywords: ["chiamo"]
+      },
+      {
+        italian: "Sono felice di conoscerti.",
+        german: "Ich freue mich, dich kennenzulernen.",
+        explanation: "«Felice di» = glücklich/erfreut über. «Conoscere» = kennenlernen.",
+        keywords: ["felice", "conoscere"]
+      },
+      {
+        italian: "Parli italiano?",
+        german: "Sprichst du italienisch?",
+        explanation: "«Parlare» = sprechen. «Parli» = du sprichst (formale Form).",
+        keywords: ["parli", "italiano"]
+      },
+      {
+        italian: "Un po', grazie per chiedere.",
+        german: "Ein bisschen, danke dass du fragst.",
+        explanation: "«Un po'» = ein bisschen. «Grazie per chiedere» = danke, dass du fragst.",
+        keywords: ["po'", "grazie"]
+      }
+    ],
+    story: {
+      title: "Il primo giorno",
+      topic: "Schule",
+      level: "A1",
+      readingTime: "3 min",
+      pages: [
+        [
+          {
+            italian: "Anna entra nella scuola per la prima volta.",
+            german: "Anna betritt die Schule zum ersten Mal.",
+            note: "«Entra» = betritt. «La prima volta» = zum ersten Mal."
+          },
+          {
+            italian: "Ha un nuovo zaino rosso e splendente.",
+            german: "Sie hat einen neuen, glänzenden roten Rucksack.",
+            note: "«Zaino» = Rucksack. «Rosso» = rot. «Splendente» = strahlend."
+          },
+          {
+            italian: "La maestra la accoglie con un sorriso caldo.",
+            german: "Die Lehrerin begrüßt sie mit einem warmen Lächeln.",
+            note: "«Maestra» = Lehrerin. «Accogliere» = begrüßen. «Caldo» = warm."
+          }
+        ],
+        [
+          {
+            italian: "«Benvenuta!» dice la maestra. «Come ti chiami?»",
+            german: "«Willkommen!» sagt die Lehrerin. «Wie heißt du?»",
+            note: "«Benvenuta» = Willkommen (weiblich). «Ti chiami» = du heißt."
+          },
+          {
+            italian: "«Sono Anna», risponde la bambina shyly.",
+            german: "«Ich bin Anna», antwortet das Mädchen schüchtern.",
+            note: "«Bambina» = Mädchen. Deutsche Wörter im Italienischen sind manchmal möglich."
+          }
+        ],
+        [
+          {
+            italian: "Anna conosce nuovi amici nella classe.",
+            german: "Anna lernt neue Freunde in der Klasse kennen.",
+            note: "«Conoscere» = kennenlernen. «Amici» = Freunde."
+          },
+          {
+            italian: "Il primo giorno è bellissimo!",
+            german: "Der erste Tag ist wunderbar!",
+            note: "«Bellissimo» = wunderbar (Superlativ von «bello»)."
+          }
+        ]
+      ]
+    },
+    news: [
+      {
+        category: "Bildung",
+        headline: "Neue italienische Sprachlern-App erfolgreich gestartet",
+        italianSummary: "Una nuova applicazione per imparare l'italiano è stata lanciata con successo. L'app insegna ai principianti la lingua italiana con lezioni quotidiane, storie e notizie. Ha già trovato migliaia di utenti in tutto il mondo. La piattaforma offre una modalità offline per imparare senza connessione internet.",
+        german: "Eine neue italienische Sprachlern-App wurde erfolgreich gestartet. Die App lehrt Anfängern Italienisch mit täglichen Unterricht, Geschichten und Nachrichten. Sie hat bereits Tausende von Benutzern weltweit gefunden. Die Plattform bietet einen Offline-Modus zum Lernen ohne Internetverbindung.",
+        source: "https://www.education.it",
+        sourceName: "Education Today"
+      },
+      {
+        category: "Tourismus",
+        headline: "Venedig verzeichnet Rekordbesucher im Februar",
+        italianSummary: "La città di Venezia ha ricevuto un numero record di visitatori questo febbraio. Il Carnevale di Venezia attrae turisti da tutto il mondo. I hotel sono al completo e i ristoranti offrono piatti veneziani tradizionali. I gondolieri sono più occupati che mai con i turisti.",
+        german: "Die Stadt Venedig hat diese Woche eine Rekordanzahl von Besuchern erhalten. Der Karneval in Venedig zieht Touristen aus der ganzen Welt an. Hotels sind ausgebucht und Restaurants bieten traditionelle venezianische Gerichte. Gondoliere sind beschäftigter als je zuvor mit den Touristen.",
+        source: "https://www.venezia.it",
+        sourceName: "Venezia Turismo"
+      }
+    ]
+  },
+
+  "2026-02-04": {
+    date: "2026-02-04",
+    weekday: "Mittwoch",
+    greeting: "Buongiorno! 🌤️",
+    sentences: [
+      {
+        italian: "La ricetta della pasta carbonara è semplice.",
+        german: "Das Rezept für Pasta Carbonara ist einfach.",
+        explanation: "«Ricetta» = Rezept. «Semplice» = einfach. Carbonara ist ein klassisches italienisches Gericht.",
+        keywords: ["ricetta", "carbonara", "semplice"]
+      },
+      {
+        italian: "Mi piace molto il caffè italiano.",
+        german: "Mir gefällt italienischer Kaffee sehr gut.",
+        explanation: "«Mi piace» = mir gefällt. «Molto» = sehr. Italienischer Kaffee ist weltberühmt.",
+        keywords: ["piace", "caffè"]
+      },
+      {
+        italian: "Posso avere un bicchiere d'acqua?",
+        german: "Kann ich ein Glas Wasser haben?",
+        explanation: "«Posso avere» = kann ich haben. «Bicchiere» = Glas. Ein politer Höflichkeitssatz.",
+        keywords: ["posso", "avere", "bicchiere"]
+      },
+      {
+        italian: "Quando torna da lavoro?",
+        german: "Wann kommt er/sie von der Arbeit zurück?",
+        explanation: "«Tornare» = zurückkommen. «Da lavoro» = von der Arbeit. «Quando» = wann.",
+        keywords: ["quando", "torna", "lavoro"]
+      },
+      {
+        italian: "Stasera guardiamo un film?",
+        german: "Gucken wir heute Abend einen Film?",
+        explanation: "«Guardiamo» = wir schauen/gucken. «Stasera» = heute Abend. Ein Vorschlag für den Abend.",
+        keywords: ["stasera", "guardiamo", "film"]
+      }
+    ],
+    story: {
+      title: "Una gita al parco",
+      topic: "Freizeit",
+      level: "A2",
+      readingTime: "5 min",
+      pages: [
+        [
+          {
+            italian: "Luca e Sofia decidono di fare una gita al parco domenica.",
+            german: "Luca und Sofia beschließen, am Sonntag einen Ausflug in den Park zu machen.",
+            note: "«Gita» = Ausflug. «Domenica» = Sonntag. Naturerlebnisse sind in Italien sehr beliebt."
+          },
+          {
+            italian: "Il sole brilla e il cielo è azzurro.",
+            german: "Die Sonne scheint und der Himmel ist blau.",
+            note: "«Brillare» = scheinen/leuchten. «Azzurro» = blau."
+          }
+        ],
+        [
+          {
+            italian: "Nel parco, vedono molti bambini che giocano.",
+            german: "Im Park sehen sie viele spielende Kinder.",
+            note: "«Giocano» = spielen. «Molti» = viele."
+          },
+          {
+            italian: "Sofia compra il gelato. Luca preferisce la coppa di frutti di bosco.",
+            german: "Sofia kauft Eis. Luca bevorzugt ein Beet mit Waldfrüchten.",
+            note: "«Gelato» = Eis. «Frutti di bosco» = Waldfrüchte."
+          }
+        ],
+        [
+          {
+            italian: "Camminano lungo il lago e parlano per ore.",
+            german: "Sie gehen am See spazieren und sprechen stundenlang.",
+            note: "«Camminano» = gehen. «Lago» = See. «Per ore» = stundenlang."
+          },
+          {
+            italian: "È stata una giornata bellissima!",
+            german: "Es war ein wunderbar schöner Tag!",
+            note: "«È stata» = es war. «Bellissima» = wunderbar schön (Superlativ)."
+          }
+        ]
+      ]
+    },
+    news: [
+      {
+        category: "Gastronomie",
+        headline: "Mailand: Gehobene Restaurants konkurrieren um Michelin-Sterne",
+        italianSummary: "A Milano, i migliori ristoranti di tutta Italia competono per le stelle Michelin. La città è sede di moltissimi chef rinomati che creano piatti innovativi. La cucina lombarda è sempre più apprezzata a livello internazionale. I turisti gourmet visitano Milano per le sue eccellenti opzioni culinarie.",
+        german: "In Mailand konkurrieren die besten Restaurants Italiens um Michelin-Sterne. Die Stadt ist Heimat vieler berühmter Köche, die innovative Gerichte kreieren. Die lombardische Küche wird international immer geschätzter. Gourmet-Touristen besuchen Mailand für seine hervorragenden kulinarischen Optionen.",
+        source: "https://www.milano.it",
+        sourceName: "Milano Guida Turistica"
+      }
+    ]
+  },
+
   "2026-02-08": {
     date: "2026-02-08",
     weekday: "Sonntag",
