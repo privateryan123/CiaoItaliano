@@ -10,9 +10,9 @@
     "test": "jest"
   },
   "dependencies": {
-    "@azure/cognitiveservices-translator": "^1.0.0",
+    "@azure/functions": "*",
+    "@azure/openai": "*",
     "axios": "^1.6.0",
-    "azure-functions-core-tools": "^4.0.0",
     "dotenv": "^16.3.1"
   },
   "devDependencies": {
