@@ -275,9 +275,6 @@ const App = {
       btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Geschichte mit AI generieren';
     }
   },
-      btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Geschichte mit AI generieren';
-    }
-  },
 
   async aiGenerateNews() {
     const btn = document.getElementById('btn-ai-news');
@@ -316,9 +313,6 @@ const App = {
         this.showToast('⚠️ Fehler: ' + msg);
       }
       btn.disabled = false;
-      btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Nachrichten mit AI generieren';
-    }
-  },
       btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Nachrichten mit AI generieren';
     }
   },
