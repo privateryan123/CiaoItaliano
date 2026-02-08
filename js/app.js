@@ -5,13 +5,14 @@
 const App = {
   currentView: 'sentences',
   currentVocabTab: 'sentences',
+  currentVerbsTab: 'verbs',
   translationDir: 'de-it',
   _lastTranslation: null,
 
   // Sub-views that belong under the "more" tab
   SUB_VIEWS: ['library', 'vocabulary', 'settings'],
   // Main tab views matching bottom nav
-  MAIN_VIEWS: ['sentences', 'story', 'news', 'translator', 'more'],
+  MAIN_VIEWS: ['sentences', 'story', 'news', 'verbs', 'translator', 'more'],
 
   // ==========================================
   // INITIALIZATION
@@ -144,8 +145,8 @@ const App = {
       case 'verbs':
         console.log('Rendering verbs view...');
         const selectedVerb = Store.getSelectedVerb();
-        Views.renderVerbs(selectedVerb);
-        subtitle.textContent = 'Verben üben';
+        Views.renderVerbs(selectedVerb, this.currentVerbsTab || 'verbs');
+        subtitle.textContent = 'Verben & Sätze üben';
         break;
       case 'translator':
         console.log('Rendering translator view...');
@@ -429,15 +430,19 @@ const App = {
   // ==========================================
   changeVerb(verbKey) {
     Store.setSelectedVerb(verbKey);
-    Views.renderVerbs(verbKey);
+    Views.renderVerbs(verbKey, this.currentVerbsTab || 'verbs');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   },
 
   changeSentencesTopic(topicKey) {
     Store.setSelectedSentencesTopic(topicKey);
-    const currentDate = Store.getCurrentSentenceDate();
-    const sentences = Store.getSentencesForDate(currentDate) || [];
-    Views.renderSentences(currentDate, sentences);
+    Views.renderVerbs(Store.getSelectedVerb(), 'sentences');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  },
+
+  verbTab(tab) {
+    this.currentVerbsTab = tab;
+    Views.renderVerbs(Store.getSelectedVerb(), tab);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   },
 
