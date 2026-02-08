@@ -97,17 +97,6 @@ const Store = {
     return cache[dateStr]?.[type] || null;
   },
 
-  getScrapedNews(dateStr) {
-    const key = `scraped_news_${dateStr}`;
-    const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : null;
-  },
-
-  setScrapedNews(dateStr, articles) {
-    const key = `scraped_news_${dateStr}`;
-    localStorage.setItem(key, JSON.stringify(articles));
-  },
-
   // --- Story Archive ---
   CURRENT_STORY_DATE_KEY: 'current_story_date',
   STORY_ARCHIVE_KEY: 'story_archive',
