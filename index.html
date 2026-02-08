@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Italiano">
+  <meta name="theme-color" content="#6366f1" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+  <meta name="description" content="Lerne jeden Tag Italienisch — von Deutsch aus.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <link rel="stylesheet" href="css/style.css">
+
+  <title>Italiano Ogni Giorno</title>
+</head>
+<body>
+  <div class="app" id="app">
+
+    <!-- ===== Header ===== -->
+    <header class="header" id="header">
+      <div class="header-title">Italiano Ogni Giorno</div>
+      <div class="header-subtitle" id="header-subtitle">Dein täglicher Begleiter für Italienisch</div>
+    </header>
+
+    <!-- ===== Views ===== -->
+
+    <!-- Sentences View -->
+    <main class="main-content view active" id="view-sentences">
+      <div id="sentences-content"></div>
+    </main>
+
+    <!-- Story View -->
+    <main class="main-content view" id="view-story">
+      <div id="story-content"></div>
+    </main>
+
+    <!-- News View -->
+    <main class="main-content view" id="view-news">
+      <div id="news-content"></div>
+    </main>
+
+    <!-- Translator View -->
+    <main class="main-content view" id="view-translator">
+      <div id="translator-content"></div>
+    </main>
+
+    <!-- More Hub View -->
+    <main class="main-content view" id="view-more">
+      <div id="more-content"></div>
+    </main>
+
+    <!-- Library View (sub-view of More) -->
+    <main class="main-content view" id="view-library">
+      <div id="library-content"></div>
+    </main>
+
+    <!-- Vocabulary View (sub-view of More) -->
+    <main class="main-content view" id="view-vocabulary">
+      <div id="vocabulary-content"></div>
+    </main>
+
+    <!-- Settings View (sub-view of More) -->
+    <main class="main-content view" id="view-settings">
+      <div id="settings-content"></div>
+    </main>
+
+    <!-- ===== Bottom Navigation ===== -->
+    <nav class="bottom-nav">
+      <div class="nav-items">
+        <button class="nav-item active" data-view="sentences" aria-label="S\u00e4tze">
+          <span class="nav-icon">\u270f\ufe0f</span>
+          <span>S\u00e4tze</span>
+        </button>
+        <button class="nav-item" data-view="story" aria-label="Geschichte">
+          <span class="nav-icon">\ud83d\udcd6</span>
+          <span>Geschichte</span>
+        </button>
+        <button class="nav-item" data-view="news" aria-label="News">
+          <span class="nav-icon">\ud83d\udcf0</span>
+          <span>News</span>
+        </button>
+        <button class="nav-item" data-view="translator" aria-label="\u00dcbersetzer">
+          <span class="nav-icon">\ud83d\udd04</span>
+          <span>\u00dcbersetzer</span>
+        </button>
+        <button class="nav-item" data-view="more" aria-label="Mehr">
+          <span class="nav-icon">\u2630</span>
+          <span>Mehr</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Word Popup -->
+    <div class="word-popup-overlay" id="word-popup-overlay">
+      <div class="word-popup" id="word-popup">
+        <div class="word-popup-handle"></div>
+        <div class="word-popup-header">
+          <span class="word-popup-word" id="popup-word"></span>
+          <button class="word-popup-close" id="popup-close">✕</button>
+        </div>
+        <div class="word-popup-context" id="popup-context"></div>
+        <div class="word-popup-translation" id="popup-translation"></div>
+        <a class="word-popup-wr" id="popup-wr-link" href="#" target="_blank" rel="noopener" style="display:none;">📘 In WordReference nachschlagen</a>
+        <div class="word-popup-actions">
+          <button class="word-popup-btn primary" id="popup-save-word">💬 Wort speichern</button>
+          <button class="word-popup-btn secondary" id="popup-save-sentence">🔖 Ganzen Satz speichern</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/views.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
