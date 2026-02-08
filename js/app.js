@@ -164,20 +164,43 @@ const App = {
   async aiGenerateSentences() {
     const btn = document.getElementById('btn-ai-sentences');
     if (!btn) return;
+    
+    const settings = Store.getSettings();
+    if (!settings.openaiKey) {
+      this.showToast('⚙️ Bitte füge einen OpenAI API-Schlüssel in den Einstellungen hinzu.');
+      this.switchView('settings', true);
+      return;
+    }
+    
     btn.disabled = true;
     btn.innerHTML = '<span class="ai-spinner"></span> Sätze werden generiert…';
 
     try {
-      const settings = Store.getSettings();
       const sentences = await AI.generateSentences(settings.sentenceCount, settings.level, settings.topics);
+      if (!sentences) {
+        this.showToast('⚠️ Fehler: Überprüfe deinen API-Schlüssel und Netzwerkverbindung.');
+        btn.disabled = false;
+        btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Sätze mit AI generieren';
+        return;
+      }
       const today = getTodayDateStr();
       Store.setAICacheEntry(today, 'sentences', sentences);
       Views.renderSentences(today, sentences);
       this.showToast(`${sentences.length} neue Sätze generiert! ✨`);
     } catch (err) {
       console.error('AI sentence generation failed:', err);
-      this.showToast('Fehler: ' + (err.message || 'AI nicht erreichbar'));
+      const msg = err.message || 'AI Fehler';
+      if (msg.includes('Rate-Limit')) {
+        this.showToast('⏱️ Rate-Limit erreicht. Bitte warte einige Minuten.');
+      } else if (msg.includes('ungültig') || msg.includes('401')) {
+        this.showToast('🔑 API-Schlüssel ungültig. Überprüfe deine Einstellungen.');
+      } else {
+        this.showToast('⚠️ Fehler: ' + msg);
+      }
       btn.disabled = false;
+      btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Sätze mit AI generieren';
+    }
+  },
       btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Sätze mit AI generieren';
     }
   },
@@ -185,20 +208,43 @@ const App = {
   async aiGenerateStory() {
     const btn = document.getElementById('btn-ai-story');
     if (!btn) return;
+    
+    const settings = Store.getSettings();
+    if (!settings.openaiKey) {
+      this.showToast('⚙️ Bitte füge einen OpenAI API-Schlüssel in den Einstellungen hinzu.');
+      this.switchView('settings', true);
+      return;
+    }
+    
     btn.disabled = true;
     btn.innerHTML = '<span class="ai-spinner"></span> Geschichte wird generiert…';
 
     try {
-      const settings = Store.getSettings();
       const story = await AI.generateStory(settings.level, settings.topics);
+      if (!story) {
+        this.showToast('⚠️ Fehler: Überprüfe deinen API-Schlüssel und Netzwerkverbindung.');
+        btn.disabled = false;
+        btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Geschichte mit AI generieren';
+        return;
+      }
       const today = getTodayDateStr();
       Store.setAICacheEntry(today, 'story', story);
       Views.renderStory(today, story);
-      this.showToast('Neue Geschichte generiert! ✨');
+      this.showToast('Neue Geschichte generiert! 📖');
     } catch (err) {
       console.error('AI story generation failed:', err);
-      this.showToast('Fehler: ' + (err.message || 'AI nicht erreichbar'));
+      const msg = err.message || 'AI Fehler';
+      if (msg.includes('Rate-Limit')) {
+        this.showToast('⏱️ Rate-Limit erreicht. Bitte warte einige Minuten.');
+      } else if (msg.includes('ungültig') || msg.includes('401')) {
+        this.showToast('🔑 API-Schlüssel ungültig. Überprüfe deine Einstellungen.');
+      } else {
+        this.showToast('⚠️ Fehler: ' + msg);
+      }
       btn.disabled = false;
+      btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Geschichte mit AI generieren';
+    }
+  },
       btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Geschichte mit AI generieren';
     }
   },
@@ -206,20 +252,43 @@ const App = {
   async aiGenerateNews() {
     const btn = document.getElementById('btn-ai-news');
     if (!btn) return;
+    
+    const settings = Store.getSettings();
+    if (!settings.openaiKey) {
+      this.showToast('⚙️ Bitte füge einen OpenAI API-Schlüssel in den Einstellungen hinzu.');
+      this.switchView('settings', true);
+      return;
+    }
+    
     btn.disabled = true;
     btn.innerHTML = '<span class="ai-spinner"></span> Nachrichten werden generiert…';
 
     try {
-      const settings = Store.getSettings();
       const news = await AI.generateNews(settings.level);
+      if (!news) {
+        this.showToast('⚠️ Fehler: Überprüfe deinen API-Schlüssel und Netzwerkverbindung.');
+        btn.disabled = false;
+        btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Nachrichten mit AI generieren';
+        return;
+      }
       const today = getTodayDateStr();
       Store.setAICacheEntry(today, 'news', news);
       Views.renderNews(today, news);
-      this.showToast(`${news.length} Nachrichten generiert! ✨`);
+      this.showToast('Neue Nachrichten generiert! 📰');
     } catch (err) {
       console.error('AI news generation failed:', err);
-      this.showToast('Fehler: ' + (err.message || 'AI nicht erreichbar'));
+      const msg = err.message || 'AI Fehler';
+      if (msg.includes('Rate-Limit')) {
+        this.showToast('⏱️ Rate-Limit erreicht. Bitte warte einige Minuten.');
+      } else if (msg.includes('ungültig') || msg.includes('401')) {
+        this.showToast('🔑 API-Schlüssel ungültig. Überprüfe deine Einstellungen.');
+      } else {
+        this.showToast('⚠️ Fehler: ' + msg);
+      }
       btn.disabled = false;
+      btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Nachrichten mit AI generieren';
+    }
+  },
       btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Nachrichten mit AI generieren';
     }
   },
