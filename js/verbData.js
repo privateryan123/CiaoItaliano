@@ -597,5 +597,3 @@ const VerbData = {
     ]
   }
 };
-
-export { VerbData };
