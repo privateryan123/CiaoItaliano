@@ -8,16 +8,32 @@ const Views = {
   // SENTENCES VIEW
   // ==========================================
   renderSentences(dateStr, sentences) {
+    console.log('=== Views.renderSentences called ===');
+    console.log('dateStr:', dateStr);
+    console.log('sentences argument:', sentences);
+    
     const container = document.getElementById('sentences-content');
+    console.log('Container element:', container);
+    
     const settings = Store.getSettings();
+    console.log('Settings:', settings);
+    
     const showExplanations = settings.showExplanations;
     const content = getContentForDate(dateStr);
+    console.log('Content from getContentForDate:', content);
+    
     const dateInfo = formatDateDisplay(dateStr);
+    console.log('Date info:', dateInfo);
 
     // Use AI-generated sentences if provided, else fall back to static
     const sentenceList = sentences || (content ? content.sentences : []);
+    console.log('Sentence list:', sentenceList);
+    console.log('Sentence list length:', sentenceList ? sentenceList.length : 0);
+    
     const sentenceCount = settings.sentenceCount;
     const displayed = sentenceList.slice(0, sentenceCount);
+    console.log('Displayed sentences:', displayed);
+    console.log('Displayed count:', displayed.length);
 
     const hasApiKey = !!settings.openaiKey;
 
@@ -93,7 +109,10 @@ const Views = {
       html += '</div>';
     }
 
+    console.log('Setting container innerHTML. HTML length:', html.length);
+    console.log('First 200 chars of HTML:', html.substring(0, 200));
     container.innerHTML = html;
+    console.log('=== Views.renderSentences complete ===');
   },
 
   // ==========================================

@@ -17,18 +17,30 @@ const App = {
   // INITIALIZATION
   // ==========================================
   init() {
+    console.log('=== App.init() starting ===');
+    
+    console.log('1. Applying theme...');
     applyTheme(Store.getTheme());
+    
+    console.log('2. Setting up navigation...');
     this.setupNav();
+    
+    console.log('3. Setting up word tap...');
     this.setupWordTap();
 
     // Determine initial view from hash
     const hash = (location.hash || '#sentences').replace('#', '');
     const validViews = [...this.MAIN_VIEWS, ...this.SUB_VIEWS];
     const initialView = validViews.includes(hash) ? hash : 'sentences';
-
+    
+    console.log('4. Initial view determined:', initialView);
+    console.log('5. Switching to initial view...');
     this.switchView(initialView, false);
+    console.log('6. View switched, updating history...');
+    
     history.replaceState({ view: initialView }, '', `#${initialView}`);
 
+    console.log('7. Registering service worker...');
     this.registerSW();
 
     window.addEventListener('popstate', (e) => {
@@ -51,8 +63,11 @@ const App = {
   },
 
   switchView(viewName, pushState = true) {
+    console.log('=== switchView called ===', { viewName, pushState });
+    
     // Figure out which nav tab to highlight
     const navTab = this.SUB_VIEWS.includes(viewName) ? 'more' : viewName;
+    console.log('Nav tab to highlight:', navTab);
 
     document.querySelectorAll('.nav-item').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.view === navTab);
@@ -61,47 +76,65 @@ const App = {
     // Hide all views, show target
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     const targetView = document.getElementById(`view-${viewName}`);
-    if (targetView) targetView.classList.add('active');
+    console.log('Target view element:', targetView);
+    if (targetView) {
+      targetView.classList.add('active');
+      console.log('View activated:', viewName);
+    } else {
+      console.error('Target view not found:', `view-${viewName}`);
+    }
 
     const subtitle = document.getElementById('header-subtitle');
     const today = getTodayDateStr();
+    console.log('Today date string:', today);
 
     switch (viewName) {
       case 'sentences': {
+        console.log('Rendering sentences view...');
         const cached = Store.getAICacheEntry(today, 'sentences');
+        console.log('Cached sentences data:', cached);
         Views.renderSentences(today, cached);
         subtitle.textContent = 'Tagessätze auf Italienisch';
         break;
       }
       case 'story': {
+        console.log('Rendering story view...');
         const cached = Store.getAICacheEntry(today, 'story');
+        console.log('Cached story data:', cached);
         Views.renderStory(today, cached);
         subtitle.textContent = 'Tagesgeschichte lesen';
         break;
       }
       case 'news': {
+        console.log('Rendering news view...');
         const cached = Store.getAICacheEntry(today, 'news');
+        console.log('Cached news data:', cached);
         Views.renderNews(today, cached);
         subtitle.textContent = 'Nachrichten auf Italienisch';
         break;
       }
       case 'translator':
+        console.log('Rendering translator view...');
         Views.renderTranslator();
         subtitle.textContent = 'Übersetzer & Wörterbuch';
         break;
       case 'more':
+        console.log('Rendering more view...');
         Views.renderMore();
         subtitle.textContent = 'Weitere Funktionen';
         break;
       case 'library':
+        console.log('Rendering library view...');
         Views.renderLibrary();
         subtitle.textContent = 'Vergangene Lektionen';
         break;
       case 'vocabulary':
+        console.log('Rendering vocabulary view...');
         Views.renderVocabulary(this.currentVocabTab);
         subtitle.textContent = 'Deine gespeicherten Vokabeln';
         break;
       case 'settings':
+        console.log('Rendering settings view...');
         Views.renderSettings();
         subtitle.textContent = 'App personalisieren';
         break;
@@ -592,6 +625,21 @@ const App = {
 // ==========================================
 // BOOT
 // ==========================================
+console.log('=== BOOT: Script loaded ===');
+console.log('Current date:', new Date());
+console.log('Checking if DAILY_CONTENT exists:', typeof DAILY_CONTENT !== 'undefined');
+if (typeof DAILY_CONTENT !== 'undefined') {
+  console.log('Available dates in DAILY_CONTENT:', Object.keys(DAILY_CONTENT));
+  console.log('Today date string:', getTodayDateStr ? getTodayDateStr() : 'getTodayDateStr not defined');
+  if (getTodayDateStr) {
+    const today = getTodayDateStr();
+    console.log('Content for today (' + today + '):', getContentForDate ? getContentForDate(today) : 'getContentForDate not defined');
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('=== DOMContentLoaded fired ===');
+  console.log('Calling App.init()...');
   App.init();
+  console.log('App.init() completed');
 });
