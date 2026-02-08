@@ -40,7 +40,7 @@ const Views = {
       <div class="story-nav-header">
         <button class="nav-arrow" onclick="App.navigateSentences(-1)" title="Vorheriger Tag">←</button>
         <div class="nav-date">
-          <div class="nav-date-main">${dateInfo.readable}</div>
+          <div class="nav-date-main">${dateInfo.full}</div>
           <div class="nav-date-sub">${dateInfo.weekday}</div>
         </div>
         <button class="nav-arrow" onclick="App.navigateSentences(1)" ${!canGoForward ? 'disabled' : ''} title="Nächster Tag">→</button>
@@ -332,6 +332,7 @@ const Views = {
   // ==========================================
   renderTranslator() {
     const container = document.getElementById('translator-content');
+    const vocab = Store.getVocabulary();
 
     let html = `
       <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-lg);">Übersetzer & Wörterbuch</h2>
@@ -376,20 +377,69 @@ const Views = {
         </div>
       </div>
 
-      <!-- Quick phrases -->
+      <!-- Saved Sentences -->
       <div class="card" style="margin-top: var(--space-md);">
-        <div class="section-header" style="margin-bottom: var(--space-sm);">
-          <span class="section-icon">⚡</span>
-          <span class="section-title">Schnell übersetzen</span>
-        </div>
-        <div class="quick-phrases">
-          <button class="quick-phrase" onclick="App.quickTranslate('Wo ist die nächste Apotheke?')">Wo ist die nächste Apotheke?</button>
-          <button class="quick-phrase" onclick="App.quickTranslate('Ich hätte gerne die Rechnung.')">Ich hätte gerne die Rechnung.</button>
-          <button class="quick-phrase" onclick="App.quickTranslate('Können Sie das wiederholen?')">Können Sie das wiederholen?</button>
-          <button class="quick-phrase" onclick="App.quickTranslate('Wie komme ich zum Bahnhof?')">Wie komme ich zum Bahnhof?</button>
-          <button class="quick-phrase" onclick="App.quickTranslate('Das schmeckt sehr gut!')">Das schmeckt sehr gut!</button>
-        </div>
-      </div>`;
+        <div class="section-header" style="margin-bottom: var(--space-md);">
+          <span class="section-icon">🔖</span>
+          <span class="section-title">Gespeicherte Sätze (${vocab.sentences.length})</span>
+        </div>`;
+
+    if (vocab.sentences.length === 0) {
+      html += `
+        <div class="vocab-empty">
+          <div class="vocab-empty-icon">🔖</div>
+          <div class="vocab-empty-text">
+            Noch keine Sätze gespeichert.
+          </div>
+        </div>`;
+    } else {
+      vocab.sentences.forEach(s => {
+        html += `
+          <div class="vocab-item">
+            <div>
+              <div class="vocab-italian">${s.italian}</div>
+              <div class="vocab-german">${s.german}</div>
+            </div>
+            <button class="vocab-delete" onclick="App.removeSentence('${this.esc(s.italian)}')" title="Entfernen">✕</button>
+          </div>`;
+      });
+    }
+
+    html += `
+      </div>
+
+      <!-- Saved Words -->
+      <div class="card" style="margin-top: var(--space-md);">
+        <div class="section-header" style="margin-bottom: var(--space-md);">
+          <span class="section-icon">💬</span>
+          <span class="section-title">Gespeicherte Wörter (${vocab.words.length})</span>
+        </div>`;
+
+    if (vocab.words.length === 0) {
+      html += `
+        <div class="vocab-empty">
+          <div class="vocab-empty-icon">💬</div>
+          <div class="vocab-empty-text">
+            Noch keine Wörter gespeichert.
+          </div>
+        </div>`;
+    } else {
+      vocab.words.forEach(w => {
+        html += `
+          <div class="vocab-item">
+            <div>
+              <div class="vocab-italian">${w.italian}</div>
+              <div class="vocab-german">${w.german}</div>
+            </div>
+            <div style="display:flex; gap: 4px; align-items: center;">
+              <button class="vocab-wr-btn" onclick="window.open('${AI.getWordReferenceUrl(w.italian)}', '_blank')" title="In WordReference nachschlagen">📘</button>
+              <button class="vocab-delete" onclick="App.removeWord('${this.esc(w.italian)}')" title="Entfernen">✕</button>
+            </div>
+          </div>`;
+      });
+    }
+
+    html += `</div>`;
 
     container.innerHTML = html;
 
