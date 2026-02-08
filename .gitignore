@@ -1,3 +1,20 @@
 .DS_Store
 Thumbs.db
 *.log
+# Azure Functions
+api/node_modules/
+api/dist/
+api/.env
+api/.env.local
+api/.env.*.local
+
+# Local development
+local.settings.json
+.azure/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

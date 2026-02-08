@@ -1,0 +1,22 @@
+{
+  "name": "ciao-italiano-api",
+  "version": "1.0.0",
+  "description": "Azure Functions API for CiaoItaliano - Italian Learning App",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "func start",
+    "dev": "tsc && func start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@azure/cognitiveservices-translator": "^1.0.0",
+    "axios": "^1.6.0",
+    "azure-functions-core-tools": "^4.0.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}
