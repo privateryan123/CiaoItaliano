@@ -38,12 +38,16 @@ const Views = {
 
     let html = `
       <div class="story-nav-header">
-        <button class="nav-arrow" onclick="App.navigateSentences(-1)" title="Vorheriger Tag">←</button>
-        <div class="nav-date">
-          <div class="nav-date-main">Tagessätze</div>
-          <div class="nav-date-sub">${dateInfo.full}</div>
+        <button class="story-nav-btn" onclick="App.navigateSentences(-1)" title="Vorheriger Tag">
+          <span>←</span>
+        </button>
+        <div style="text-align: center; flex: 1;">
+          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">Tagessätze</h2>
+          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;">${dateInfo.full}</p>
         </div>
-        <button class="nav-arrow" onclick="App.navigateSentences(1)" ${!canGoForward ? 'disabled' : ''} title="Nächster Tag">→</button>
+        <button class="story-nav-btn" onclick="App.navigateSentences(1)" title="Nächster Tag" ${!canGoForward ? 'disabled' : ''}>
+          <span>→</span>
+        </button>
       </div>`;
 
     if (displayed.length === 0) {
