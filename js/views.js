@@ -241,24 +241,24 @@ const Views = {
   // ==========================================
   renderNews(dateStr, news) {
     const container = document.getElementById('news-content');
-    const content = getContentForDate(dateStr);
     const dateInfo = formatDateDisplay(dateStr);
-    const settings = Store.getSettings();
 
-    const newsList = news || (content ? content.news : []);
+    // Check if we have scraped news for today
+    const scrapedNews = Store.getScrapedNews(dateStr);
+    const newsList = scrapedNews || (news || []);
 
     let html = `
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-md);">
         <div>
-          <h2 style="font-family: var(--font-serif); font-size: 1.3rem;">Tagesnachrichten</h2>
+          <h2 style="font-family: var(--font-serif); font-size: 1.3rem;">Nachrichten aus Italien</h2>
           <p style="color: var(--text-tertiary); font-size: 0.82rem; margin-top: 2px;">${dateInfo.full}</p>
         </div>
         <span class="section-badge">${newsList.length} Artikel</span>
       </div>`;
 
     html += `
-      <button class="ai-generate-btn" onclick="App.aiGenerateNews()" id="btn-ai-news">
-        <span class="ai-btn-icon">✨</span> Neue Nachrichten mit AI generieren
+      <button class="ai-generate-btn" onclick="App.loadTodayNews()" id="btn-load-news">
+        <span class="ai-btn-icon">📰</span> Aktuelle Nachrichten laden
       </button>`;
 
     if (newsList.length === 0) {
@@ -266,7 +266,7 @@ const Views = {
         <div class="vocab-empty">
           <div class="vocab-empty-icon">🗞️</div>
           <div class="vocab-empty-text">
-            Tippe oben, um aktuelle Nachrichten zu generieren.
+            Lade aktuelle Artikel von ANSA.it mit dem Button oben.
           </div>
         </div>`;
     } else {
@@ -274,11 +274,31 @@ const Views = {
         html += `
           <div class="card news-card">
             <div class="news-category">${n.category}</div>
-            <div class="news-headline">${n.headline}</div>
+            <div class="news-headline">${n.headline}</div>`;
+        
+        // Display sentence by sentence
+        if (n.sentences && n.sentences.length > 0) {
+          n.sentences.forEach((s, idx) => {
+            html += `
+              <div class="news-sentence-pair" style="margin: var(--space-sm) 0; padding: var(--space-sm); background: var(--bg-secondary); border-radius: var(--radius-sm);">
+                <div class="news-italian" style="font-style: italic; margin-bottom: 4px;">
+                  ${this.makeInteractive(s.italian, [], s.italian, s.german)}
+                </div>
+                <div class="news-german" style="color: var(--text-secondary); font-size: 0.9rem;">
+                  ${s.german}
+                </div>
+              </div>`;
+          });
+        } else if (n.italianSummary) {
+          // Fallback for old format
+          html += `
             <div class="news-italian-summary">${this.makeInteractive(n.italianSummary, [], n.italianSummary, n.german)}</div>
-            <div class="news-german">${n.german}</div>
-            <a class="news-source" href="${n.source}" target="_blank" rel="noopener">
-              ${n.sourceName} →
+            <div class="news-german">${n.german}</div>`;
+        }
+        
+        html += `
+            <a class="news-source" href="${n.url || n.source || '#'}" target="_blank" rel="noopener" style="margin-top: var(--space-sm); display: inline-block;">
+              ANSA.it →
             </a>
           </div>`;
       });

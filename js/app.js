@@ -266,39 +266,40 @@ const App = {
     }
   },
 
-  async aiGenerateNews() {
-    const btn = document.getElementById('btn-ai-news');
+  async loadTodayNews() {
+    const btn = document.getElementById('btn-load-news');
     if (!btn) return;
     
-    const settings = Store.getSettings();
-    
     btn.disabled = true;
-    btn.innerHTML = '<span class="ai-spinner"></span> Nachrichten werden generiert…';
+    btn.innerHTML = '<span class="ai-spinner"></span> Nachrichten werden geladen…';
 
     try {
-      const news = await AI.generateNews(settings.level);
-      if (!news) {
-        this.showToast('⚠️ Fehler: Überprüfe deinen API-Schlüssel und Netzwerkverbindung.');
-        btn.disabled = false;
-        btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Nachrichten mit AI generieren';
-        return;
+      const response = await fetch('/api/scrape-news', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to load news');
       }
+
+      const data = await response.json();
       const today = getTodayDateStr();
-      Store.setAICacheEntry(today, 'news', news);
-      Views.renderNews(today, news);
-      this.showToast('Neue Nachrichten generiert! 📰');
-    } catch (err) {
-      console.error('AI news generation failed:', err);
-      const msg = err.message || 'AI Fehler';
-      if (msg.includes('Rate-Limit')) {
-        this.showToast('⏱️ Rate-Limit erreicht. Bitte warte einige Minuten.');
-      } else if (msg.includes('ungültig') || msg.includes('401')) {
-        this.showToast('🔑 API-Schlüssel ungültig. Überprüfe deine Einstellungen.');
+      
+      if (data.articles && data.articles.length > 0) {
+        Store.setScrapedNews(today, data.articles);
+        Views.renderNews(today, null);
+        this.showToast(`${data.articles.length} Artikel von ANSA.it geladen! 📰`);
       } else {
-        this.showToast('⚠️ Fehler: ' + msg);
+        this.showToast('⚠️ Keine Artikel gefunden. Versuche es später noch einmal.');
       }
+      
+    } catch (err) {
+      console.error('News loading failed:', err);
+      this.showToast('⚠️ Fehler beim Laden der Nachrichten.');
+    } finally {
       btn.disabled = false;
-      btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Nachrichten mit AI generieren';
+      btn.innerHTML = '<span class="ai-btn-icon">📰</span> Aktuelle Nachrichten laden';
     }
   },
 

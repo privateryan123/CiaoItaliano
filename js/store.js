@@ -97,6 +97,17 @@ const Store = {
     return cache[dateStr]?.[type] || null;
   },
 
+  getScrapedNews(dateStr) {
+    const key = `scraped_news_${dateStr}`;
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
+  },
+
+  setScrapedNews(dateStr, articles) {
+    const key = `scraped_news_${dateStr}`;
+    localStorage.setItem(key, JSON.stringify(articles));
+  },
+
   // --- Theme ---
   getTheme() {
     return localStorage.getItem(this.THEME_KEY) || 'auto';
