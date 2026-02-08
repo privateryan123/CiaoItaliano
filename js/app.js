@@ -496,9 +496,14 @@ const App = {
       if (e.target === e.currentTarget) this.hideWordPopup();
     });
 
-    document.getElementById('popup-save-word').addEventListener('click', () => {
+    document.getElementById('popup-save-word').addEventListener('click', async () => {
       if (this._popupData) {
-        const added = Store.saveWord(this._popupData.word, this._popupData.translation);
+        const word = this._popupData.word;
+        
+        // Translate only the single word, not the whole sentence
+        const wordTranslation = await AI.translate(word, 'it', 'de');
+        
+        const added = Store.saveWord(word, wordTranslation);
         this.hideWordPopup();
         this.showToast(added ? 'Wort gespeichert! 💬' : 'Bereits gespeichert');
       }

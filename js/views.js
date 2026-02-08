@@ -654,7 +654,12 @@ const Views = {
       { id: 'Kultur', label: '🎨 Kultur' },
       { id: 'Beruf', label: '💼 Beruf' },
       { id: 'Essen', label: '🍝 Essen & Trinken' },
-      { id: 'Sport', label: '⚽ Sport' }
+      { id: 'Sport', label: '⚽ Sport' },
+      { id: 'Familie', label: '👨‍👩‍👧 Familie' },
+      { id: 'Kinder', label: '👶 Kinder' },
+      { id: 'Haus und Garten', label: '🏡 Haus & Garten' },
+      { id: 'Auto', label: '🚗 Auto' },
+      { id: 'Hobbies', label: '🎯 Hobbies' }
     ];
 
     let html = `
