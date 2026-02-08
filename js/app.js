@@ -99,9 +99,18 @@ const App = {
       }
       case 'story': {
         console.log('Rendering story view...');
-        const cached = Store.getAICacheEntry(today, 'story');
-        console.log('Cached story data:', cached);
-        Views.renderStory(today, cached);
+        const storyDate = Store.getCurrentStoryDate();
+        let storyData = Store.getStoryForDate(storyDate);
+        
+        // If no story exists for this date, generate one
+        if (!storyData) {
+          AI.generateStory(Store.getSettings().level, Store.getSettings().topics).then(story => {
+            Store.setStoryForDate(storyDate, story);
+            Views.renderStory(storyDate, story);
+          });
+        } else {
+          Views.renderStory(storyDate, storyData);
+        }
         subtitle.textContent = 'Tagesgeschichte lesen';
         break;
       }
@@ -230,39 +239,24 @@ const App = {
     }
   },
 
-  async aiGenerateStory() {
-    const btn = document.getElementById('btn-ai-story');
-    if (!btn) return;
+  navigateStory(direction) {
+    const currentDate = Store.getCurrentStoryDate();
+    const date = new Date(currentDate);
+    date.setDate(date.getDate() + direction);
     
-    const settings = Store.getSettings();
+    const newDateStr = date.toISOString().split('T')[0];
+    Store.setCurrentStoryDate(newDateStr);
     
-    btn.disabled = true;
-    btn.innerHTML = '<span class="ai-spinner"></span> Geschichte wird generiert…';
-
-    try {
-      const story = await AI.generateStory(settings.level, settings.topics);
-      if (!story) {
-        this.showToast('⚠️ Fehler: Überprüfe deinen API-Schlüssel und Netzwerkverbindung.');
-        btn.disabled = false;
-        btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Geschichte mit AI generieren';
-        return;
-      }
-      const today = getTodayDateStr();
-      Store.setAICacheEntry(today, 'story', story);
-      Views.renderStory(today, story);
-      this.showToast('Neue Geschichte generiert! 📖');
-    } catch (err) {
-      console.error('AI story generation failed:', err);
-      const msg = err.message || 'AI Fehler';
-      if (msg.includes('Rate-Limit')) {
-        this.showToast('⏱️ Rate-Limit erreicht. Bitte warte einige Minuten.');
-      } else if (msg.includes('ungültig') || msg.includes('401')) {
-        this.showToast('🔑 API-Schlüssel ungültig. Überprüfe deine Einstellungen.');
-      } else {
-        this.showToast('⚠️ Fehler: ' + msg);
-      }
-      btn.disabled = false;
-      btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Geschichte mit AI generieren';
+    // Check if story exists for this date, if not generate one
+    let story = Store.getStoryForDate(newDateStr);
+    if (!story) {
+      // Generate a new story for this date
+      AI.generateStory(Store.getSettings().level, Store.getSettings().topics).then(storyData => {
+        Store.setStoryForDate(newDateStr, storyData);
+        Views.renderStory(newDateStr, storyData);
+      });
+    } else {
+      Views.renderStory(newDateStr, story);
     }
   },
 

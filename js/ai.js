@@ -200,80 +200,235 @@ const AI = {
   // ==========================================
   async generateStory(level, topics) {
     try {
-      return {
-        title: 'Una Giornata Speciale a Roma',
-        topic: 'Reisen',
-        level: level,
-        readingTime: '5 min',
-        pages: [
-          [
-            {
-              italian: 'Marco è un giovane italiano che vive a Roma, la capitale meravigliosa dell\'Italia.',
-              german: 'Marco ist ein junger Italiener, der in Rom lebt, der wunderschönen Hauptstadt Italiens.',
-              note: 'vive = lebt (presente). meravigliosa = wunderbar, wunderschön.'
-            },
-            {
-              italian: 'Ogni mattina si sveglia presto per ammirare il sole che sorge sopra la città.',
-              german: 'Jeden Morgen wacht er früh auf, um die Sonne zu bewundern, die über der Stadt aufgeht.',
-              note: 'si sveglia = wacht auf. sorge = geht auf. Perfettivo avec "sorge".'
-            },
-            {
-              italian: 'Questo giorno è speciale perché porta con sé una sorpresa meravigliosa.',
-              german: 'Dieser Tag ist besonders, weil er eine wunderbare Überraschung mit sich bringt.',
-              note: 'porta = bringt. con sé = mit sich. sorpresa = Überraschung.'
-            },
-            {
-              italian: 'Marco ha ricevuto una lettera con un invito a visitare una mostra d\'arte nel palazzo più antico di Roma.',
-              german: 'Marco hat einen Brief mit einer Einladung erhalten, eine Kunstausstellung im ältesten Palazzo Roms zu besuchen.',
-              note: 'ha ricevuto = hat erhalten (Perfekt). invito = Einladung. mostra d\'arte = Kunstausstellung.'
-            }
-          ],
-          [
-            {
-              italian: 'Si veste con eleganza e parte verso il palazzo che ha sempre desiderato visitare.',
-              german: 'Er zieht sich elegant an und macht sich auf zum Palazzo, den er schon immer besuchen wollte.',
-              note: 'parte verso = macht sich auf. desiderato = erwünscht, erträumt.'
-            },
-            {
-              italian: 'Mentre cammina per le strade antiche di Roma, guarda le bellissime fontane e gli edifici storici.',
-              german: 'Während er durch die alten Straßen Roms geht, betrachtet er die wunderschönen Brunnen und historischen Gebäude.',
-              note: 'mentre = während. cammina = geht. guarda = schaut, sieht.'
-            },
-            {
-              italian: 'Arriva al palazzo e rimane affascinato dalla sua architettura sorprendente.',
-              german: 'Er kommt am Palazzo an und ist fasziniert von seiner überraschenden Architektur.',
-              note: 'rimane affascinato = bleibt fasziniert. architettura = Architektur.'
-            },
-            {
-              italian: 'All\'interno, scopre che la mostra è dedicata agli artisti italiani più famosi del rinascimento.',
-              german: 'Im Inneren entdeckt er, dass die Ausstellung italienischen Künstlern der berühmtesten Renaissance-Zeit gewidmet ist.',
-              note: 'scopre = entdeckt. dedicata = gewidmet. rinascimento = Renaissance.'
-            }
-          ],
-          [
-            {
-              italian: 'Passa ore intere a contemplare i capolavori di Leonardo da Vinci e Michelangelo.',
-              german: 'Er verbringt Stunden damit, die Meisterwerke von Leonardo da Vinci und Michelangelo zu betrachten.',
-              note: 'passa = verbringt. capolavori = Meisterwerke. contemplare = betrachten.'
-            },
-            {
-              italian: 'Ogni opera d\'arte racconta una storia di bellezza, passione e genio italiano.',
-              german: 'Jedes Kunstwerk erzählt eine Geschichte von Schönheit, Leidenschaft und italienischem Genie.',
-              note: 'racconta = erzählt. opera d\'arte = Kunstwerk. genio = Genie.'
-            },
-            {
-              italian: 'Marco si sente ispirato e ringrazia il cielo di essere nato in un paese così straordinario.',
-              german: 'Marco fühlt sich inspiriert und dankt dem Himmel, dass er in einem so außergewöhnlichen Land geboren wurde.',
-              note: 'ispirato = inspiriert. ringrazia = dankt. straordinario = außergewöhnlich.'
-            },
-            {
-              italian: 'Uscendo dal palazzo al tramonto, porterà con sé il ricordo di questa giornata indimenticabile.',
-              german: 'Wenn er beim Sonnenuntergang aus dem Palazzo hinausgeht, wird er die Erinnerung an diesen unvergesslichen Tag mitnehmen.',
-              note: 'uscendo = hinausgehend. tramonto = Sonnenuntergang. indimenticabile = unvergesslich.'
-            }
+      // Pool of different stories for the archive
+      const stories = [
+        {
+          title: 'Una Giornata Speciale a Roma',
+          topic: 'Reisen',
+          level: level,
+          readingTime: '5 min',
+          pages: [
+            [
+              {
+                italian: 'Marco è un giovane italiano che vive a Roma, la capitale meravigliosa dell\'Italia.',
+                german: 'Marco ist ein junger Italiener, der in Rom lebt, der wunderschönen Hauptstadt Italiens.',
+                note: 'vive = lebt (presente). meravigliosa = wunderbar, wunderschön.'
+              },
+              {
+                italian: 'Ogni mattina si sveglia presto per ammirare il sole che sorge sopra la città.',
+                german: 'Jeden Morgen wacht er früh auf, um die Sonne zu bewundern, die über der Stadt aufgeht.',
+                note: 'si sveglia = wacht auf. sorge = geht auf.'
+              },
+              {
+                italian: 'Questo giorno è speciale perché porta con sé una sorpresa meravigliosa.',
+                german: 'Dieser Tag ist besonders, weil er eine wunderbare Überraschung mit sich bringt.',
+                note: 'porta = bringt. con sé = mit sich. sorpresa = Überraschung.'
+              },
+              {
+                italian: 'Marco ha ricevuto una lettera con un invito a visitare una mostra d\'arte nel palazzo più antico di Roma.',
+                german: 'Marco hat einen Brief mit einer Einladung erhalten, eine Kunstausstellung im ältesten Palazzo Roms zu besuchen.',
+                note: 'ha ricevuto = hat erhalten (Perfekt). invito = Einladung. mostra d\'arte = Kunstausstellung.'
+              }
+            ],
+            [
+              {
+                italian: 'Si veste con eleganza e parte verso il palazzo che ha sempre desiderato visitare.',
+                german: 'Er zieht sich elegant an und macht sich auf zum Palazzo, den er schon immer besuchen wollte.',
+                note: 'parte verso = macht sich auf. desiderato = erwünscht.'
+              },
+              {
+                italian: 'Mentre cammina per le strade antiche di Roma, guarda le bellissime fontane e gli edifici storici.',
+                german: 'Während er durch die alten Straßen Roms geht, betrachtet er die wunderschönen Brunnen und historischen Gebäude.',
+                note: 'mentre = während. cammina = geht. guarda = schaut, sieht.'
+              },
+              {
+                italian: 'Arriva al palazzo e rimane affascinato dalla sua architettura sorprendente.',
+                german: 'Er kommt am Palazzo an und ist fasziniert von seiner überraschenden Architektur.',
+                note: 'rimane affascinato = bleibt fasziniert. architettura = Architektur.'
+              },
+              {
+                italian: 'All\'interno, scopre che la mostra è dedicata agli artisti italiani più famosi del rinascimento.',
+                german: 'Im Inneren entdeckt er, dass die Ausstellung italienischen Künstlern der berühmtesten Renaissance gewidmet ist.',
+                note: 'scopre = entdeckt. dedicata = gewidmet. rinascimento = Renaissance.'
+              }
+            ],
+            [
+              {
+                italian: 'Passa ore intere a contemplare i capolavori di Leonardo da Vinci e Michelangelo.',
+                german: 'Er verbringt Stunden damit, die Meisterwerke von Leonardo da Vinci und Michelangelo zu betrachten.',
+                note: 'passa = verbringt. capolavori = Meisterwerke. contemplare = betrachten.'
+              },
+              {
+                italian: 'Ogni opera d\'arte racconta una storia di bellezza, passione e genio italiano.',
+                german: 'Jedes Kunstwerk erzählt eine Geschichte von Schönheit, Leidenschaft und italienischem Genie.',
+                note: 'racconta = erzählt. opera d\'arte = Kunstwerk. genio = Genie.'
+              },
+              {
+                italian: 'Marco si sente ispirato e ringrazia il cielo di essere nato in un paese così straordinario.',
+                german: 'Marco fühlt sich inspiriert und dankt dem Himmel, dass er in einem so außergewöhnlichen Land geboren wurde.',
+                note: 'ispirato = inspiriert. ringrazia = dankt. straordinario = außergewöhnlich.'
+              },
+              {
+                italian: 'Uscendo dal palazzo al tramonto, porterà con sé il ricordo di questa giornata indimenticabile.',
+                german: 'Beim Hinausgehen aus dem Palazzo zum Sonnenuntergang nimmt er die Erinnerung an diesen unvergesslichen Tag mit.',
+                note: 'uscendo = hinausgehend. tramonto = Sonnenuntergang. indimenticabile = unvergesslich.'
+              }
+            ]
           ]
-        ]
-      };
+        },
+        {
+          title: 'Il Mercato di Firenze',
+          topic: 'Alltag',
+          level: level,
+          readingTime: '4 min',
+          pages: [
+            [
+              {
+                italian: 'Giulia ama visitare il mercato centrale di Firenze ogni sabato mattina.',
+                german: 'Giulia liebt es, jeden Samstagmorgen den Zentralmarkt von Florenz zu besuchen.',
+                note: 'ama = liebt. ogni sabato = jeden Samstag.'
+              },
+              {
+                italian: 'Il mercato è un luogo pieno di colori, profumi e voci allegre dei venditori.',
+                german: 'Der Markt ist ein Ort voller Farben, Düfte und fröhlicher Stimmen der Verkäufer.',
+                note: 'pieno di = voll von. profumi = Düfte. allegre = fröhlich.'
+              },
+              {
+                italian: 'Oggi vuole preparare una cena speciale per i suoi amici più cari.',
+                german: 'Heute möchte sie ein besonderes Abendessen für ihre liebsten Freunde vorbereiten.',
+                note: 'vuole = möchte. preparare = vorbereiten. cari = lieb, teuer.'
+              },
+              {
+                italian: 'Cammina tra le bancarelle cercando gli ingredienti più freschi e genuini.',
+                german: 'Sie geht zwischen den Ständen umher und sucht die frischesten und authentischsten Zutaten.',
+                note: 'bancarelle = Stände. genuini = echt, authentisch.'
+              }
+            ],
+            [
+              {
+                italian: 'Al banco del pesce, sceglie del branzino freschissimo appena pescato.',
+                german: 'Am Fischstand wählt sie frischesten, gerade gefangenen Wolfsbarsch aus.',
+                note: 'banco = Stand. branzino = Wolfsbarsch. pescato = gefangen.'
+              },
+              {
+                italian: 'Poi va dal fruttivendolo e compra pomodori rossi e succosi, basilico profumato e limoni siciliani.',
+                german: 'Dann geht sie zum Gemüsehändler und kauft rote saftige Tomaten, duftenden Basilikum und sizilianische Zitronen.',
+                note: 'fruttivendolo = Obst- und Gemüsehändler. succosi = saftig.'
+              },
+              {
+                italian: 'Il venditore le sorride e le regala un mazzetto di prezzemolo fresco.',
+                german: 'Der Verkäufer lächelt sie an und schenkt ihr ein Sträußchen frische Petersilie.',
+                note: 'sorride = lächelt. regala = schenkt. mazzetto = Sträußchen.'
+              },
+              {
+                italian: 'Giulia lo ringrazia calorosamente e continua il suo giro tra le bancarelle.',
+                german: 'Giulia dankt ihm herzlich und setzt ihren Rundgang zwischen den Ständen fort.',
+                note: 'ringrazia = dankt. calorosamente = herzlich. giro = Rundgang.'
+              }
+            ],
+            [
+              {
+                italian: 'All\'ultimo banco trova del pane fatto in casa ancora caldo e croccante.',
+                german: 'Am letzten Stand findet sie hausgemachtes Brot, noch warm und knusprig.',
+                note: 'fatto in casa = hausgemacht. caldo = warm. croccante = knusprig.'
+              },
+              {
+                italian: 'Compra anche una bottiglia di olio d\'oliva toscano di altissima qualità.',
+                german: 'Sie kauft auch eine Flasche toskanisches Olivenöl von höchster Qualität.',
+                note: 'bottiglia = Flasche. altissima = höchste.'
+              },
+              {
+                italian: 'Con la borsa piena di tesori culinari, Giulia torna a casa felice e soddisfatta.',
+                german: 'Mit der Tasche voller kulinarischer Schätze kehrt Giulia glücklich und zufrieden nach Hause zurück.',
+                note: 'tesori = Schätze. soddisfatta = zufrieden.'
+              },
+              {
+                italian: 'Stasera preparerà una cena che i suoi amici ricorderanno per sempre.',
+                german: 'Heute Abend wird sie ein Abendessen zubereiten, das ihre Freunde für immer in Erinnerung behalten werden.',
+                note: 'stasera = heute Abend. ricorderanno = werden sich erinnern.'
+              }
+            ]
+          ]
+        },
+        {
+          title: 'Vacanze al Mare in Sicilia',
+          topic: 'Reisen',
+          level: level,
+          readingTime: '5 min',
+          pages: [
+            [
+              {
+                italian: 'Luca e Anna hanno sognato per mesi le loro vacanze in Sicilia.',
+                german: 'Luca und Anna haben monatelang von ihrem Urlaub in Sizilien geträumt.',
+                note: 'hanno sognato = haben geträumt. per mesi = monatelang.'
+              },
+              {
+                italian: 'Finalmente arrivano a Taormina, una piccola città affacciata sul mare turchese.',
+                german: 'Endlich kommen sie in Taormina an, einer kleinen Stadt mit Blick auf das türkisfarbene Meer.',
+                note: 'finalmente = endlich. affacciata = mit Blick auf. turchese = türkis.'
+              },
+              {
+                italian: 'L\'albergo si trova su una collina con una vista mozzafiato sull\'Etna.',
+                german: 'Das Hotel liegt auf einem Hügel mit atemberaubendem Blick auf den Ätna.',
+                note: 'collina = Hügel. vista mozzafiato = atemberaubende Aussicht.'
+              },
+              {
+                italian: 'Dopo aver lasciato le valigie in camera, scendono subito in spiaggia.',
+                german: 'Nachdem sie die Koffer im Zimmer gelassen haben, gehen sie sofort zum Strand hinunter.',
+                note: 'valigie = Koffer. scendono = gehen hinunter.'
+              }
+            ],
+            [
+              {
+                italian: 'La sabbia dorata è calda sotto i piedi e l\'acqua cristallina li invita a tuffarsi.',
+                german: 'Der goldene Sand ist warm unter den Füßen und das kristallklare Wasser lädt zum Eintauchen ein.',
+                note: 'dorata = golden. tuffarsi = eintauchen, sich stürzen.'
+              },
+              {
+                italian: 'Nuotano insieme tra le onde dolci del Mediterraneo ridendo come bambini.',
+                german: 'Sie schwimmen zusammen zwischen den sanften Wellen des Mittelmeers und lachen wie Kinder.',
+                note: 'onde = Wellen. dolci = sanft. ridendo = lachend.'
+              },
+              {
+                italian: 'Nel pomeriggio, passeggiano per le stradine del centro storico ammirando i palazzi antichi.',
+                german: 'Am Nachmittag spazieren sie durch die kleinen Gassen der Altstadt und bewundern die alten Paläste.',
+                note: 'stradine = kleine Gassen. ammirando = bewundernd.'
+              },
+              {
+                italian: 'Si fermano in una gelateria tradizionale e assaggiano il gelato al pistacchio siciliano.',
+                german: 'Sie halten an einer traditionellen Eisdiele und probieren sizilianisches Pistazieneis.',
+                note: 'si fermano = sie halten an. assaggiano = probieren.'
+              }
+            ],
+            [
+              {
+                italian: 'La sera, cenano in un ristorante con terrazza vista mare.',
+                german: 'Am Abend essen sie in einem Restaurant mit Terrasse und Meerblick zu Abend.',
+                note: 'cenano = essen zu Abend. terrazza = Terrasse.'
+              },
+              {
+                italian: 'Ordinano pasta alla Norma e pesce fresco grigliato accompagnati da vino bianco locale.',
+                german: 'Sie bestellen Pasta alla Norma und frischen gegrillten Fisch, begleitet von lokalem Weißwein.',
+                note: 'grigliato = gegrillt. accompagnati = begleitet.'
+              },
+              {
+                italian: 'Mentre il sole tramonta colorando il cielo di arancione e rosa, si tengono per mano.',
+                german: 'Während die Sonne untergeht und den Himmel orange und rosa färbt, halten sie sich an den Händen.',
+                note: 'tramonta = geht unter. colorando = färbend. si tengono per mano = halten Händchen.'
+              },
+              {
+                italian: 'In questo momento perfetto, capiscono che la Sicilia ha rubato i loro cuori per sempre.',
+                german: 'In diesem perfekten Moment verstehen sie, dass Sizilien ihre Herzen für immer gestohlen hat.',
+                note: 'ha rubato = hat gestohlen. cuori = Herzen.'
+              }
+            ]
+          ]
+        }
+      ];
+
+      // Return a random story from the pool
+      const randomIndex = Math.floor(Math.random() * stories.length);
+      return stories[randomIndex];
     } catch (err) {
       console.error('Story generation error:', err);
       throw err;

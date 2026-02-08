@@ -108,6 +108,38 @@ const Store = {
     localStorage.setItem(key, JSON.stringify(articles));
   },
 
+  // --- Story Archive ---
+  CURRENT_STORY_DATE_KEY: 'current_story_date',
+  STORY_ARCHIVE_KEY: 'story_archive',
+
+  getCurrentStoryDate() {
+    return localStorage.getItem(this.CURRENT_STORY_DATE_KEY) || getTodayDateStr();
+  },
+
+  setCurrentStoryDate(dateStr) {
+    localStorage.setItem(this.CURRENT_STORY_DATE_KEY, dateStr);
+  },
+
+  getStoryForDate(dateStr) {
+    const archive = this.getStoryArchive();
+    return archive[dateStr] || null;
+  },
+
+  setStoryForDate(dateStr, story) {
+    const archive = this.getStoryArchive();
+    archive[dateStr] = story;
+    localStorage.setItem(this.STORY_ARCHIVE_KEY, JSON.stringify(archive));
+  },
+
+  getStoryArchive() {
+    try {
+      const data = localStorage.getItem(this.STORY_ARCHIVE_KEY);
+      return data ? JSON.parse(data) : {};
+    } catch (e) {
+      return {};
+    }
+  },
+
   // --- Theme ---
   getTheme() {
     return localStorage.getItem(this.THEME_KEY) || 'auto';

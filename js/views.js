@@ -118,29 +118,39 @@ const Views = {
     const container = document.getElementById('story-content');
     const settings = Store.getSettings();
     const showExplanations = settings.showExplanations;
-    const content = getContentForDate(dateStr);
+    
+    // Get or create story for this date
+    let storyData = story;
+    if (!storyData) {
+      const cachedStory = Store.getStoryForDate(dateStr);
+      if (cachedStory) {
+        storyData = cachedStory;
+      }
+    }
+    
     const dateInfo = formatDateDisplay(dateStr);
 
-    const storyData = story || (content ? content.story : null);
     let html = `
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-md);">
-        <div>
-          <h2 style="font-family: var(--font-serif); font-size: 1.3rem;">Tagesgeschichte</h2>
-          <p style="color: var(--text-tertiary); font-size: 0.82rem; margin-top: 2px;">${dateInfo.full}</p>
+      <div class="story-nav-header">
+        <button class="story-nav-btn" onclick="App.navigateStory(-1)" title="Vorheriger Tag">
+          <span>←</span>
+        </button>
+        <div style="text-align: center; flex: 1;">
+          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">Tagesgeschichte</h2>
+          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;">${dateInfo.full}</p>
         </div>
+        <button class="story-nav-btn" onclick="App.navigateStory(1)" title="Nächster Tag">
+          <span>→</span>
+        </button>
       </div>`;
-
-    html += `
-      <button class="ai-generate-btn" onclick="App.aiGenerateStory()" id="btn-ai-story">
-        <span class="ai-btn-icon">✨</span> Neue Geschichte mit AI generieren
-      </button>`;
 
     if (!storyData) {
       html += `
         <div class="vocab-empty">
           <div class="vocab-empty-icon">📖</div>
           <div class="vocab-empty-text">
-            Tippe auf den Button oben, um eine neue Geschichte zu generieren.
+            Für diesen Tag gibt es noch keine Geschichte.<br>
+            Nutze die Pfeile, um zu anderen Tagen zu navigieren.
           </div>
         </div>`;
     } else {
@@ -159,36 +169,6 @@ const Views = {
             ${this.renderStoryPage(storyData, 0, showExplanations)}
           </div>
         </div>`;
-    }
-
-    // Past days
-    const allDates = getAvailableDates();
-    const pastDates = allDates.filter(d => d !== dateStr).slice(0, 3);
-    if (pastDates.length > 0) {
-      html += `
-        <div class="section-divider"></div>
-        <div class="section-header" style="margin-top: var(--space-lg);">
-          <span class="section-icon">📅</span>
-          <span class="section-title">Ältere Geschichten</span>
-        </div>
-        <div class="library-grid">`;
-      pastDates.forEach(d => {
-        const c = getContentForDate(d);
-        const di = formatDateDisplay(d);
-        html += `
-          <div class="library-item" onclick="App.loadDateStory('${d}')">
-            <div class="library-item-date">
-              <div class="library-item-day">${di.day}</div>
-              <div class="library-item-month">${di.monthShort}</div>
-            </div>
-            <div class="library-item-content">
-              <div class="library-item-title">${c ? c.story.title : '—'}</div>
-              <div class="library-item-preview">${c ? c.story.topic + ' · ' + c.story.level : ''}</div>
-            </div>
-            <div class="library-item-arrow">›</div>
-          </div>`;
-      });
-      html += '</div>';
     }
 
     container.innerHTML = html;
