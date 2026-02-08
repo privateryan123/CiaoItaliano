@@ -141,6 +141,12 @@ const App = {
         subtitle.textContent = 'Nachrichten auf Italienisch';
         break;
       }
+      case 'verbs':
+        console.log('Rendering verbs view...');
+        const selectedVerb = Store.getSelectedVerb();
+        Views.renderVerbs(selectedVerb);
+        subtitle.textContent = 'Verben üben';
+        break;
       case 'translator':
         console.log('Rendering translator view...');
         Views.renderTranslator();
@@ -386,6 +392,15 @@ const App = {
     input.value = text;
     this.setTranslationDir('de-it');
     this.doTranslate();
+  },
+
+  // ==========================================
+  // VERBS
+  // ==========================================
+  changeVerb(verbKey) {
+    Store.setSelectedVerb(verbKey);
+    Views.renderVerbs(verbKey);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   },
 
   // ==========================================

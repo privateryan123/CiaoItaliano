@@ -193,6 +193,17 @@ const Store = {
     }
   },
 
+  // --- Selected Verb ---
+  SELECTED_VERB_KEY: 'selected_verb',
+
+  getSelectedVerb() {
+    return localStorage.getItem(this.SELECTED_VERB_KEY) || 'ESSERE';
+  },
+
+  setSelectedVerb(verbKey) {
+    localStorage.setItem(this.SELECTED_VERB_KEY, verbKey);
+  },
+
   // --- Theme ---
   getTheme() {
     return localStorage.getItem(this.THEME_KEY) || 'auto';

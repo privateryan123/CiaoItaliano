@@ -264,6 +264,70 @@ const Views = {
   },
 
   // ==========================================
+  // VERBS VIEW
+  // ==========================================
+  renderVerbs(selectedVerb) {
+    const container = document.getElementById('verbs-content');
+    
+    // Default to ESSERE if no verb selected
+    const verbKey = selectedVerb || 'ESSERE';
+    const currentVerb = VerbData[verbKey];
+    
+    if (!currentVerb) {
+      container.innerHTML = '<div class="vocab-empty">Verb nicht gefunden.</div>';
+      return;
+    }
+
+    const settings = Store.getSettings();
+    const showExplanations = settings.showExplanations;
+
+    let html = `
+      <div style="margin-bottom: var(--space-md);">
+        <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-sm);">Verben üben</h2>
+        <p style="color: var(--text-tertiary); font-size: 0.85rem;">Wähle ein Verb und übe mit Beispielsätzen</p>
+      </div>
+
+      <div class="card" style="margin-bottom: var(--space-md);">
+        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
+          Verb auswählen:
+        </label>
+        <select id="verb-selector" onchange="App.changeVerb(this.value)" style="width: 100%; padding: 12px; font-size: 1rem; border: 2px solid var(--border-color); border-radius: 12px; background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); cursor: pointer;">`;
+    
+    // Add all verbs to dropdown
+    Object.keys(VerbData).forEach(key => {
+      const selected = key === verbKey ? 'selected' : '';
+      html += `<option value="${key}" ${selected}>${VerbData[key].name}</option>`;
+    });
+    
+    html += `
+        </select>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-md);">
+        <h3 style="font-family: var(--font-serif); font-size: 1.1rem; margin: 0;">${currentVerb.name}</h3>
+        <span class="section-badge">${currentVerb.sentences.length} Sätze</span>
+      </div>`;
+
+    // Render all sentences for this verb
+    currentVerb.sentences.forEach((s, i) => {
+      const isSaved = Store.isSentenceSaved(s.italian);
+      html += `
+        <div class="card sentence-card" style="margin-bottom: var(--space-sm);">
+          <span class="sentence-number">${i + 1}</span>
+          <div class="sentence-italian">${this.makeInteractive(s.italian, [], s.italian, s.german)}</div>
+          <div class="sentence-german">${s.german}</div>
+          <div class="card-actions">
+            <button class="save-btn ${isSaved ? 'saved' : ''}"
+              onclick="App.saveSentence('${this.esc(s.italian)}', '${this.esc(s.german)}')"
+              title="Satz speichern">🔖</button>
+          </div>
+        </div>`;
+    });
+
+    container.innerHTML = html;
+  },
+
+  // ==========================================
   // TRANSLATOR VIEW
   // ==========================================
   renderTranslator() {
