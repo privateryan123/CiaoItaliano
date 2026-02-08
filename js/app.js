@@ -433,6 +433,14 @@ const App = {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   },
 
+  changeSentencesTopic(topicKey) {
+    Store.setSelectedSentencesTopic(topicKey);
+    const currentDate = Store.getCurrentSentenceDate();
+    const sentences = Store.getSentencesForDate(currentDate) || [];
+    Views.renderSentences(currentDate, sentences);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  },
+
   // ==========================================
   // WORDREFERENCE
   // ==========================================

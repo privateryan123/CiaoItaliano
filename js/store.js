@@ -204,6 +204,17 @@ const Store = {
     localStorage.setItem(this.SELECTED_VERB_KEY, verbKey);
   },
 
+  // --- Selected Sentences Topic ---
+  SELECTED_SENTENCES_TOPIC_KEY: 'selected_sentences_topic',
+
+  getSelectedSentencesTopic() {
+    return localStorage.getItem(this.SELECTED_SENTENCES_TOPIC_KEY) || 'VORSTELLUNG';
+  },
+
+  setSelectedSentencesTopic(topicKey) {
+    localStorage.setItem(this.SELECTED_SENTENCES_TOPIC_KEY, topicKey);
+  },
+
   // --- Theme ---
   getTheme() {
     return localStorage.getItem(this.THEME_KEY) || 'auto';
