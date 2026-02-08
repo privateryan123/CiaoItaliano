@@ -234,9 +234,6 @@ const App = {
       btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Sätze mit AI generieren';
     }
   },
-      btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Sätze mit AI generieren';
-    }
-  },
 
   async aiGenerateStory() {
     const btn = document.getElementById('btn-ai-story');
