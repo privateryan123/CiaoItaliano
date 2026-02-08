@@ -296,6 +296,14 @@ body {
 }
 
 /* --- Story Section --- */
+.story-nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+  gap: var(--space-md);
+}
+
 .story-header {
   margin-bottom: var(--space-md);
 }
