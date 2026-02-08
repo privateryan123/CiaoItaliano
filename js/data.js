@@ -7,6 +7,136 @@
 
 const DAILY_CONTENT = {
 
+  "2026-02-08": {
+    date: "2026-02-08",
+    weekday: "Sonntag",
+    greeting: "Buona domenica! ☀️",
+    sentences: [
+      {
+        italian: "Dove si trova la stazione?",
+        german: "Wo ist der Bahnhof?",
+        explanation: "«Dove si trova» = Wo befindet sich. Eine der wichtigsten Fragen zum Finden von Orten.",
+        keywords: ["dove", "stazione"]
+      },
+      {
+        italian: "Mi piacciono i libri di Italo Calvino.",
+        german: "Mir gefallen die Bücher von Italo Calvino.",
+        explanation: "«Piacere» mit indirektem Objekt: «Mi piacciono» (mir gefallen). «Libri» = Bücher.",
+        keywords: ["piacciono", "libri"]
+      },
+      {
+        italian: "Potremmo andare al cinema stasera?",
+        german: "Könnten wir heute Abend ins Kino gehen?",
+        explanation: "«Potremmo» = Wir könnten (condizionale). «Stasera» = heute Abend. Eine höfliche Vorschlag.",
+        keywords: ["potremmo", "cinema", "stasera"]
+      },
+      {
+        italian: "Lei parla italiano molto bene!",
+        german: "Sie sprechen italienisch sehr gut!",
+        explanation: "«Lei» = formelles «Sie» (Singular). «Molto bene» = sehr gut. Ein Kompliment auf formale Weise.",
+        keywords: ["lei", "molto", "bene"]
+      },
+      {
+        italian: "Non capisco quello che dici.",
+        german: "Ich verstehe nicht, was du sagst.",
+        explanation: "«Capire» = verstehen. «Quello che» = was/das was. Essentiell für Verständigungsschwierigkeiten.",
+        keywords: ["capisco", "quello"]
+      }
+    ],
+    story: {
+      title: "Una domenica al mercato",
+      topic: "Alltag",
+      level: "A1",
+      readingTime: "4 min",
+      pages: [
+        [
+          {
+            italian: "Sofia si sveglia la domenica mattina. Quale bel giorno!",
+            german: "Sofia wacht Sonntagmorgen auf. Was für ein schöner Tag!",
+            note: "«Svegliarsi» = aufwachen. «Quale bel giorno» = Was für ein schöner Tag."
+          },
+          {
+            italian: "Decide di andare al mercato della sua città.",
+            german: "Sie beschließt, zum Markt ihrer Stadt zu gehen.",
+            note: "«Decidere» = beschließen. «Mercato» = Markt."
+          },
+          {
+            italian: "Prende una borsa e esce di casa.",
+            german: "Sie nimmt eine Tasche und verlässt das Haus.",
+            note: "«Borsa» = Tasche/Handtasche. «Uscire» = hinausgehen."
+          },
+          {
+            italian: "Il sole brilla nei cieli azzurri.",
+            german: "Die Sonne scheint am blauen Himmel.",
+            note: "«Brillare» = scheinen/leuchten. «Cieli azzurri» = blaue Himmel."
+          }
+        ],
+        [
+          {
+            italian: "Al mercato, Sofia vede tanti venditori.",
+            german: "Auf dem Markt sieht Sofia viele Verkäufer.",
+            note: "«Venditori» = Verkäufer. «Tanti» = viele."
+          },
+          {
+            italian: "Un ragazzo vende mele rosse bellissime.",
+            german: "Ein Junge verkauft wunderschöne rote Äpfel.",
+            note: "«Mele» = Äpfel. «Bellissime» = wunderschön (Superlativ)."
+          },
+          {
+            italian: "«Buongiorno! Quante mele vuoi?» chiede il ragazzo.",
+            german: "«Guten Morgen! Wie viele Äpfel möchtest du?» fragt der Junge.",
+            note: "«Quante» = wie viele (Plural weiblich). «Vuoi» = du möchtest."
+          },
+          {
+            italian: "«Cinque, per favore!» dice Sofia con un sorriso.",
+            german: "«Fünf, bitte!» sagt Sofia mit einem Lächeln.",
+            note: "«Cinque» = fünf. «Per favore» = bitte."
+          }
+        ],
+        [
+          {
+            italian: "Sofia compra anche pomodori, pane e formaggio.",
+            german: "Sofia kauft auch Tomaten, Brot und Käse.",
+            note: "«Pomodori» = Tomaten. «Pane» = Brot. «Formaggio» = Käse."
+          },
+          {
+            italian: "La borsa è piena di cose buone.",
+            german: "Die Tasche ist voll mit guten Dingen.",
+            note: "«Piena» = voll. «Cose buone» = gute Dinge."
+          },
+          {
+            italian: "Sofia è felice. Ha tutto quello che serve per la cena.",
+            german: "Sofia ist glücklich. Sie hat alles, was sie für das Abendessen braucht.",
+            note: "«Tutto quello che» = alles was. «Serve» = braucht."
+          },
+          {
+            italian: "Torna a casa, pronta a cucinare!",
+            german: "Sie kehrt nach Hause zurück, bereit zum Kochen!",
+            note: "«Tornare» = zurückkehren. «Cucinare» = kochen."
+          }
+        ]
+      ]
+    },
+    news: [
+      {
+        category: "Kultur",
+        headline: "Florenz: Neue Leonardo-da-Vinci-Ausstellung eröffnet",
+        italianSummary: "A Firenze apre una grande mostra dedicata a Leonardo da Vinci. L'esposizione presenta oltre 200 disegni e schizzi del genio rinascimentale. I visitatori possono ammirare le sue invenzioni, i suoi studi scientifici e le sue opere d'arte. La mostra sarà aperta fino a settembre 2026. Tanti turisti da tutto il mondo visiteranno questa importante esposizione. È un'occasione unica per comprendere il genio di Leonardo.",
+        german: "In Florenz eröffnet eine große Ausstellung zu Leonardo da Vinci. Die Ausstellung präsentiert über 200 Zeichnungen und Skizzen des Renaissance-Genies. Besucher können seine Erfindungen, wissenschaftlichen Studien und Kunstwerke bewundern. Die Ausstellung ist bis September 2026 geöffnet. Viele Touristen aus der ganzen Welt werden diese wichtige Ausstellung besuchen. Es ist eine einmalige Gelegenheit, Leonardos Genie zu verstehen.",
+        source: "https://www.uffizi.it",
+        sourceName: "Galleria degli Uffizi"
+      },
+      {
+        category: "Natur",
+        headline: "Italienische Alpen: Skigebiet erlebt besten Winter seit 10 Jahren",
+        italianSummary: "Le Dolomiti, montagne bellissime nel nord-est dell'Italia, stanno vivendo una stagione invernale spettacolare. Nevicate abbondanti hanno ricoperto le piste e le valli. Gli sciatori da tutta Europa stanno arrivando per godersi le pendici bianche. Le rieste sono in perfette condizioni. I villaggi montani sono pieni di turisti e di allegria. Questo inverno promette di essere memorabile per gli appassionati di sci.",
+        german: "Die Dolomiten, wunderschöne Berge im Nordosten Italiens, erleben eine spektakuläre Wintersaison. Üppige Schneefälle haben die Pisten und Täler bedeckt. Skifahrer aus ganz Europa kommen an, um die weißen Hänge zu genießen. Die Pisten sind in perfektem Zustand. Die Bergheilägendörfer sind voller Touristen und Freude. Dieser Winter verspricht für Skifans unvergesslich zu sein.",
+        source: "https://www.dolomiti.it",
+        sourceName: "Dolomiti Turismo"
+      }
+    ]
+  },
+
   "2026-02-07": {
     date: "2026-02-07",
     weekday: "Samstag",
