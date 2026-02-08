@@ -161,6 +161,38 @@ const Store = {
     }
   },
 
+  // --- Sentence Archive ---
+  CURRENT_SENTENCE_DATE_KEY: 'current_sentence_date',
+  SENTENCE_ARCHIVE_KEY: 'sentence_archive',
+
+  getCurrentSentenceDate() {
+    return localStorage.getItem(this.CURRENT_SENTENCE_DATE_KEY) || getTodayDateStr();
+  },
+
+  setCurrentSentenceDate(dateStr) {
+    localStorage.setItem(this.CURRENT_SENTENCE_DATE_KEY, dateStr);
+  },
+
+  getSentencesForDate(dateStr) {
+    const archive = this.getSentenceArchive();
+    return archive[dateStr] || null;
+  },
+
+  setSentencesForDate(dateStr, sentences) {
+    const archive = this.getSentenceArchive();
+    archive[dateStr] = sentences;
+    localStorage.setItem(this.SENTENCE_ARCHIVE_KEY, JSON.stringify(archive));
+  },
+
+  getSentenceArchive() {
+    try {
+      const data = localStorage.getItem(this.SENTENCE_ARCHIVE_KEY);
+      return data ? JSON.parse(data) : {};
+    } catch (e) {
+      return {};
+    }
+  },
+
   // --- Theme ---
   getTheme() {
     return localStorage.getItem(this.THEME_KEY) || 'auto';

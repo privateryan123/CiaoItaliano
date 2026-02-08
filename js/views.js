@@ -19,14 +19,11 @@ const Views = {
     console.log('Settings:', settings);
     
     const showExplanations = settings.showExplanations;
-    const content = getContentForDate(dateStr);
-    console.log('Content from getContentForDate:', content);
-    
     const dateInfo = formatDateDisplay(dateStr);
     console.log('Date info:', dateInfo);
 
-    // Use AI-generated sentences if provided, else fall back to static
-    const sentenceList = sentences || (content ? content.sentences : []);
+    // Use provided sentences from archive
+    const sentenceList = sentences || [];
     console.log('Sentence list:', sentenceList);
     console.log('Sentence list length:', sentenceList ? sentenceList.length : 0);
     
@@ -35,26 +32,26 @@ const Views = {
     console.log('Displayed sentences:', displayed);
     console.log('Displayed count:', displayed.length);
 
-    let html = `
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-md);">
-        <div>
-          <h2 style="font-family: var(--font-serif); font-size: 1.3rem;">Tagessätze</h2>
-          <p style="color: var(--text-tertiary); font-size: 0.82rem; margin-top: 2px;">${dateInfo.full}</p>
-        </div>
-        <span class="section-badge">${displayed.length} / ${sentenceCount}</span>
-      </div>`;
+    const today = getTodayDateStr();
+    const isToday = dateStr === today;
+    const canGoForward = dateStr < today;
 
-    html += `
-      <button class="ai-generate-btn" onclick="App.aiGenerateSentences()" id="btn-ai-sentences">
-        <span class="ai-btn-icon">✨</span> Neue Sätze mit AI generieren
-      </button>`;
+    let html = `
+      <div class="story-nav-header">
+        <button class="nav-arrow" onclick="App.navigateSentences(-1)" title="Vorheriger Tag">←</button>
+        <div class="nav-date">
+          <div class="nav-date-main">${dateInfo.readable}</div>
+          <div class="nav-date-sub">${dateInfo.weekday}</div>
+        </div>
+        <button class="nav-arrow" onclick="App.navigateSentences(1)" ${!canGoForward ? 'disabled' : ''} title="Nächster Tag">→</button>
+      </div>`;
 
     if (displayed.length === 0) {
       html += `
         <div class="vocab-empty">
           <div class="vocab-empty-icon">✏️</div>
           <div class="vocab-empty-text">
-            Tippe auf den Button oben, um neue Sätze zu generieren.
+            Keine Sätze für diesen Tag verfügbar.
           </div>
         </div>`;
     } else {
@@ -75,38 +72,7 @@ const Views = {
       });
     }
 
-    // Past days quick links
-    const allDates = getAvailableDates();
-    const pastDates = allDates.filter(d => d !== dateStr).slice(0, 3);
-    if (pastDates.length > 0) {
-      html += `
-        <div class="section-divider"></div>
-        <div class="section-header" style="margin-top: var(--space-lg);">
-          <span class="section-icon">📅</span>
-          <span class="section-title">Ältere Sätze</span>
-        </div>
-        <div class="library-grid">`;
-      pastDates.forEach(d => {
-        const c = getContentForDate(d);
-        const di = formatDateDisplay(d);
-        html += `
-          <div class="library-item" onclick="App.loadDateSentences('${d}')">
-            <div class="library-item-date">
-              <div class="library-item-day">${di.day}</div>
-              <div class="library-item-month">${di.monthShort}</div>
-            </div>
-            <div class="library-item-content">
-              <div class="library-item-title">${c ? c.sentences.length + ' Sätze' : '—'}</div>
-              <div class="library-item-preview">${di.weekday}</div>
-            </div>
-            <div class="library-item-arrow">›</div>
-          </div>`;
-      });
-      html += '</div>';
-    }
-
     console.log('Setting container innerHTML. HTML length:', html.length);
-    console.log('First 200 chars of HTML:', html.substring(0, 200));
     container.innerHTML = html;
     console.log('=== Views.renderSentences complete ===');
   },
@@ -292,36 +258,6 @@ const Views = {
             </a>
           </div>`;
       });
-    }
-
-    // Past days
-    const allDates = getAvailableDates();
-    const pastDates = allDates.filter(d => d !== dateStr).slice(0, 3);
-    if (pastDates.length > 0) {
-      html += `
-        <div class="section-divider"></div>
-        <div class="section-header" style="margin-top: var(--space-lg);">
-          <span class="section-icon">📅</span>
-          <span class="section-title">Ältere Nachrichten</span>
-        </div>
-        <div class="library-grid">`;
-      pastDates.forEach(d => {
-        const c = getContentForDate(d);
-        const di = formatDateDisplay(d);
-        html += `
-          <div class="library-item" onclick="App.loadDateNews('${d}')">
-            <div class="library-item-date">
-              <div class="library-item-day">${di.day}</div>
-              <div class="library-item-month">${di.monthShort}</div>
-            </div>
-            <div class="library-item-content">
-              <div class="library-item-title">${c ? c.news.length + ' Nachrichten' : '—'}</div>
-              <div class="library-item-preview">${di.weekday}</div>
-            </div>
-            <div class="library-item-arrow">›</div>
-          </div>`;
-      });
-      html += '</div>';
     }
 
     container.innerHTML = html;

@@ -91,9 +91,19 @@ const App = {
     switch (viewName) {
       case 'sentences': {
         console.log('Rendering sentences view...');
-        const cached = Store.getAICacheEntry(today, 'sentences');
-        console.log('Cached sentences data:', cached);
-        Views.renderSentences(today, cached);
+        const currentDate = Store.getCurrentSentenceDate();
+        let sentences = Store.getSentencesForDate(currentDate);
+        
+        // Auto-generate if no sentences exist for this date
+        if (!sentences) {
+          this.generateSentencesForDate(currentDate).then(generatedSentences => {
+            Store.setSentencesForDate(currentDate, generatedSentences);
+            Views.renderSentences(currentDate, generatedSentences);
+          });
+        } else {
+          Views.renderSentences(currentDate, sentences);
+        }
+        
         subtitle.textContent = 'Tagessätze auf Italienisch';
         break;
       }
@@ -185,66 +195,6 @@ const App = {
     if (storyPages) {
       storyPages.innerHTML = Views.renderStoryPage(storyData, pageIndex, settings.showExplanations);
       document.getElementById('story-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  },
-
-  // ==========================================
-  // DATE-BASED CONTENT LOADING
-  // ==========================================
-  loadDateSentences(dateStr) {
-    const cached = Store.getAICacheEntry(dateStr, 'sentences');
-    Views.renderSentences(dateStr, cached);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  },
-
-  loadDateStory(dateStr) {
-    const cached = Store.getAICacheEntry(dateStr, 'story');
-    Views.renderStory(dateStr, cached);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  },
-
-  loadDateNews(dateStr) {
-    const cached = Store.getAICacheEntry(dateStr, 'news');
-    Views.renderNews(dateStr, cached);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  },
-
-  // ==========================================
-  // AI GENERATION
-  // ==========================================
-  async aiGenerateSentences() {
-    const btn = document.getElementById('btn-ai-sentences');
-    if (!btn) return;
-    
-    const settings = Store.getSettings();
-    
-    btn.disabled = true;
-    btn.innerHTML = '<span class="ai-spinner"></span> Sätze werden generiert…';
-
-    try {
-      const sentences = await AI.generateSentences(settings.sentenceCount, settings.level, settings.topics);
-      if (!sentences) {
-        this.showToast('⚠️ Fehler: Überprüfe deinen API-Schlüssel und Netzwerkverbindung.');
-        btn.disabled = false;
-        btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Sätze mit AI generieren';
-        return;
-      }
-      const today = getTodayDateStr();
-      Store.setAICacheEntry(today, 'sentences', sentences);
-      Views.renderSentences(today, sentences);
-      this.showToast(`${sentences.length} neue Sätze generiert! ✨`);
-    } catch (err) {
-      console.error('AI sentence generation failed:', err);
-      const msg = err.message || 'AI Fehler';
-      if (msg.includes('Rate-Limit')) {
-        this.showToast('⏱️ Rate-Limit erreicht. Bitte warte einige Minuten.');
-      } else if (msg.includes('ungültig') || msg.includes('401')) {
-        this.showToast('🔑 API-Schlüssel ungültig. Überprüfe deine Einstellungen.');
-      } else {
-        this.showToast('⚠️ Fehler: ' + msg);
-      }
-      btn.disabled = false;
-      btn.innerHTML = '<span class="ai-btn-icon">✨</span> Neue Sätze mit AI generieren';
     }
   },
 
