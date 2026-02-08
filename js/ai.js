@@ -33,7 +33,7 @@ const AI = {
   // ==========================================
   async generateSentences(count, level, topics) {
     try {
-      const testSentences = [
+      const allSentences = [
         {
           italian: 'Buongiorno, come stai oggi?',
           german: 'Guten Morgen, wie geht es dir heute?',
@@ -63,10 +63,132 @@ const AI = {
           german: 'Wenn ich Italien besuche, möchte ich Rom, Florenz und Venedig sehen.',
           explanation: 'Quando = wenn/wann. Visiterò = ich werde besuchen (Zukunft). Vorrei = ich würde mögen. Vedere = sehen.',
           keywords: ['visiterò', 'Italia', 'vorrei']
+        },
+        {
+          italian: 'Dove posso trovare un buon ristorante qui vicino?',
+          german: 'Wo kann ich hier in der Nähe ein gutes Restaurant finden?',
+          explanation: 'Dove = wo. Posso = ich kann. Trovare = finden. Qui vicino = hier in der Nähe.',
+          keywords: ['dove', 'posso', 'ristorante']
+        },
+        {
+          italian: 'Vorrei ordinare un bicchiere di vino rosso, per favore.',
+          german: 'Ich hätte gerne ein Glas Rotwein, bitte.',
+          explanation: 'Vorrei = ich hätte gerne. Ordinare = bestellen. Un bicchiere = ein Glas. Vino rosso = Rotwein.',
+          keywords: ['vorrei', 'bicchiere', 'vino']
+        },
+        {
+          italian: 'Che bel tempo oggi! Andiamo a fare una passeggiata?',
+          german: 'Was für ein schönes Wetter heute! Sollen wir spazieren gehen?',
+          explanation: 'Che bel tempo = was für ein schönes Wetter. Andiamo = wir gehen. Passeggiata = Spaziergang.',
+          keywords: ['bel', 'tempo', 'passeggiata']
+        },
+        {
+          italian: 'Scusi, può dirmi dov\'è la stazione?',
+          german: 'Entschuldigung, können Sie mir sagen, wo der Bahnhof ist?',
+          explanation: 'Scusi = entschuldigen Sie (formell). Può = können Sie. Dirmi = mir sagen. Dov\'è = wo ist.',
+          keywords: ['scusi', 'può', 'stazione']
+        },
+        {
+          italian: 'Ho prenotato una camera per due notti.',
+          german: 'Ich habe ein Zimmer für zwei Nächte reserviert.',
+          explanation: 'Ho prenotato = ich habe reserviert (Perfekt). Una camera = ein Zimmer. Due notti = zwei Nächte.',
+          keywords: ['prenotato', 'camera', 'notti']
+        },
+        {
+          italian: 'Non parlo molto bene l\'italiano, mi dispiace.',
+          german: 'Ich spreche nicht sehr gut Italienisch, tut mir leid.',
+          explanation: 'Non parlo = ich spreche nicht. Molto bene = sehr gut. Mi dispiace = es tut mir leid.',
+          keywords: ['parlo', 'italiano', 'dispiace']
+        },
+        {
+          italian: 'Quanto costa questo libro?',
+          german: 'Wie viel kostet dieses Buch?',
+          explanation: 'Quanto = wie viel. Costa = kostet. Questo = dieser/dieses. Libro = Buch.',
+          keywords: ['quanto', 'costa', 'libro']
+        },
+        {
+          italian: 'Mi può aiutare, per cortesia?',
+          german: 'Können Sie mir bitte helfen?',
+          explanation: 'Mi può aiutare = können Sie mir helfen. Per cortesia = bitte (höflich).',
+          keywords: ['può', 'aiutare', 'cortesia']
+        },
+        {
+          italian: 'Vado al supermercato a comprare del pane fresco.',
+          german: 'Ich gehe zum Supermarkt, um frisches Brot zu kaufen.',
+          explanation: 'Vado = ich gehe. Comprare = kaufen. Del pane = etwas Brot. Fresco = frisch.',
+          keywords: ['vado', 'supermercato', 'pane']
+        },
+        {
+          italian: 'La mia famiglia abita in un piccolo paese vicino a Firenze.',
+          german: 'Meine Familie wohnt in einem kleinen Dorf in der Nähe von Florenz.',
+          explanation: 'La mia famiglia = meine Familie. Abita = wohnt. Piccolo paese = kleines Dorf.',
+          keywords: ['famiglia', 'abita', 'paese']
+        },
+        {
+          italian: 'Studio italiano da sei mesi e mi piace molto.',
+          german: 'Ich lerne seit sechs Monaten Italienisch und es gefällt mir sehr.',
+          explanation: 'Studio = ich lerne/studiere. Da sei mesi = seit sechs Monaten. Mi piace molto = es gefällt mir sehr.',
+          keywords: ['studio', 'mesi', 'piace']
+        },
+        {
+          italian: 'Domani partirò per le vacanze al mare.',
+          german: 'Morgen fahre ich in den Urlaub ans Meer.',
+          explanation: 'Domani = morgen. Partirò = ich werde abfahren (Zukunft). Le vacanze = der Urlaub. Al mare = ans Meer.',
+          keywords: ['domani', 'partirò', 'vacanze']
+        },
+        {
+          italian: 'Questo vino è davvero ottimo! Complimenti!',
+          german: 'Dieser Wein ist wirklich ausgezeichnet! Kompliment!',
+          explanation: 'Davvero = wirklich. Ottimo = ausgezeichnet, hervorragend. Complimenti = Glückwünsche, Kompliment.',
+          keywords: ['vino', 'ottimo', 'complimenti']
+        },
+        {
+          italian: 'Fa freddo oggi, devo mettermi il cappotto.',
+          german: 'Es ist kalt heute, ich muss meinen Mantel anziehen.',
+          explanation: 'Fa freddo = es ist kalt. Devo = ich muss. Mettermi = mir anziehen. Cappotto = Mantel.',
+          keywords: ['freddo', 'devo', 'cappotto']
+        },
+        {
+          italian: 'Ti piacerebbe venire a cena da me stasera?',
+          german: 'Würdest du gerne heute Abend zum Essen zu mir kommen?',
+          explanation: 'Ti piacerebbe = würdest du gerne. Venire = kommen. A cena = zum Essen. Stasera = heute Abend.',
+          keywords: ['piacerebbe', 'cena', 'stasera']
+        },
+        {
+          italian: 'Ieri ho visto un film bellissimo al cinema.',
+          german: 'Gestern habe ich einen wunderschönen Film im Kino gesehen.',
+          explanation: 'Ieri = gestern. Ho visto = ich habe gesehen (Perfekt). Un film = ein Film. Al cinema = im Kino.',
+          keywords: ['ieri', 'visto', 'film']
+        },
+        {
+          italian: 'Non so parlare spagnolo, parlo solo italiano e inglese.',
+          german: 'Ich kann kein Spanisch sprechen, ich spreche nur Italienisch und Englisch.',
+          explanation: 'Non so = ich kann nicht (wissen). Parlare = sprechen. Solo = nur.',
+          keywords: ['so', 'parlare', 'solo']
+        },
+        {
+          italian: 'Che ore sono? Devo prendere il treno alle tre.',
+          german: 'Wie spät ist es? Ich muss den Zug um drei Uhr nehmen.',
+          explanation: 'Che ore sono = wie spät ist es. Devo prendere = ich muss nehmen. Il treno = der Zug.',
+          keywords: ['ore', 'prendere', 'treno']
+        },
+        {
+          italian: 'La vista dalla finestra è meravigliosa!',
+          german: 'Die Aussicht vom Fenster ist wunderbar!',
+          explanation: 'La vista = die Aussicht. Dalla finestra = vom Fenster. Meravigliosa = wunderbar.',
+          keywords: ['vista', 'finestra', 'meravigliosa']
+        },
+        {
+          italian: 'Hai fame? Preparo velocemente qualcosa da mangiare.',
+          german: 'Hast du Hunger? Ich bereite schnell etwas zu essen vor.',
+          explanation: 'Hai fame = hast du Hunger. Preparo = ich bereite vor. Velocemente = schnell. Qualcosa = etwas.',
+          keywords: ['fame', 'preparo', 'mangiare']
         }
       ];
 
-      return testSentences.slice(0, count);
+      // Randomly shuffle and select 'count' sentences
+      const shuffled = allSentences.sort(() => Math.random() - 0.5);
+      return shuffled.slice(0, count);
     } catch (err) {
       console.error('Sentence generation error:', err);
       throw err;
