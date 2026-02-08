@@ -106,10 +106,18 @@ This app automatically deploys to Azure Static Web Apps whenever changes are pus
 
 ### Manual Deployment
 The deployment is fully automated via GitHub Actions. To deploy changes:
+
+**Option 1: Automatic (recommended)**
 1. Make your code changes
 2. Commit and push to `main` branch
 3. GitHub Actions will automatically build and deploy
 4. Check the Actions tab to monitor deployment progress
+
+**Option 2: Manual trigger**
+1. Go to the Actions tab in GitHub
+2. Select "Azure Static Web Apps CI/CD" workflow
+3. Click "Run workflow" button
+4. Select the branch and click "Run workflow"
 
 The live app is hosted on Azure Static Web Apps and updates within minutes of pushing changes.
 
