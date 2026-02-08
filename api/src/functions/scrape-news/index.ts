@@ -196,6 +196,5 @@ async function translateText(
 app.http('scrape-news', {
   methods: ['GET'],
   authLevel: 'anonymous',
-  route: 'scrape-news',
   handler: scrapeNews
 });
