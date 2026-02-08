@@ -1,5 +1,7 @@
 # Italiano Ogni Giorno 🇮🇹
 
+[![Azure Static Web Apps CI/CD](https://github.com/privateryan123/CiaoItaliano/actions/workflows/azure-static-web-apps-nice-bay-080373810.yml/badge.svg)](https://github.com/privateryan123/CiaoItaliano/actions/workflows/azure-static-web-apps-nice-bay-080373810.yml)
+
 **Dein täglicher Begleiter für Italienisch — von Deutsch aus.**
 
 A mobile-first Progressive Web App (PWA) for learning Italian from German, designed for daily use on iPhone.
@@ -92,6 +94,24 @@ Add a new date entry to `DAILY_CONTENT` in `js/data.js`:
 ```
 
 Content is designed to be generated daily and loaded by date string.
+
+## Deployment
+
+This app automatically deploys to Azure Static Web Apps whenever changes are pushed to the `main` branch.
+
+### Automatic Deployment
+- **Every push to `main`** triggers an automatic deployment
+- **Pull requests to `main`** create preview deployments for testing
+- **Deployment status** is shown in the badge at the top of this README
+
+### Manual Deployment
+The deployment is fully automated via GitHub Actions. To deploy changes:
+1. Make your code changes
+2. Commit and push to `main` branch
+3. GitHub Actions will automatically build and deploy
+4. Check the Actions tab to monitor deployment progress
+
+The live app is hosted on Azure Static Web Apps and updates within minutes of pushing changes.
 
 ## License
 
