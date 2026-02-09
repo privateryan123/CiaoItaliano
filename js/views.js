@@ -669,7 +669,6 @@ const Views = {
           ${showExplanations ? `<div class="sentence-explanation">${s.explanation}</div>` : ''}
         </div>`;
     });
-    });
     html += '</section>';
 
     // Story
