@@ -63,6 +63,8 @@ const I18n = {
       
       // Translator View
       translatorDictionary: 'Translator & Dictionary',
+      translator: 'Translator',
+      myDictionary: 'My Dictionary',
       enterSentenceOrWord: 'Enter sentence or word…',
       translate: 'Translate',
       clear: 'Clear',
@@ -214,6 +216,8 @@ const I18n = {
       
       // Translator View
       translatorDictionary: 'Übersetzer & Wörterbuch',
+      translator: 'Übersetzer',
+      myDictionary: 'Mein Wörterbuch',
       enterSentenceOrWord: 'Satz oder Wort eingeben…',
       translate: 'Übersetzen',
       clear: 'Löschen',

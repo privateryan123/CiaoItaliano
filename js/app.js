@@ -153,7 +153,7 @@ const App = {
         break;
       case 'translator':
         console.log('Rendering translator view...');
-        Views.renderTranslator(this.currentTranslatorTab || 'sentences');
+        Views.renderTranslator(this.currentTranslatorTab || 'translator', this.currentTranslatorSubTab || 'sentences');
         subtitle.textContent = I18n.t('subtitleTranslator');
         break;
       case 'more':
@@ -614,7 +614,16 @@ const App = {
 
   translatorTab(tab) {
     this.currentTranslatorTab = tab;
-    Views.renderTranslator(tab);
+    // Reset sub-tab when switching main tabs
+    if (tab === 'dictionary') {
+      this.currentTranslatorSubTab = this.currentTranslatorSubTab || 'sentences';
+    }
+    Views.renderTranslator(tab, this.currentTranslatorSubTab || 'sentences');
+  },
+
+  translatorSubTab(subTab) {
+    this.currentTranslatorSubTab = subTab;
+    Views.renderTranslator(this.currentTranslatorTab || 'dictionary', subTab);
   },
 
   refreshSaveButtons() {

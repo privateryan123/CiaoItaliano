@@ -43,7 +43,7 @@ const Views = {
         </button>
         <div style="text-align: center; flex: 1;">
           <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">${I18n.t('dailySentences')}</h2>
-          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;">${dateInfo.full}</p>
+          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;${isToday ? ' text-decoration: underline;' : ''}">${dateInfo.full}</p>
         </div>
         <button class="story-nav-btn" onclick="App.navigateSentences(1)" title="${I18n.t('nextDay')}" ${!canGoForward ? 'disabled' : ''}>
           <span>→</span>
@@ -101,6 +101,8 @@ const Views = {
     }
     
     const dateInfo = formatDateDisplay(dateStr);
+    const today = getTodayDateStr();
+    const isToday = dateStr === today;
 
     let html = `
       <div class="story-nav-header">
@@ -109,7 +111,7 @@ const Views = {
         </button>
         <div style="text-align: center; flex: 1;">
           <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">${I18n.t('dailyStory')}</h2>
-          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;">${dateInfo.full}</p>
+          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;${isToday ? ' text-decoration: underline;' : ''}">${dateInfo.full}</p>
         </div>
         <button class="story-nav-btn" onclick="App.navigateStory(1)" title="${I18n.t('nextDay')}">
           <span>→</span>
@@ -207,6 +209,7 @@ const Views = {
     const dateInfo = formatDateDisplay(dateStr);
     const newsList = newsData || [];
     const today = getTodayDateStr();
+    const isToday = dateStr === today;
     const canGoForward = dateStr < today;
 
     let html = `
@@ -216,7 +219,7 @@ const Views = {
         </button>
         <div style="text-align: center; flex: 1;">
           <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">${I18n.t('newsFromItaly')}</h2>
-          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;">${dateInfo.full}</p>
+          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;${isToday ? ' text-decoration: underline;' : ''}">${dateInfo.full}</p>
         </div>
         <button class="story-nav-btn" onclick="App.navigateNews(1)" title="${I18n.t('nextDay')}" ${!canGoForward ? 'disabled' : ''}>
           <span>→</span>
@@ -410,13 +413,21 @@ const Views = {
   // ==========================================
   // TRANSLATOR VIEW
   // ==========================================
-  renderTranslator(tab = 'sentences') {
+  renderTranslator(tab = 'translator', subTab = 'sentences') {
     const container = document.getElementById('translator-content');
     const vocab = Store.getVocabulary();
 
     let html = `
       <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-lg);">${I18n.t('translatorDictionary')}</h2>
 
+      <!-- Main Tabs -->
+      <div class="vocab-tabs" style="margin-bottom: var(--space-md);">
+        <button class="vocab-tab ${tab === 'translator' ? 'active' : ''}" onclick="App.translatorTab('translator')">${I18n.t('translator')}</button>
+        <button class="vocab-tab ${tab === 'dictionary' ? 'active' : ''}" onclick="App.translatorTab('dictionary')">${I18n.t('myDictionary')} (${vocab.sentences.length + vocab.words.length})</button>
+      </div>`;
+
+    if (tab === 'translator') {
+      html += `
       <!-- Translation Box -->
       <div class="card">
         <div class="translator-direction" id="translator-direction">
@@ -455,106 +466,111 @@ const Views = {
             🇮🇹→🇩🇪 ${I18n.t('lookup')}
           </button>
         </div>
-      </div>
-
-      <!-- Vocabulary Tabs -->
-      <div class="vocab-tabs" style="margin-top: var(--space-md);">
-        <button class="vocab-tab ${tab === 'sentences' ? 'active' : ''}" onclick="App.translatorTab('sentences')">${I18n.t('sentences')} (${vocab.sentences.length})</button>
-        <button class="vocab-tab ${tab === 'words' ? 'active' : ''}" onclick="App.translatorTab('words')">${I18n.t('words')} (${vocab.words.length})</button>
+      </div>`;
+    } else {
+      // Dictionary tab - show saved sentences and words
+      html += `
+      <!-- Sub-tabs for sentences/words -->
+      <div class="vocab-tabs vocab-tabs-secondary" style="margin-bottom: var(--space-md);">
+        <button class="vocab-tab ${subTab === 'sentences' ? 'active' : ''}" onclick="App.translatorSubTab('sentences')">${I18n.t('sentences')} (${vocab.sentences.length})</button>
+        <button class="vocab-tab ${subTab === 'words' ? 'active' : ''}" onclick="App.translatorSubTab('words')">${I18n.t('words')} (${vocab.words.length})</button>
       </div>`;
 
-    if (tab === 'sentences') {
-      html += `
-      <!-- Saved Sentences -->
-      <div class="card">
-        <div class="section-header" style="margin-bottom: var(--space-md);">
-          <span class="section-icon">🔖</span>
-          <span class="section-title">${I18n.t('savedSentences')}</span>
-        </div>`;
-
-      if (vocab.sentences.length === 0) {
+      if (subTab === 'sentences') {
         html += `
-          <div class="vocab-empty">
-            <div class="vocab-empty-icon">🔖</div>
-            <div class="vocab-empty-text">
-              ${I18n.t('noSentencesSaved')}
-            </div>
+        <!-- Saved Sentences -->
+        <div class="card">
+          <div class="section-header" style="margin-bottom: var(--space-md);">
+            <span class="section-icon">🔖</span>
+            <span class="section-title">${I18n.t('savedSentences')}</span>
           </div>`;
-      } else {
-        vocab.sentences.forEach(s => {
-          html += `
-            <div class="vocab-item">
-              <div>
-                <div class="vocab-italian">${s.italian}</div>
-                <div class="vocab-german">${s.german}</div>
-              </div>
-              <button class="vocab-delete" onclick="App.removeSentence('${this.esc(s.italian)}')" title="${I18n.t('remove')}">✕</button>
-            </div>`;
-        });
-      }
 
-      html += `</div>`;
-    } else {
-      html += `
-      <!-- Saved Words -->
-      <div class="card">
-        <div class="section-header" style="margin-bottom: var(--space-md);">
-          <span class="section-icon">💬</span>
-          <span class="section-title">${I18n.t('savedWords')}</span>
-        </div>`;
-
-      if (vocab.words.length === 0) {
-        html += `
-          <div class="vocab-empty">
-            <div class="vocab-empty-icon">💬</div>
-            <div class="vocab-empty-text">
-              ${I18n.t('noWordsSaved')}
-            </div>
-          </div>`;
-      } else {
-        vocab.words.forEach(w => {
+        if (vocab.sentences.length === 0) {
           html += `
-            <div class="vocab-item">
-              <div>
-                <div class="vocab-italian">${w.italian}</div>
-                <div class="vocab-german">${w.german}</div>
-              </div>
-              <div style="display:flex; gap: 4px; align-items: center;">
-                <button class="vocab-wr-btn" onclick="window.open('${AI.getWordReferenceUrl(w.italian)}', '_blank')" title="${I18n.t('lookupInWordRef')}">📘</button>
-                <button class="vocab-delete" onclick="App.removeWord('${this.esc(w.italian)}')" title="${I18n.t('remove')}">✕</button>
+            <div class="vocab-empty">
+              <div class="vocab-empty-icon">🔖</div>
+              <div class="vocab-empty-text">
+                ${I18n.t('noSentencesSaved')}
               </div>
             </div>`;
-        });
-      }
+        } else {
+          vocab.sentences.forEach(s => {
+            html += `
+              <div class="vocab-item">
+                <div>
+                  <div class="vocab-italian">${s.italian}</div>
+                  <div class="vocab-german">${s.german}</div>
+                </div>
+                <button class="vocab-delete" onclick="App.removeSentence('${this.esc(s.italian)}')" title="${I18n.t('remove')}">✕</button>
+              </div>`;
+          });
+        }
 
-      html += `</div>`;
+        html += `</div>`;
+      } else {
+        html += `
+        <!-- Saved Words -->
+        <div class="card">
+          <div class="section-header" style="margin-bottom: var(--space-md);">
+            <span class="section-icon">💬</span>
+            <span class="section-title">${I18n.t('savedWords')}</span>
+          </div>`;
+
+        if (vocab.words.length === 0) {
+          html += `
+            <div class="vocab-empty">
+              <div class="vocab-empty-icon">💬</div>
+              <div class="vocab-empty-text">
+                ${I18n.t('noWordsSaved')}
+              </div>
+            </div>`;
+        } else {
+          vocab.words.forEach(w => {
+            html += `
+              <div class="vocab-item">
+                <div>
+                  <div class="vocab-italian">${w.italian}</div>
+                  <div class="vocab-german">${w.german}</div>
+                </div>
+                <div style="display:flex; gap: 4px; align-items: center;">
+                  <button class="vocab-wr-btn" onclick="window.open('${AI.getWordReferenceUrl(w.italian)}', '_blank')" title="${I18n.t('lookupInWordRef')}">📘</button>
+                  <button class="vocab-delete" onclick="App.removeWord('${this.esc(w.italian)}')" title="${I18n.t('remove')}">✕</button>
+                </div>
+              </div>`;
+          });
+        }
+
+        html += `</div>`;
+      }
     }
 
     container.innerHTML = html;
 
-    // Setup clear button & enter key
-    const input = document.getElementById('translator-input');
-    const clearBtn = document.getElementById('translator-clear');
-    clearBtn.addEventListener('click', () => {
-      input.value = '';
-      document.getElementById('translator-result').style.display = 'none';
-      input.focus();
-    });
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        App.doTranslate();
-      }
-    });
+    // Setup clear button & enter key (only if translator tab is active)
+    if (tab === 'translator') {
+      const input = document.getElementById('translator-input');
+      const clearBtn = document.getElementById('translator-clear');
+      clearBtn.addEventListener('click', () => {
+        input.value = '';
+        document.getElementById('translator-result').style.display = 'none';
+        input.focus();
+      });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          App.doTranslate();
+        }
+      });
 
-    // WR enter key
-    const wrInput = document.getElementById('wr-input');
-    wrInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        App.lookupWordReference();
-      }
-    });
+      // WR enter key
+      const wrInput = document.getElementById('wr-input');
+      wrInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          App.lookupWordReference();
+        }
+      });
+    }
   },
 
   // ==========================================
