@@ -275,13 +275,13 @@ const Views = {
   renderVerbs(selectedVerb, tab = 'verbs') {
     const container = document.getElementById('verbs-content');
     
-    // Tab selector
+    // Tab selector using vocab-tabs styling
     let html = `
-      <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-md); border-bottom: 2px solid var(--border-color);">
-        <button onclick="App.verbTab('verbs')" style="flex: 1; padding: 12px; font-size: 1rem; border: none; background: none; cursor: pointer; font-weight: 600; color: ${tab === 'verbs' ? 'var(--accent-color)' : 'var(--text-secondary)'}; border-bottom: ${tab === 'verbs' ? '3px solid var(--accent-color)' : 'none'}; margin-bottom: -2px;">
+      <div class="vocab-tabs" style="margin-bottom: var(--space-lg);">
+        <button class="vocab-tab ${tab === 'verbs' ? 'active' : ''}" onclick="App.verbTab('verbs')">
           ${I18n.t('verbs')}
         </button>
-        <button onclick="App.verbTab('sentences')" style="flex: 1; padding: 12px; font-size: 1rem; border: none; background: none; cursor: pointer; font-weight: 600; color: ${tab === 'sentences' ? 'var(--accent-color)' : 'var(--text-secondary)'}; border-bottom: ${tab === 'sentences' ? '3px solid var(--accent-color)' : 'none'}; margin-bottom: -2px;">
+        <button class="vocab-tab ${tab === 'sentences' ? 'active' : ''}" onclick="App.verbTab('sentences')">
           ${I18n.t('preparedSentences')}
         </button>
       </div>`;

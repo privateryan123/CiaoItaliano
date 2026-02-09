@@ -19,6 +19,17 @@ const I18n = {
       navTranslate: 'Translate',
       navMore: 'More',
       
+      // View Subtitles
+      subtitleSentences: 'Daily Italian sentences',
+      subtitleStory: 'Read the daily story',
+      subtitleNews: 'News in Italian',
+      subtitleVerbs: 'Practice verbs & sentences',
+      subtitleTranslator: 'Translator & Dictionary',
+      subtitleMore: 'More features',
+      subtitleLibrary: 'Past lessons',
+      subtitleVocabulary: 'Your saved vocabulary',
+      subtitleSettings: 'Personalize the app',
+      
       // Sentences View
       dailySentences: 'Daily Sentences',
       noSentencesAvailable: 'No sentences available for this day.',
@@ -131,6 +142,16 @@ const I18n = {
       wordRemoved: 'Word removed',
       levelSetTo: 'Level set to',
       sentencesPerDaySet: 'sentences per day',
+      explanationsShown: 'Explanations shown',
+      explanationsHidden: 'Explanations hidden',
+      theme: 'Theme',
+      themeLight: 'Light',
+      themeDark: 'Dark',
+      themeAuto: 'Automatic',
+      
+      // Popup buttons
+      word: 'Word',
+      sentence: 'Sentence',
       
       // Misc
       notFound: 'Not found.'
@@ -148,6 +169,17 @@ const I18n = {
       navVerbs: 'Verben',
       navTranslate: 'Übersetz',
       navMore: 'Mehr',
+      
+      // View Subtitles
+      subtitleSentences: 'Tagessätze auf Italienisch',
+      subtitleStory: 'Tagesgeschichte lesen',
+      subtitleNews: 'Nachrichten auf Italienisch',
+      subtitleVerbs: 'Verben & Sätze üben',
+      subtitleTranslator: 'Übersetzer & Wörterbuch',
+      subtitleMore: 'Weitere Funktionen',
+      subtitleLibrary: 'Vergangene Lektionen',
+      subtitleVocabulary: 'Deine gespeicherten Vokabeln',
+      subtitleSettings: 'App personalisieren',
       
       // Sentences View
       dailySentences: 'Tagessätze',
@@ -261,6 +293,16 @@ const I18n = {
       wordRemoved: 'Wort entfernt',
       levelSetTo: 'Level auf',
       sentencesPerDaySet: 'Sätze pro Tag',
+      explanationsShown: 'Erklärungen eingeblendet',
+      explanationsHidden: 'Erklärungen ausgeblendet',
+      theme: 'Design',
+      themeLight: 'Hell',
+      themeDark: 'Dunkel',
+      themeAuto: 'Automatisch',
+      
+      // Popup buttons
+      word: 'Wort',
+      sentence: 'Satz',
       
       // Misc
       notFound: 'Nicht gefunden.'

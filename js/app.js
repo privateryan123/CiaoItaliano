@@ -108,7 +108,7 @@ const App = {
           Views.renderSentences(currentDate, sentences);
         }
         
-        subtitle.textContent = 'Tagessätze auf Italienisch';
+        subtitle.textContent = I18n.t('subtitleSentences');
         break;
       }
       case 'story': {
@@ -125,7 +125,7 @@ const App = {
         } else {
           Views.renderStory(storyDate, storyData);
         }
-        subtitle.textContent = 'Tagesgeschichte lesen';
+        subtitle.textContent = I18n.t('subtitleStory');
         break;
       }
       case 'news': {
@@ -142,39 +142,39 @@ const App = {
         } else {
           Views.renderNews(newsDate, newsData);
         }
-        subtitle.textContent = 'Nachrichten auf Italienisch';
+        subtitle.textContent = I18n.t('subtitleNews');
         break;
       }
       case 'verbs':
         console.log('Rendering verbs view...');
         const selectedVerb = Store.getSelectedVerb();
         Views.renderVerbs(selectedVerb, this.currentVerbsTab || 'verbs');
-        subtitle.textContent = 'Verben & Sätze üben';
+        subtitle.textContent = I18n.t('subtitleVerbs');
         break;
       case 'translator':
         console.log('Rendering translator view...');
         Views.renderTranslator(this.currentTranslatorTab || 'sentences');
-        subtitle.textContent = 'Übersetzer & Wörterbuch';
+        subtitle.textContent = I18n.t('subtitleTranslator');
         break;
       case 'more':
         console.log('Rendering more view...');
         Views.renderMore();
-        subtitle.textContent = 'Weitere Funktionen';
+        subtitle.textContent = I18n.t('subtitleMore');
         break;
       case 'library':
         console.log('Rendering library view...');
         Views.renderLibrary();
-        subtitle.textContent = 'Vergangene Lektionen';
+        subtitle.textContent = I18n.t('subtitleLibrary');
         break;
       case 'vocabulary':
         console.log('Rendering vocabulary view...');
         Views.renderVocabulary(this.currentVocabTab);
-        subtitle.textContent = 'Deine gespeicherten Vokabeln';
+        subtitle.textContent = I18n.t('subtitleVocabulary');
         break;
       case 'settings':
         console.log('Rendering settings view...');
         Views.renderSettings();
-        subtitle.textContent = 'App personalisieren';
+        subtitle.textContent = I18n.t('subtitleSettings');
         break;
     }
 
@@ -542,17 +542,17 @@ const App = {
     const wordBtn = document.getElementById('popup-save-word');
     const sentBtn = document.getElementById('popup-save-sentence');
     if (Store.isWordSaved(word)) {
-      wordBtn.textContent = '✓ Wort';
+      wordBtn.textContent = '✓ ' + I18n.t('word');
       wordBtn.style.opacity = '0.6';
     } else {
-      wordBtn.textContent = '💬 Wort';
+      wordBtn.textContent = '💬 ' + I18n.t('word');
       wordBtn.style.opacity = '1';
     }
     if (Store.isSentenceSaved(sentence)) {
-      sentBtn.textContent = '✓ Satz';
+      sentBtn.textContent = '✓ ' + I18n.t('sentence');
       sentBtn.style.opacity = '0.6';
     } else {
-      sentBtn.textContent = '🔖 Satz';
+      sentBtn.textContent = '🔖 ' + I18n.t('sentence');
       sentBtn.style.opacity = '1';
     }
 
@@ -660,18 +660,20 @@ const App = {
     Store.saveSettings(settings);
     Views.renderSettings();
     const msg = settings.showExplanations 
-      ? (I18n.currentLang === 'en' ? 'Explanations shown' : 'Erklärungen eingeblendet')
-      : (I18n.currentLang === 'en' ? 'Explanations hidden' : 'Erklärungen ausgeblendet');
+      ? I18n.t('explanationsShown')
+      : I18n.t('explanationsHidden');
     this.showToast(msg);
   },
 
   setTheme(theme) {
     Store.setTheme(theme);
     Views.renderSettings();
-    const labelsEn = { light: 'Light', dark: 'Dark', auto: 'Automatic' };
-    const labelsDe = { light: 'Hell', dark: 'Dunkel', auto: 'Automatisch' };
-    const labels = I18n.currentLang === 'en' ? labelsEn : labelsDe;
-    this.showToast(`${I18n.currentLang === 'en' ? 'Theme' : 'Design'}: ${labels[theme]}`);
+    const themeLabels = {
+      light: I18n.t('themeLight'),
+      dark: I18n.t('themeDark'),
+      auto: I18n.t('themeAuto')
+    };
+    this.showToast(`${I18n.t('theme')}: ${themeLabels[theme]}`);
   },
 
   setLanguage(lang) {
