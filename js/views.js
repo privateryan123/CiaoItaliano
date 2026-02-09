@@ -469,7 +469,17 @@ const Views = {
       </div>`;
     } else {
       // Dictionary tab - show saved sentences and words
+      const totalItems = vocab.sentences.length + vocab.words.length;
+      
       html += `
+      <!-- Quiz Start Button -->
+      <div class="card quiz-start-card" style="margin-bottom: var(--space-md); text-align: center;">
+        <button class="quiz-start-btn" onclick="App.showQuizSettings()" ${totalItems === 0 ? 'disabled' : ''}>
+          🎯 ${I18n.t('startQuiz')}
+        </button>
+        ${totalItems === 0 ? `<p style="font-size: 0.8rem; color: var(--text-tertiary); margin-top: var(--space-sm);">${I18n.t('addItemsFirst')}</p>` : ''}
+      </div>
+      
       <!-- Sub-tabs for sentences/words -->
       <div class="vocab-tabs vocab-tabs-secondary" style="margin-bottom: var(--space-md);">
         <button class="vocab-tab ${subTab === 'sentences' ? 'active' : ''}" onclick="App.translatorSubTab('sentences')">${I18n.t('sentences')} (${vocab.sentences.length})</button>
@@ -920,6 +930,265 @@ const Views = {
       </p>`;
 
     container.innerHTML = html;
+  },
+
+  // ==========================================
+  // QUIZ VIEWS
+  // ==========================================
+  renderQuizSettings() {
+    const container = document.getElementById('translator-content');
+    const vocab = Store.getVocabulary();
+    const quizSettings = App.quizSettings || { type: 'both', count: 10 };
+    
+    const totalSentences = vocab.sentences.length;
+    const totalWords = vocab.words.length;
+    const maxItems = quizSettings.type === 'sentences' ? totalSentences : 
+                     quizSettings.type === 'words' ? totalWords : 
+                     totalSentences + totalWords;
+
+    let html = `
+      <div class="quiz-settings-container">
+        <button class="back-btn" onclick="App.translatorTab('dictionary')">← ${I18n.t('backBtn')}</button>
+        
+        <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: var(--space-md) 0;">${I18n.t('quizSettings')}</h2>
+        
+        <div class="card">
+          <div class="section-header" style="margin-bottom: var(--space-md);">
+            <span class="section-icon">📝</span>
+            <span class="section-title">${I18n.t('quizType')}</span>
+          </div>
+          
+          <div class="quiz-type-options">
+            <label class="quiz-option ${quizSettings.type === 'words' ? 'selected' : ''}">
+              <input type="radio" name="quizType" value="words" ${quizSettings.type === 'words' ? 'checked' : ''} onchange="App.setQuizType('words')">
+              <span class="quiz-option-label">💬 ${I18n.t('words')} (${totalWords})</span>
+            </label>
+            <label class="quiz-option ${quizSettings.type === 'sentences' ? 'selected' : ''}">
+              <input type="radio" name="quizType" value="sentences" ${quizSettings.type === 'sentences' ? 'checked' : ''} onchange="App.setQuizType('sentences')">
+              <span class="quiz-option-label">🔖 ${I18n.t('sentences')} (${totalSentences})</span>
+            </label>
+            <label class="quiz-option ${quizSettings.type === 'both' ? 'selected' : ''}">
+              <input type="radio" name="quizType" value="both" ${quizSettings.type === 'both' ? 'checked' : ''} onchange="App.setQuizType('both')">
+              <span class="quiz-option-label">📚 ${I18n.t('both')} (${totalSentences + totalWords})</span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="card" style="margin-top: var(--space-md);">
+          <div class="section-header" style="margin-bottom: var(--space-md);">
+            <span class="section-icon">🔢</span>
+            <span class="section-title">${I18n.t('numberOfQuestions')}</span>
+          </div>
+          
+          <div class="quiz-count-options">
+            ${[5, 10, 20, 'all'].map(n => {
+              const val = n === 'all' ? maxItems : n;
+              const disabled = val > maxItems;
+              const isSelected = quizSettings.count === (n === 'all' ? 'all' : n);
+              return `
+                <button class="quiz-count-btn ${isSelected ? 'selected' : ''} ${disabled ? 'disabled' : ''}" 
+                        onclick="App.setQuizCount(${n === 'all' ? "'all'" : n})" 
+                        ${disabled ? 'disabled' : ''}>
+                  ${n === 'all' ? I18n.t('all') + ' (' + maxItems + ')' : n}
+                </button>
+              `;
+            }).join('')}
+          </div>
+        </div>
+        
+        <button class="quiz-start-btn quiz-start-btn-large" onclick="App.startQuiz()" style="margin-top: var(--space-lg);">
+          🎯 ${I18n.t('startQuiz')}
+        </button>
+      </div>`;
+
+    container.innerHTML = html;
+  },
+
+  renderQuiz(quizState) {
+    const container = document.getElementById('translator-content');
+    const { currentIndex, items, score, currentItem, answered, userAnswer, isCorrect, typoPositions } = quizState;
+    
+    const progress = ((currentIndex) / items.length) * 100;
+    const isItalianQuestion = quizState.questionLang === 'italian';
+    const questionText = isItalianQuestion ? currentItem.italian : currentItem.german;
+    const correctAnswer = isItalianQuestion ? currentItem.german : currentItem.italian;
+    
+    let html = `
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <button class="quiz-exit-btn" onclick="App.exitQuiz()">✕</button>
+          <div class="quiz-progress-info">
+            <span>${currentIndex + 1} / ${items.length}</span>
+          </div>
+          <div class="quiz-score">
+            <span class="quiz-score-correct">✓ ${score.correct}</span>
+            <span class="quiz-score-wrong">✗ ${score.wrong}</span>
+          </div>
+        </div>
+        
+        <div class="quiz-progress-bar">
+          <div class="quiz-progress-fill" style="width: ${progress}%"></div>
+        </div>
+        
+        <div class="card quiz-question-card">
+          <div class="quiz-lang-indicator">${isItalianQuestion ? '🇮🇹' : '🇩🇪'}</div>
+          <div class="quiz-question">${this.escAttr(questionText)}</div>
+          <div class="quiz-arrow">↓</div>
+          <div class="quiz-lang-indicator">${isItalianQuestion ? '🇩🇪' : '🇮🇹'}</div>
+        </div>
+        
+        <div class="card quiz-answer-card">
+          ${!answered ? `
+            <input type="text" class="quiz-input" id="quiz-answer-input" 
+                   placeholder="${I18n.t('enterYourAnswer')}" 
+                   autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            <button class="quiz-submit-btn" onclick="App.submitQuizAnswer()">
+              ${I18n.t('check')}
+            </button>
+          ` : `
+            <div class="quiz-result ${isCorrect ? 'correct' : 'wrong'}">
+              <div class="quiz-result-icon">${isCorrect ? '✓' : '✗'}</div>
+              <div class="quiz-result-text">
+                ${isCorrect ? I18n.t('correct') : I18n.t('wrong')}
+              </div>
+            </div>
+            
+            <div class="quiz-answer-comparison">
+              <div class="quiz-your-answer">
+                <span class="quiz-answer-label">${I18n.t('yourAnswer')}:</span>
+                <span class="quiz-answer-text ${isCorrect ? 'correct-text' : 'wrong-text'}">${this.highlightTypos(userAnswer, correctAnswer, typoPositions)}</span>
+              </div>
+              ${!isCorrect ? `
+                <div class="quiz-correct-answer">
+                  <span class="quiz-answer-label">${I18n.t('correctAnswer')}:</span>
+                  <span class="quiz-answer-text correct-text">${this.escAttr(correctAnswer)}</span>
+                </div>
+              ` : ''}
+            </div>
+            
+            <button class="quiz-next-btn" onclick="App.nextQuizQuestion()">
+              ${currentIndex + 1 < items.length ? I18n.t('nextQuestion') : I18n.t('showResults')}
+            </button>
+          `}
+        </div>
+      </div>`;
+
+    container.innerHTML = html;
+
+    // Focus input and setup enter key
+    if (!answered) {
+      const input = document.getElementById('quiz-answer-input');
+      if (input) {
+        input.focus();
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            App.submitQuizAnswer();
+          }
+        });
+      }
+    }
+  },
+
+  renderQuizResults(quizState) {
+    const container = document.getElementById('translator-content');
+    const { items, score } = quizState;
+    const total = items.length;
+    const percentage = Math.round((score.correct / total) * 100);
+    
+    let emoji, message;
+    if (percentage === 100) {
+      emoji = '🏆';
+      message = I18n.t('resultPerfect');
+    } else if (percentage >= 80) {
+      emoji = '🎉';
+      message = I18n.t('resultGreat');
+    } else if (percentage >= 60) {
+      emoji = '👍';
+      message = I18n.t('resultGood');
+    } else if (percentage >= 40) {
+      emoji = '📚';
+      message = I18n.t('resultKeepPracticing');
+    } else {
+      emoji = '💪';
+      message = I18n.t('resultTryAgain');
+    }
+
+    let html = `
+      <div class="quiz-results-container">
+        <div class="quiz-results-card card">
+          <div class="quiz-results-emoji">${emoji}</div>
+          <h2 class="quiz-results-title">${I18n.t('quizComplete')}</h2>
+          <p class="quiz-results-message">${message}</p>
+          
+          <div class="quiz-results-stats">
+            <div class="quiz-stat">
+              <div class="quiz-stat-value quiz-stat-correct">${score.correct}</div>
+              <div class="quiz-stat-label">${I18n.t('correctAnswers')}</div>
+            </div>
+            <div class="quiz-stat">
+              <div class="quiz-stat-value quiz-stat-wrong">${score.wrong}</div>
+              <div class="quiz-stat-label">${I18n.t('wrongAnswers')}</div>
+            </div>
+            <div class="quiz-stat">
+              <div class="quiz-stat-value quiz-stat-percent">${percentage}%</div>
+              <div class="quiz-stat-label">${I18n.t('accuracy')}</div>
+            </div>
+          </div>
+          
+          <div class="quiz-results-actions">
+            <button class="quiz-action-btn quiz-retry-btn" onclick="App.startQuiz()">
+              🔄 ${I18n.t('tryAgain')}
+            </button>
+            <button class="quiz-action-btn quiz-back-btn" onclick="App.translatorTab('dictionary')">
+              ← ${I18n.t('backToDictionary')}
+            </button>
+          </div>
+        </div>
+        
+        <div class="card" style="margin-top: var(--space-md);">
+          <div class="section-header" style="margin-bottom: var(--space-md);">
+            <span class="section-icon">📋</span>
+            <span class="section-title">${I18n.t('reviewAnswers')}</span>
+          </div>
+          
+          <div class="quiz-review-list">
+            ${quizState.history.map((h, i) => `
+              <div class="quiz-review-item ${h.isCorrect ? 'review-correct' : 'review-wrong'}">
+                <div class="quiz-review-num">${i + 1}</div>
+                <div class="quiz-review-content">
+                  <div class="quiz-review-question">${h.questionLang === 'italian' ? '🇮🇹' : '🇩🇪'} ${this.escAttr(h.question)}</div>
+                  <div class="quiz-review-answer">
+                    ${h.isCorrect 
+                      ? `<span class="review-correct-mark">✓</span> ${this.escAttr(h.userAnswer)}`
+                      : `<span class="review-wrong-mark">✗</span> ${this.escAttr(h.userAnswer)} → <span class="review-correct-text">${this.escAttr(h.correctAnswer)}</span>`
+                    }
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>`;
+
+    container.innerHTML = html;
+  },
+
+  highlightTypos(userAnswer, correctAnswer, typoPositions) {
+    if (!typoPositions || typoPositions.length === 0) {
+      return this.escAttr(userAnswer);
+    }
+    
+    let result = '';
+    for (let i = 0; i < userAnswer.length; i++) {
+      const char = userAnswer[i];
+      if (typoPositions.includes(i)) {
+        result += `<span class="typo-char">${this.escAttr(char)}</span>`;
+      } else {
+        result += this.escAttr(char);
+      }
+    }
+    return result;
   },
 
   // ==========================================

@@ -626,6 +626,210 @@ const App = {
     Views.renderTranslator(this.currentTranslatorTab || 'dictionary', subTab);
   },
 
+  // ==========================================
+  // QUIZ FUNCTIONS
+  // ==========================================
+  quizSettings: { type: 'both', count: 10 },
+  quizState: null,
+
+  showQuizSettings() {
+    Views.renderQuizSettings();
+  },
+
+  setQuizType(type) {
+    this.quizSettings.type = type;
+    // Reset count if it exceeds available items
+    const vocab = Store.getVocabulary();
+    const maxItems = type === 'sentences' ? vocab.sentences.length : 
+                     type === 'words' ? vocab.words.length : 
+                     vocab.sentences.length + vocab.words.length;
+    if (this.quizSettings.count !== 'all' && this.quizSettings.count > maxItems) {
+      this.quizSettings.count = maxItems > 0 ? Math.min(10, maxItems) : 5;
+    }
+    Views.renderQuizSettings();
+  },
+
+  setQuizCount(count) {
+    this.quizSettings.count = count;
+    Views.renderQuizSettings();
+  },
+
+  startQuiz() {
+    const vocab = Store.getVocabulary();
+    let items = [];
+    
+    if (this.quizSettings.type === 'words' || this.quizSettings.type === 'both') {
+      items = items.concat(vocab.words.map(w => ({ ...w, type: 'word' })));
+    }
+    if (this.quizSettings.type === 'sentences' || this.quizSettings.type === 'both') {
+      items = items.concat(vocab.sentences.map(s => ({ ...s, type: 'sentence' })));
+    }
+    
+    if (items.length === 0) {
+      this.showToast(I18n.t('noItemsToQuiz'));
+      return;
+    }
+    
+    // Shuffle items
+    items = this.shuffleArray(items);
+    
+    // Limit count
+    const count = this.quizSettings.count === 'all' ? items.length : Math.min(this.quizSettings.count, items.length);
+    items = items.slice(0, count);
+    
+    this.quizState = {
+      items,
+      currentIndex: 0,
+      currentItem: items[0],
+      questionLang: Math.random() < 0.5 ? 'italian' : 'german',
+      score: { correct: 0, wrong: 0 },
+      answered: false,
+      userAnswer: '',
+      isCorrect: false,
+      typoPositions: [],
+      history: []
+    };
+    
+    Views.renderQuiz(this.quizState);
+  },
+
+  shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  },
+
+  submitQuizAnswer() {
+    const input = document.getElementById('quiz-answer-input');
+    if (!input) return;
+    
+    const userAnswer = input.value.trim();
+    if (!userAnswer) {
+      this.showToast(I18n.t('pleaseEnterAnswer'));
+      return;
+    }
+    
+    const { currentItem, questionLang } = this.quizState;
+    const correctAnswer = questionLang === 'italian' ? currentItem.german : currentItem.italian;
+    
+    // Check answer with typo tolerance
+    const { isCorrect, typoPositions } = this.checkAnswer(userAnswer, correctAnswer);
+    
+    this.quizState.answered = true;
+    this.quizState.userAnswer = userAnswer;
+    this.quizState.isCorrect = isCorrect;
+    this.quizState.typoPositions = typoPositions;
+    
+    if (isCorrect) {
+      this.quizState.score.correct++;
+    } else {
+      this.quizState.score.wrong++;
+    }
+    
+    // Save to history
+    this.quizState.history.push({
+      question: questionLang === 'italian' ? currentItem.italian : currentItem.german,
+      questionLang,
+      correctAnswer,
+      userAnswer,
+      isCorrect,
+      typoPositions
+    });
+    
+    Views.renderQuiz(this.quizState);
+  },
+
+  checkAnswer(userAnswer, correctAnswer) {
+    // Normalize for comparison
+    const normalizeStr = (str) => str.toLowerCase().trim()
+      .replace(/[.,!?;:'"„""''«»]/g, '')
+      .replace(/\s+/g, ' ');
+    
+    const userNorm = normalizeStr(userAnswer);
+    const correctNorm = normalizeStr(correctAnswer);
+    
+    // Exact match
+    if (userNorm === correctNorm) {
+      return { isCorrect: true, typoPositions: [] };
+    }
+    
+    // Calculate Levenshtein distance for typo tolerance
+    const distance = this.levenshteinDistance(userNorm, correctNorm);
+    const maxLen = Math.max(userNorm.length, correctNorm.length);
+    const similarity = 1 - (distance / maxLen);
+    
+    // Allow typos: 90% similarity or max 2 character errors for short strings
+    const isCorrect = similarity >= 0.9 || (maxLen <= 10 && distance <= 1) || (maxLen <= 20 && distance <= 2);
+    
+    // Find typo positions
+    const typoPositions = this.findTypoPositions(userAnswer, correctAnswer);
+    
+    return { isCorrect, typoPositions };
+  },
+
+  levenshteinDistance(str1, str2) {
+    const m = str1.length;
+    const n = str2.length;
+    const dp = Array(m + 1).fill(null).map(() => Array(n + 1).fill(0));
+    
+    for (let i = 0; i <= m; i++) dp[i][0] = i;
+    for (let j = 0; j <= n; j++) dp[0][j] = j;
+    
+    for (let i = 1; i <= m; i++) {
+      for (let j = 1; j <= n; j++) {
+        if (str1[i - 1] === str2[j - 1]) {
+          dp[i][j] = dp[i - 1][j - 1];
+        } else {
+          dp[i][j] = 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+        }
+      }
+    }
+    
+    return dp[m][n];
+  },
+
+  findTypoPositions(userAnswer, correctAnswer) {
+    const positions = [];
+    const userLower = userAnswer.toLowerCase();
+    const correctLower = correctAnswer.toLowerCase();
+    const minLen = Math.min(userLower.length, correctLower.length);
+    
+    for (let i = 0; i < userLower.length; i++) {
+      if (i >= correctLower.length || userLower[i] !== correctLower[i]) {
+        positions.push(i);
+      }
+    }
+    
+    return positions;
+  },
+
+  nextQuizQuestion() {
+    this.quizState.currentIndex++;
+    
+    if (this.quizState.currentIndex >= this.quizState.items.length) {
+      // Quiz complete
+      Views.renderQuizResults(this.quizState);
+      return;
+    }
+    
+    this.quizState.currentItem = this.quizState.items[this.quizState.currentIndex];
+    this.quizState.questionLang = Math.random() < 0.5 ? 'italian' : 'german';
+    this.quizState.answered = false;
+    this.quizState.userAnswer = '';
+    this.quizState.isCorrect = false;
+    this.quizState.typoPositions = [];
+    
+    Views.renderQuiz(this.quizState);
+  },
+
+  exitQuiz() {
+    this.quizState = null;
+    this.translatorTab('dictionary');
+  },
+
   refreshSaveButtons() {
     document.querySelectorAll('.save-btn').forEach(btn => {
       const onclickAttr = btn.getAttribute('onclick');
