@@ -595,5 +595,259 @@ const VerbData = {
       { italian: 'È uscito spesso con i colleghi dopo il lavoro.', german: 'Er ist nach der Arbeit oft mit Kollegen ausgegangen.' },
       { italian: 'Siamo usciti a vedere un film ieri sera.', german: 'Wir sind gestern Abend einen Film schauen gegangen.' }
     ]
+  },
+
+  DARE: {
+    name: 'DARE (geben)',
+    sentences: [
+      { italian: 'Te lo do appena posso.', german: 'Ich gebe es dir, sobald ich kann.' },
+      { italian: 'Non te lo posso dare adesso.', german: 'Ich kann es dir jetzt nicht geben.' },
+      { italian: 'Me lo dai un attimo?', german: 'Gibst du es mir kurz?' },
+      { italian: 'Glielo do io, non ti preoccupare.', german: 'Ich gebe es ihm/ihr, keine Sorge.' },
+      { italian: 'Ce lo danno domani.', german: 'Sie geben es uns morgen.' },
+      { italian: 'Te ne do uno migliore.', german: 'Ich gebe dir ein besseres.' },
+      { italian: 'Me ne dai un altro?', german: 'Gibst du mir noch eins?' },
+      { italian: 'Se vuoi, te lo do io.', german: 'Wenn du willst, gebe ich es dir.' },
+      { italian: 'Ce lo porta tra un attimo.', german: 'Er/Sie bringt es uns gleich.' },
+      { italian: 'Glielo può dare lei?', german: 'Können Sie es ihm/ihr geben?' },
+      { italian: 'Me lo dà senza zucchero.', german: 'Geben Sie es mir ohne Zucker.' },
+      { italian: 'Ce ne dà due, per favore.', german: 'Geben Sie uns bitte zwei davon.' },
+      { italian: 'Glieli do subito.', german: 'Ich gebe sie ihm/ihr sofort.' },
+      { italian: 'Me li incarta? Poi glieli do io.', german: 'Packen Sie sie mir ein? Dann gebe ich sie ihm/ihr.' },
+      { italian: "Gliel'ho già dato ieri.", german: 'Ich habe es ihm/ihr gestern schon gegeben.' },
+      { italian: 'Non gliene darei troppa importanza.', german: 'Ich würde dem nicht zu viel Bedeutung beimessen.' },
+      { italian: 'Te ne do uno io, tanto non lo uso.', german: 'Ich gebe dir eins, ich benutze es sowieso nicht.' },
+      { italian: 'Se lo vedi, daglielo da parte mia.', german: 'Wenn du ihn/sie siehst, gib es ihm/ihr von mir.' },
+      { italian: 'Non glielo dire adesso, poi glielo do io.', german: 'Sag es ihm/ihr jetzt nicht, ich sage es ihm/ihr später.' },
+      { italian: 'Te lo do come consiglio.', german: 'Ich gebe dir das als Rat.' },
+      { italian: 'Te lo dico sinceramente.', german: 'Ich sage es dir ehrlich.' },
+      { italian: 'Non me ne darei la colpa.', german: 'Ich würde mir dafür keine Schuld geben.' },
+      { italian: 'Glielo do per certo.', german: 'Ich halte es für sicher.' },
+      { italian: 'Te ne do atto.', german: 'Ich erkenne das an.' },
+      { italian: 'Non gliene do molta fiducia.', german: 'Ich habe nicht viel Vertrauen darin.' },
+      { italian: 'Me lo dai come sicuro?', german: 'Gibst du mir das als sicher an?' },
+      { italian: 'Te lo faccio sapere e te lo do per confermato.', german: 'Ich sage dir Bescheid und bestätige es dir.' },
+      { italian: 'Appena ce lo danno, ti avviso.', german: 'Sobald sie es uns geben, sage ich dir Bescheid.' },
+      { italian: 'Te ne do comunicazione domani.', german: 'Ich informiere dich morgen darüber.' },
+      { italian: 'Se ce lo danno in tempo, partiamo.', german: 'Wenn sie es uns rechtzeitig geben, fahren wir los.' },
+      { italian: 'Te lo do entro sera.', german: 'Ich gebe es dir bis heute Abend.' },
+      { italian: 'Dammelo pure, poi glielo do io.', german: 'Gib es mir ruhig, dann gebe ich es ihm/ihr.' },
+      { italian: 'Non te lo sto dando per scontato.', german: 'Ich nehme das dir gegenüber nicht als selbstverständlich an.' },
+      { italian: 'Te ne do uno al volo.', german: 'Ich gebe dir schnell eins.' },
+      { italian: 'Glielo dai tu o glielo do io?', german: 'Gibst du es ihm/ihr oder soll ich es geben?' },
+      { italian: 'Me lo sono fatto dare ieri.', german: 'Ich habe es mir gestern geben lassen.' },
+      { italian: 'Te lo do per buono.', german: 'Ich halte es für akzeptabel.' },
+      { italian: 'Non gliene do più di tanto.', german: 'Ich messe dem nicht allzu viel Bedeutung bei.' },
+      { italian: 'Te lo do come fatto.', german: 'Ich betrachte es als erledigt.' },
+      { italian: 'Ce lo siamo già dati.', german: 'Wir haben es uns schon gegeben.' }
+    ]
+  },
+
+  TROVARE: {
+    name: 'TROVARE (finden)',
+    sentences: [
+      { italian: 'Lo trovo molto interessante.', german: 'Ich finde es sehr interessant.' },
+      { italian: 'Non lo trovo giusto.', german: 'Ich finde es nicht richtig.' },
+      { italian: 'Me lo trovi strano?', german: 'Findest du es seltsam?' },
+      { italian: 'Te lo trovo io subito.', german: 'Ich finde es dir sofort.' },
+      { italian: 'Non me lo trovo più.', german: 'Ich finde es nicht mehr.' },
+      { italian: 'Ce lo troviamo domani.', german: 'Wir finden es morgen.' },
+      { italian: 'Me ne trovi uno migliore?', german: 'Findest du mir ein besseres?' },
+      { italian: 'Non lo trovo facile da fare.', german: 'Ich finde es nicht einfach zu machen.' },
+      { italian: 'Te lo trovi bene qui?', german: 'Fühlst du dich hier wohl? / Findest du dich hier gut zurecht?' },
+      { italian: 'Non glielo trovo necessario.', german: 'Ich halte es ihm/ihr gegenüber nicht für notwendig.' },
+      { italian: "Me lo sono trovato davanti all'improvviso.", german: 'Ich habe es plötzlich vor mir gefunden.' },
+      { italian: 'Non me ne trovo bene.', german: 'Ich komme damit nicht gut zurecht.' },
+      { italian: 'Te lo trovo un po\' caro.', german: 'Ich finde es dir etwas teuer.' },
+      { italian: 'Ce lo troviamo spesso in questa situazione.', german: 'Wir finden uns oft in dieser Situation wieder.' },
+      { italian: 'Non me lo trovo spiegato bene.', german: 'Ich finde es nicht gut erklärt.' }
+    ]
+  },
+
+  PENSARE: {
+    name: 'PENSARE (denken)',
+    sentences: [
+      { italian: "Lo penso anch'io.", german: 'Das denke ich auch.' },
+      { italian: 'Non lo penso possibile.', german: 'Ich halte es nicht für möglich.' },
+      { italian: 'Te ne pensi qualcosa?', german: 'Was denkst du darüber?' },
+      { italian: 'Ci sto pensando.', german: 'Ich denke darüber nach.' },
+      { italian: 'Me lo pensavo diverso.', german: 'Ich hatte es mir anders vorgestellt.' },
+      { italian: 'Non me ne penso capace.', german: 'Ich halte mich nicht dafür geeignet.' },
+      { italian: 'Te lo pensi davvero?', german: 'Denkst du das wirklich?' },
+      { italian: 'Non ci penso più.', german: 'Ich denke nicht mehr daran.' },
+      { italian: 'Me ne penso spesso.', german: 'Ich denke oft daran.' },
+      { italian: 'Te lo penso come soluzione.', german: 'Ich halte das für dich für eine Lösung.' },
+      { italian: 'Non lo penso così grave.', german: 'Ich halte es nicht für so schlimm.' },
+      { italian: 'Me lo sto pensando seriamente.', german: 'Ich überlege es mir ernsthaft.' },
+      { italian: 'Non me ne penso responsabile.', german: 'Ich halte mich nicht dafür verantwortlich.' },
+      { italian: 'Te ne pensi ancora?', german: 'Denkst du noch darüber nach?' },
+      { italian: 'Me lo penso già fatto.', german: 'Ich sehe es gedanklich schon als erledigt.' }
+    ]
+  },
+
+  PRENDERE: {
+    name: 'PRENDERE (nehmen)',
+    sentences: [
+      { italian: 'Me lo prendo io.', german: 'Ich nehme es.' },
+      { italian: 'Te lo prendi tu o io?', german: 'Nimmst du es oder soll ich?' },
+      { italian: 'Me ne prendo uno.', german: 'Ich nehme mir eins.' },
+      { italian: 'Ce lo prendiamo dopo.', german: 'Wir nehmen es später.' },
+      { italian: 'Te lo prendo al volo.', german: 'Ich nehme es schnell für dich mit.' },
+      { italian: 'Non me lo prendo sul serio.', german: 'Ich nehme es nicht ernst.' },
+      { italian: 'Me la sono presa male.', german: 'Ich habe es übel genommen.' },
+      { italian: 'Te la prendi sempre per tutto.', german: 'Du nimmst dir immer alles zu Herzen.' },
+      { italian: 'Non me ne prendere.', german: 'Nimm es mir nicht übel.' },
+      { italian: 'Me lo prendo come complimento.', german: 'Ich nehme es als Kompliment.' },
+      { italian: 'Te lo prendi un caffè?', german: 'Nimmst du einen Kaffee?' },
+      { italian: 'Ce ne prendiamo due.', german: 'Wir nehmen zwei davon.' },
+      { italian: 'Me lo sono preso ieri.', german: 'Ich habe es mir gestern genommen.' },
+      { italian: 'Non me lo prendere così.', german: 'Nimm es nicht so auf.' },
+      { italian: 'Te lo prendi tu il conto?', german: 'Übernimmst du die Rechnung?' }
+    ]
+  },
+
+  METTERE: {
+    name: 'METTERE (legen/stellen)',
+    sentences: [
+      { italian: 'Lo metto io sul tavolo.', german: 'Ich lege es auf den Tisch.' },
+      { italian: 'Me lo metti qui, per favore?', german: 'Legst du es mir bitte hierhin?' },
+      { italian: 'Ce lo mettiamo dopo.', german: 'Wir legen es später hin.' },
+      { italian: 'Non me lo mettere così.', german: 'Leg es mir nicht so hin.' },
+      { italian: 'Te lo metto da parte.', german: 'Ich lege es dir beiseite.' },
+      { italian: 'Me ne metti un po\' di più?', german: 'Tust du mir etwas mehr davon drauf?' },
+      { italian: "Ce l'ho messo apposta.", german: 'Ich habe es absichtlich hingelegt.' },
+      { italian: 'Non me lo sono messo bene.', german: 'Ich habe es mir nicht richtig angezogen.' },
+      { italian: 'Te lo metto per iscritto.', german: 'Ich halte es dir schriftlich fest.' },
+      { italian: 'Me la metto via.', german: 'Ich stecke es weg / ich vergesse es.' },
+      { italian: 'Me lo metto nello zaino.', german: 'Ich packe es in den Rucksack.' },
+      { italian: 'Me la sono messa via per dopo.', german: 'Ich habe es mir für später weggelegt.' },
+      { italian: 'Non me lo mettere in testa.', german: 'Red dir das nicht ein.' },
+      { italian: 'Me lo metto in calendario.', german: 'Ich trage es mir im Kalender ein.' }
+    ]
+  },
+
+  TENERE: {
+    name: 'TENERE (behalten/halten)',
+    sentences: [
+      { italian: 'Me lo tengo io.', german: 'Ich behalte es.' },
+      { italian: 'Me lo tengo per sicurezza.', german: 'Ich behalte es zur Sicherheit.' },
+      { italian: 'Te lo tieni tu?', german: 'Behältst du es?' },
+      { italian: 'Te lo tieni ancora?', german: 'Behältst du es noch?' },
+      { italian: 'Ce lo teniamo per dopo.', german: 'Wir behalten es für später.' },
+      { italian: 'Non me lo tenere nascosto.', german: 'Behalt es mir nicht vor.' },
+      { italian: 'Me ne tengo uno.', german: 'Ich behalte mir eins.' },
+      { italian: 'Te lo tengo da parte.', german: 'Ich halte es dir zurück.' },
+      { italian: 'Non me lo tengo dentro.', german: 'Ich behalte es nicht für mich.' },
+      { italian: 'Ce la teniamo stretta.', german: 'Wir halten daran fest.' },
+      { italian: 'Me lo sono tenuto fino ad oggi.', german: 'Ich habe es bis heute behalten.' },
+      { italian: 'Te lo tieni per te.', german: 'Du behältst es für dich.' },
+      { italian: 'Te lo tieni come riferimento.', german: 'Du behältst es als Referenz.' },
+      { italian: 'Me ne tengo responsabile.', german: 'Ich übernehme die Verantwortung dafür.' }
+    ]
+  },
+
+  LASCIARE: {
+    name: 'LASCIARE (lassen)',
+    sentences: [
+      { italian: 'Lascialo stare.', german: 'Lass es gut sein.' },
+      { italian: 'Me lo lasci dire.', german: 'Lass mich das sagen.' },
+      { italian: 'Me lo lasci un attimo?', german: 'Lässt du es mir kurz da?' },
+      { italian: 'Te lo lascio qui.', german: 'Ich lasse es dir hier.' },
+      { italian: 'Ce lo lasciamo alle spalle.', german: 'Wir lassen es hinter uns.' },
+      { italian: 'Non me lo lasciare così.', german: 'Lass es mir nicht so zurück.' },
+      { italian: 'Te lo lascio scegliere.', german: 'Ich lasse dich entscheiden.' },
+      { italian: 'Te ne lascio uno.', german: 'Ich lasse dir eins da.' },
+      { italian: 'Me lo ha lasciato detto.', german: 'Er/Sie hat es mir ausrichten lassen.' },
+      { italian: 'Non me ne lasciare fuori.', german: 'Lass mich da nicht außen vor.' },
+      { italian: 'Te lo lascio fare.', german: 'Ich überlasse es dir.' },
+      { italian: 'Ce lo siamo lasciati alle spalle.', german: 'Wir haben es hinter uns gelassen.' },
+      { italian: 'Lascia perdere il resto.', german: 'Vergiss das Wechselgeld.' },
+      { italian: 'Lo lasciamo sul tavolo.', german: 'Wir lassen es auf dem Tisch.' },
+      { italian: 'Lasciami passare.', german: 'Lass mich vorbei.' }
+    ]
+  },
+
+  ARRIVARE: {
+    name: 'ARRIVARE (ankommen)',
+    sentences: [
+      { italian: 'Ci arrivo subito.', german: 'Ich komme gleich darauf / ich verstehe es gleich.' },
+      { italian: 'Non ci arrivo.', german: 'Ich verstehe es nicht.' },
+      { italian: 'Te lo faccio arrivare domani.', german: 'Ich lasse es dir morgen zukommen.' },
+      { italian: 'Ce ne arrivano altri.', german: 'Weitere kommen bei uns an.' },
+      { italian: 'Non me ne arriva nessuno.', german: 'Bei mir kommt nichts an.' },
+      { italian: 'Te ne arriva uno più tardi.', german: 'Später kommt noch eins bei dir an.' },
+      { italian: 'Ci siamo arrivati insieme.', german: 'Wir sind gemeinsam darauf gekommen.' },
+      { italian: 'Non ci arrivo a fine mese.', german: 'Ich komme finanziell nicht bis Monatsende.' },
+      { italian: 'Te lo faccio arrivare per email.', german: 'Ich lasse es dir per E-Mail zukommen.' },
+      { italian: 'Non me lo fa arrivare.', german: 'Es erreicht mich nicht.' },
+      { italian: 'Ci arrivo tra cinque minuti.', german: 'Ich bin in fünf Minuten da.' },
+      { italian: 'È già arrivato?', german: 'Ist es schon angekommen?' },
+      { italian: 'Mi è arrivato il messaggio.', german: 'Die Nachricht ist angekommen.' },
+      { italian: 'Quando arrivi?', german: 'Wann kommst du an?' },
+      { italian: 'Non mi è arrivato niente.', german: 'Bei mir ist nichts angekommen.' },
+      { italian: 'Arriviamo insieme.', german: 'Wir kommen zusammen.' },
+      { italian: 'Il conto è arrivato.', german: 'Die Rechnung ist da.' },
+      { italian: 'Arriva tra poco.', german: 'Es kommt gleich.' },
+      { italian: 'Ci arrivo, aspetta.', german: 'Ich verstehe, warte kurz.' },
+      { italian: 'Ci arrivo piano piano.', german: 'Ich komme langsam dahinter.' },
+      { italian: 'Non ci sono ancora arrivato.', german: 'Ich habe es noch nicht ganz verstanden.' },
+      { italian: 'Te ne arriva notizia.', german: 'Du bekommst davon Nachricht.' },
+      { italian: 'Ce ne arrivano poche.', german: 'Davon kommen nur wenige an.' },
+      { italian: 'Non me ne è arrivata conferma.', german: 'Bei mir ist keine Bestätigung angekommen.' },
+      { italian: 'Te lo faccio arrivare in giornata.', german: 'Ich lasse es dir heute noch zukommen.' },
+      { italian: 'Ci siamo arrivati tardi.', german: 'Wir sind spät darauf gekommen.' },
+      { italian: 'Non ci arrivo con i tempi.', german: 'Ich komme zeitlich nicht hin.' },
+      { italian: 'Te ne arriva una copia.', german: 'Du bekommst eine Kopie davon.' },
+      { italian: 'Ce lo facciamo arrivare.', german: 'Wir lassen es uns zukommen.' },
+      { italian: 'Non me lo fa arrivare chiaro.', german: 'Es kommt bei mir nicht klar an.' },
+      { italian: 'Non ci arrivo da solo.', german: 'Ich schaffe es allein nicht.' },
+      { italian: 'Ce ne siamo arrivati insieme.', german: 'Wir sind gemeinsam dahin gekommen.' }
+    ]
+  },
+
+  CREDERE: {
+    name: 'CREDERE (glauben)',
+    sentences: [
+      { italian: 'Ci credo.', german: 'Ich glaube es.' },
+      { italian: 'Non ci credo più.', german: 'Ich glaube nicht mehr daran.' },
+      { italian: 'Te lo credo.', german: 'Ich glaube dir das.' },
+      { italian: 'Non te lo credo.', german: 'Das glaube ich dir nicht.' },
+      { italian: 'Me ne credo capace.', german: 'Ich halte mich dafür fähig.' },
+      { italian: 'Non me ne credo responsabile.', german: 'Ich halte mich nicht dafür verantwortlich.' },
+      { italian: 'Te ne credi sicuro?', german: 'Bist du dir dessen sicher?' },
+      { italian: 'Ce lo crediamo possibile.', german: 'Wir halten es für möglich.' },
+      { italian: 'Non ci crede nessuno.', german: 'Niemand glaubt daran.' },
+      { italian: 'Te lo faccio credere.', german: 'Ich lasse dich das glauben.' },
+      { italian: 'Ci credi davvero?', german: 'Glaubst du das wirklich?' },
+      { italian: "Ci credo anch'io.", german: 'Das glaube ich auch.' },
+      { italian: 'Voglio crederci.', german: 'Ich will daran glauben.' },
+      { italian: 'Non ci credo tanto.', german: 'Ich glaube nicht so richtig daran.' },
+      { italian: 'Ti voglio credere.', german: 'Ich möchte dir glauben.' }
+    ]
+  },
+
+  PARLARE: {
+    name: 'PARLARE (sprechen)',
+    sentences: [
+      { italian: 'Te ne parlo dopo.', german: 'Ich spreche später mit dir darüber.' },
+      { italian: 'Non gliene parlare adesso.', german: 'Sprich jetzt nicht mit ihm/ihr darüber.' },
+      { italian: 'Ce ne parliamo domani.', german: 'Wir sprechen morgen darüber.' },
+      { italian: 'Me ne ha parlato ieri.', german: 'Er/Sie hat gestern mit mir darüber gesprochen.' },
+      { italian: 'Non me ne parlare più.', german: 'Sprich mich nicht mehr darauf an.' },
+      { italian: 'Te lo parlo chiaramente.', german: 'Ich sage es dir ganz offen.' },
+      { italian: 'Ce ne parlano spesso.', german: 'Sie sprechen oft mit uns darüber.' },
+      { italian: 'Non gliene ho mai parlato.', german: 'Ich habe nie mit ihm/ihr darüber gesprochen.' },
+      { italian: 'Te ne parlo volentieri.', german: 'Ich spreche gern mit dir darüber.' },
+      { italian: 'Me lo ha parlato male.', german: 'Er/Sie hat schlecht darüber gesprochen.' },
+      { italian: 'Ne parliamo dopo.', german: 'Wir reden später darüber.' },
+      { italian: 'Ne parliamo a cena.', german: 'Wir besprechen es beim Abendessen.' },
+      { italian: 'Non parlarne adesso.', german: 'Sprich jetzt nicht darüber.' },
+      { italian: 'Ne parlano tutti.', german: 'Alle reden darüber.' },
+      { italian: 'Ne parliamo domani.', german: 'Wir reden morgen darüber.' },
+      { italian: 'Parlane con lui.', german: 'Sprich mit ihm darüber.' },
+      { italian: 'Non ne voglio parlare.', german: 'Ich will nicht darüber reden.' },
+      { italian: 'Ne abbiamo parlato ieri.', german: 'Wir haben gestern darüber gesprochen.' },
+      { italian: 'Te ne parlo un attimo.', german: 'Ich sage dir kurz was dazu.' }
+    ]
   }
 };
