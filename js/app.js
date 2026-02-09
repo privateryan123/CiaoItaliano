@@ -914,6 +914,14 @@ const App = {
     this.showToast(msg);
   },
 
+  async clearDictionaryCache() {
+    Store.clearVocabularyCache();
+    // Re-sync from server
+    await Store.syncVocabularyFromServer();
+    Views.renderSettings();
+    this.showToast(I18n.t('dictionaryCacheCleared'));
+  },
+
   // ==========================================
   // TOAST NOTIFICATION
   // ==========================================

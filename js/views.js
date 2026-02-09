@@ -1070,6 +1070,15 @@ const Views = {
         </div>
       </div>
 
+      <!-- Data Management -->
+      <div class="settings-group">
+        <div class="settings-group-title">${I18n.t('dataManagement')}</div>
+        <div class="settings-item" onclick="App.clearDictionaryCache()" style="border-radius: var(--radius-md);">
+          <span class="settings-item-label">🗑️ ${I18n.t('clearDictionaryCache')}</span>
+          <span class="settings-item-value">→</span>
+        </div>
+      </div>
+
       <p style="text-align: center; color: var(--text-tertiary); font-size: 0.8rem; margin-top: var(--space-lg); padding-bottom: var(--space-lg);">
         v2.0 · ${I18n.t('madeWithLove')}
       </p>`;

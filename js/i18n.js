@@ -186,6 +186,9 @@ const I18n = {
       themeLight: 'Light',
       themeDark: 'Dark',
       themeAuto: 'Automatic',
+      dataManagement: 'Data Management',
+      clearDictionaryCache: 'Clear Dictionary Cache',
+      dictionaryCacheCleared: 'Dictionary cache cleared',
       
       // Popup buttons
       word: 'Word',
@@ -375,6 +378,9 @@ const I18n = {
       themeLight: 'Hell',
       themeDark: 'Dunkel',
       themeAuto: 'Automatisch',
+      dataManagement: 'Datenverwaltung',
+      clearDictionaryCache: 'Wörterbuch-Cache leeren',
+      dictionaryCacheCleared: 'Wörterbuch-Cache geleert',
       
       // Popup buttons
       word: 'Wort',
