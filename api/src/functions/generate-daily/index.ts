@@ -1,4 +1,4 @@
-import { app, InvocationContext, Timer } from '@azure/functions';
+import { app, InvocationContext, Timer, HttpRequest, HttpResponseInit } from '@azure/functions';
 import { BlobStorage } from '../../shared/blobStorage';
 
 // Daily content topics for variety
@@ -196,7 +196,7 @@ function getDateStr(date: Date): string {
 }
 
 // Main function to generate daily content
-async function generateDailyContent(context: InvocationContext): Promise<void> {
+async function generateDailyContent(myTimer: Timer, context: InvocationContext): Promise<void> {
   context.log('Daily content generation started at:', new Date().toISOString());
 
   // Generate for today (tomorrow in PST context since this runs at 11pm)
@@ -233,7 +233,7 @@ app.http('generate-content', {
   methods: ['POST'],
   authLevel: 'anonymous',
   route: 'generate/{date?}',
-  handler: async (request, context) => {
+  handler: async (request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> => {
     const dateParam = request.params.date;
     const dates: string[] = [];
 

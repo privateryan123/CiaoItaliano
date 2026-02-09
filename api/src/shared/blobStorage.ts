@@ -149,3 +149,11 @@ async function streamToString(readableStream: NodeJS.ReadableStream | undefined)
     readableStream.on('error', reject);
   });
 }
+
+// Export as named object for easy importing
+export const BlobStorage = {
+  getContent,
+  saveContent,
+  getAvailableDates,
+  cleanupOldContent
+};
