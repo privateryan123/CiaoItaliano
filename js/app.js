@@ -96,19 +96,17 @@ const App = {
       case 'sentences': {
         console.log('Rendering sentences view...');
         const currentDate = Store.getCurrentSentenceDate();
+        let sentences = Store.getSentencesForDate(currentDate);
         
-        // Use async method to check localStorage, Azure, then DAILY_CONTENT
-        Store.getSentencesForDateAsync(currentDate).then(sentences => {
-          if (!sentences) {
-            // Auto-generate if no sentences exist for this date
-            this.generateSentencesForDate(currentDate).then(generatedSentences => {
-              Store.setSentencesForDate(currentDate, generatedSentences);
-              Views.renderSentences(currentDate, generatedSentences);
-            });
-          } else {
-            Views.renderSentences(currentDate, sentences);
-          }
-        });
+        // Auto-generate if no sentences exist for this date
+        if (!sentences) {
+          this.generateSentencesForDate(currentDate).then(generatedSentences => {
+            Store.setSentencesForDate(currentDate, generatedSentences);
+            Views.renderSentences(currentDate, generatedSentences);
+          });
+        } else {
+          Views.renderSentences(currentDate, sentences);
+        }
         
         subtitle.textContent = I18n.t('subtitleSentences');
         break;
@@ -116,38 +114,34 @@ const App = {
       case 'story': {
         console.log('Rendering story view...');
         const storyDate = Store.getCurrentStoryDate();
+        let storyData = Store.getStoryForDate(storyDate);
         
-        // Use async method to check localStorage, Azure, then DAILY_CONTENT
-        Store.getStoryForDateAsync(storyDate).then(storyData => {
-          if (!storyData) {
-            // If no story exists for this date, generate one
-            AI.generateStory(Store.getSettings().level, Store.getSettings().topics).then(story => {
-              Store.setStoryForDate(storyDate, story);
-              Views.renderStory(storyDate, story);
-            });
-          } else {
-            Views.renderStory(storyDate, storyData);
-          }
-        });
+        // If no story exists for this date, generate one
+        if (!storyData) {
+          AI.generateStory(Store.getSettings().level, Store.getSettings().topics).then(story => {
+            Store.setStoryForDate(storyDate, story);
+            Views.renderStory(storyDate, story);
+          });
+        } else {
+          Views.renderStory(storyDate, storyData);
+        }
         subtitle.textContent = I18n.t('subtitleStory');
         break;
       }
       case 'news': {
         console.log('Rendering news view...');
         const newsDate = Store.getCurrentNewsDate();
+        let newsData = Store.getNewsForDate(newsDate);
         
-        // Use async method to check localStorage, Azure, then DAILY_CONTENT
-        Store.getNewsForDateAsync(newsDate).then(newsData => {
-          if (!newsData) {
-            // If no news exists for this date, generate
-            this.generateNewsForDate(newsDate).then(articles => {
-              Store.setNewsForDate(newsDate, articles);
-              Views.renderNews(newsDate, articles);
-            });
-          } else {
-            Views.renderNews(newsDate, newsData);
-          }
-        });
+        // If no news exists for this date, generate
+        if (!newsData) {
+          this.generateNewsForDate(newsDate).then(articles => {
+            Store.setNewsForDate(newsDate, articles);
+            Views.renderNews(newsDate, articles);
+          });
+        } else {
+          Views.renderNews(newsDate, newsData);
+        }
         subtitle.textContent = I18n.t('subtitleNews');
         break;
       }

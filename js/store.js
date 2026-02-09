@@ -112,7 +112,19 @@ const Store = {
   STORY_ARCHIVE_KEY: 'story_archive',
 
   getCurrentStoryDate() {
-    return localStorage.getItem(this.CURRENT_STORY_DATE_KEY) || getTodayDateStr();
+    const stored = localStorage.getItem(this.CURRENT_STORY_DATE_KEY);
+    const today = getTodayDateStr();
+    // Validate stored date has content, otherwise use today or latest
+    if (stored && this.getStoryForDate(stored)) {
+      return stored;
+    }
+    // Try today first
+    if (this.getStoryForDate(today)) {
+      return today;
+    }
+    // Fallback to latest available date
+    const available = getAvailableDates();
+    return available.length > 0 ? available[0] : today;
   },
 
   setCurrentStoryDate(dateStr) {
@@ -151,7 +163,19 @@ const Store = {
   NEWS_ARCHIVE_KEY: 'news_archive',
 
   getCurrentNewsDate() {
-    return localStorage.getItem(this.CURRENT_NEWS_DATE_KEY) || getTodayDateStr();
+    const stored = localStorage.getItem(this.CURRENT_NEWS_DATE_KEY);
+    const today = getTodayDateStr();
+    // Validate stored date has content, otherwise use today or latest
+    if (stored && this.getNewsForDate(stored)) {
+      return stored;
+    }
+    // Try today first
+    if (this.getNewsForDate(today)) {
+      return today;
+    }
+    // Fallback to latest available date
+    const available = getAvailableDates();
+    return available.length > 0 ? available[0] : today;
   },
 
   setCurrentNewsDate(dateStr) {
@@ -190,7 +214,19 @@ const Store = {
   SENTENCE_ARCHIVE_KEY: 'sentence_archive',
 
   getCurrentSentenceDate() {
-    return localStorage.getItem(this.CURRENT_SENTENCE_DATE_KEY) || getTodayDateStr();
+    const stored = localStorage.getItem(this.CURRENT_SENTENCE_DATE_KEY);
+    const today = getTodayDateStr();
+    // Validate stored date has content, otherwise use today or latest
+    if (stored && this.getSentencesForDate(stored)) {
+      return stored;
+    }
+    // Try today first
+    if (this.getSentencesForDate(today)) {
+      return today;
+    }
+    // Fallback to latest available date
+    const available = getAvailableDates();
+    return available.length > 0 ? available[0] : today;
   },
 
   setCurrentSentenceDate(dateStr) {
