@@ -88,20 +88,44 @@ const DAILY_CONTENT = {
     },
     news: [
       {
-        category: "Culture",
-        headline: "Venice Carnival 2026 Celebrates Record Attendance",
-        italianSummary: "Il Carnevale di Venezia ha registrato un numero record di visitatori quest'anno. Le maschere tradizionali e i costumi hanno attirato turisti da tutto il mondo. La città ha organizzato eventi speciali in Piazza San Marco. Il tema di quest'anno era 'Il Sogno Veneziano'. I gondolieri hanno offerto tour speciali lungo i canali decorati.",
-        german: "Der Karneval von Venedig verzeichnete dieses Jahr eine Rekordbesucherzahl. Traditionelle Masken und Kostüme zogen Touristen aus der ganzen Welt an. Die Stadt organisierte besondere Veranstaltungen auf dem Markusplatz. Das Thema dieses Jahres war 'Der Venezianische Traum'. Gondoliere boten spezielle Touren entlang der dekorierten Kanäle an.",
+        category: "Sports",
+        headline: "Inter Milan Secures Champions League Spot with Dramatic Win",
+        italianSummary: "L'Inter ha battuto la Juventus tre a due in una partita emozionante. Il gol decisivo è arrivato al novantesimo minuto. Lautaro Martínez ha segnato una doppietta straordinaria. I tifosi nerazzurri hanno festeggiato tutta la notte. L'Inter si qualifica per la Champions League.",
+        german: "Inter besiegte Juventus drei zu zwei in einem spannenden Spiel. Das entscheidende Tor fiel in der neunzigsten Minute. Lautaro Martínez erzielte einen außergewöhnlichen Doppelpack. Die Inter-Fans feierten die ganze Nacht. Inter qualifiziert sich für die Champions League.",
+        source: "https://www.gazzetta.it",
+        sourceName: "La Gazzetta dello Sport"
+      },
+      {
+        category: "Sports",
+        headline: "Italian Skier Wins Gold at World Championships",
+        italianSummary: "Sofia Goggia ha vinto l'oro nella discesa libera ai Mondiali di sci. L'atleta italiana ha dominato la gara con un tempo eccezionale. È la terza medaglia d'oro mondiale della sua carriera. Goggia ha dedicato la vittoria alla sua famiglia. L'Italia festeggia un altro trionfo nello sci alpino.",
+        german: "Sofia Goggia gewann Gold in der Abfahrt bei der Ski-WM. Die italienische Athletin dominierte das Rennen mit einer außergewöhnlichen Zeit. Es ist die dritte WM-Goldmedaille ihrer Karriere. Goggia widmete den Sieg ihrer Familie. Italien feiert einen weiteren Triumph im alpinen Skisport.",
+        source: "https://www.gazzetta.it",
+        sourceName: "La Gazzetta dello Sport"
+      },
+      {
+        category: "Politics",
+        headline: "Italian Parliament Approves New Education Reform",
+        italianSummary: "Il Parlamento italiano ha approvato una riforma scolastica storica. La nuova legge aumenta i fondi per le scuole pubbliche. Gli insegnanti riceveranno stipendi più alti dal prossimo anno. Il ministro dell'istruzione ha definito la riforma 'un passo fondamentale'. L'opposizione ha votato contro alcune misure.",
+        german: "Das italienische Parlament hat eine historische Schulreform verabschiedet. Das neue Gesetz erhöht die Mittel für öffentliche Schulen. Lehrer werden ab nächstem Jahr höhere Gehälter erhalten. Der Bildungsminister nannte die Reform 'einen grundlegenden Schritt'. Die Opposition stimmte gegen einige Maßnahmen.",
         source: "https://www.ansa.it",
         sourceName: "ANSA"
       },
       {
-        category: "Food",
-        headline: "Italian Olive Oil Exports Reach New Heights",
-        italianSummary: "Le esportazioni di olio d'oliva italiano hanno raggiunto un nuovo record. La qualità dell'olio extravergine italiano è sempre più apprezzata nel mondo. La Puglia e la Toscana sono i principali produttori. I consumatori cercano prodotti autentici e di alta qualità. Il settore prevede una crescita del quindici percento.",
-        german: "Die italienischen Olivenölexporte haben einen neuen Rekord erreicht. Die Qualität des italienischen Extra-Vergine-Öls wird weltweit immer mehr geschätzt. Apulien und die Toskana sind die Hauptproduzenten. Verbraucher suchen authentische Produkte von hoher Qualität. Die Branche erwartet ein Wachstum von fünfzehn Prozent.",
+        category: "World",
+        headline: "EU Summit in Rome Addresses Climate Change",
+        italianSummary: "I leader europei si sono riuniti a Roma per discutere il cambiamento climatico. L'Italia ha proposto nuove misure per ridurre le emissioni. Il presidente del Consiglio ha chiesto maggiori investimenti nelle energie rinnovabili. Tutti i paesi membri hanno firmato un accordo comune. Il summit è stato considerato un grande successo diplomatico.",
+        german: "Europäische Staats- und Regierungschefs trafen sich in Rom, um den Klimawandel zu besprechen. Italien schlug neue Maßnahmen zur Emissionsreduzierung vor. Der Ministerpräsident forderte mehr Investitionen in erneuerbare Energien. Alle Mitgliedsländer unterzeichneten ein gemeinsames Abkommen. Der Gipfel wurde als großer diplomatischer Erfolg gewertet.",
         source: "https://www.repubblica.it",
         sourceName: "La Repubblica"
+      },
+      {
+        category: "Economy",
+        headline: "Italian Exports Hit Record High in January",
+        italianSummary: "Le esportazioni italiane hanno raggiunto un nuovo record a gennaio. Il settore manifatturiero ha registrato una crescita del dodici percento. I prodotti Made in Italy sono sempre più richiesti all'estero. La moda e l'alimentare guidano la crescita. Gli economisti prevedono un anno positivo per l'economia italiana.",
+        german: "Die italienischen Exporte erreichten im Januar einen neuen Rekord. Der Fertigungssektor verzeichnete ein Wachstum von zwölf Prozent. Made in Italy-Produkte sind im Ausland immer gefragter. Mode und Lebensmittel treiben das Wachstum an. Ökonomen prognostizieren ein positives Jahr für die italienische Wirtschaft.",
+        source: "https://www.ilsole24ore.com",
+        sourceName: "Il Sole 24 Ore"
       }
     ]
   },
@@ -203,20 +227,44 @@ const DAILY_CONTENT = {
     },
     news: [
       {
-        category: "Travel",
-        headline: "Italy Introduces New Tourist Rail Pass",
-        italianSummary: "L'Italia ha introdotto un nuovo biglietto ferroviario per i turisti. Con il 'Discover Italy Pass' si può viaggiare su tutti i treni regionali per una settimana. Il pass costa novantanove euro e include sconti per musei. I viaggiatori possono acquistarlo online o nelle stazioni principali. L'iniziativa promuove il turismo sostenibile.",
-        german: "Italien hat ein neues Zugticket für Touristen eingeführt. Mit dem 'Discover Italy Pass' kann man eine Woche lang alle Regionalzüge nutzen. Der Pass kostet neunundneunzig Euro und beinhaltet Museumsrabatte. Reisende können ihn online oder an Hauptbahnhöfen kaufen. Die Initiative fördert nachhaltigen Tourismus.",
-        source: "https://www.trenitalia.com",
-        sourceName: "Trenitalia"
+        category: "Sports",
+        headline: "Napoli Extends Lead at Top of Serie A",
+        italianSummary: "Il Napoli ha vinto due a zero contro la Roma e consolida il primo posto in classifica. Osimhen ha segnato entrambi i gol nella ripresa. La squadra di Spalletti sembra inarrestabile quest'anno. I tifosi napoletani sognano lo scudetto. Il prossimo match sarà contro l'Atalanta.",
+        german: "Napoli gewann zwei zu null gegen Roma und festigt den ersten Platz in der Tabelle. Osimhen erzielte beide Tore in der zweiten Halbzeit. Spallettis Team scheint dieses Jahr unaufhaltsam. Die neapolitanischen Fans träumen vom Meistertitel. Das nächste Spiel ist gegen Atalanta.",
+        source: "https://www.gazzetta.it",
+        sourceName: "La Gazzetta dello Sport"
       },
       {
-        category: "Art",
-        headline: "Uffizi Gallery Extends Evening Hours",
-        italianSummary: "La Galleria degli Uffizi di Firenze estende gli orari di apertura serali. I visitatori potranno ammirare i capolavori fino alle ventidue ogni venerdì. L'iniziativa mira a ridurre l'affollamento durante le ore diurne. Saranno organizzati anche concerti e eventi culturali. I biglietti serali costano venti euro.",
-        german: "Die Uffizien in Florenz verlängern die Abendöffnungszeiten. Besucher können die Meisterwerke jeden Freitag bis zweiundzwanzig Uhr bewundern. Die Initiative zielt darauf ab, die Überfüllung tagsüber zu reduzieren. Es werden auch Konzerte und kulturelle Veranstaltungen organisiert. Abendkarten kosten zwanzig Euro.",
-        source: "https://www.uffizi.it",
-        sourceName: "Galleria degli Uffizi"
+        category: "Sports",
+        headline: "Ferrari Reveals New Formula 1 Car for 2026 Season",
+        italianSummary: "La Ferrari ha presentato la nuova monoposto per la stagione di Formula 1. Il design innovativo promette maggiore velocità e efficienza. Charles Leclerc e Carlos Sainz sono entusiasti del nuovo veicolo. Il team spera di competere per il titolo mondiale. I test pre-stagionali inizieranno la prossima settimana.",
+        german: "Ferrari präsentierte den neuen Rennwagen für die Formel-1-Saison. Das innovative Design verspricht mehr Geschwindigkeit und Effizienz. Charles Leclerc und Carlos Sainz sind begeistert vom neuen Fahrzeug. Das Team hofft, um den Weltmeistertitel zu kämpfen. Die Vorsaisontests beginnen nächste Woche.",
+        source: "https://www.gazzetta.it",
+        sourceName: "La Gazzetta dello Sport"
+      },
+      {
+        category: "Politics",
+        headline: "President Mattarella Meets with German Chancellor",
+        italianSummary: "Il Presidente Mattarella ha incontrato il Cancelliere tedesco al Quirinale. I due leader hanno discusso di cooperazione economica europea. L'Italia e la Germania rafforzano i legami bilaterali. Sono stati firmati accordi per l'energia e la tecnologia. La visita è stata definita 'estremamente produttiva'.",
+        german: "Präsident Mattarella traf den deutschen Bundeskanzler im Quirinal. Die beiden Staatschefs besprachen die europäische Wirtschaftskooperation. Italien und Deutschland stärken die bilateralen Beziehungen. Es wurden Abkommen für Energie und Technologie unterzeichnet. Der Besuch wurde als 'äußerst produktiv' bezeichnet.",
+        source: "https://www.ansa.it",
+        sourceName: "ANSA"
+      },
+      {
+        category: "World",
+        headline: "Italian Peacekeepers Lead UN Mission in Lebanon",
+        italianSummary: "L'Italia guida la missione ONU in Libano con tremila soldati. Il contingente italiano è il più grande della missione UNIFIL. I militari italiani lavorano per mantenere la pace nella regione. Il Ministro della Difesa ha visitato le truppe ieri. La comunità internazionale ha elogiato l'impegno italiano.",
+        german: "Italien führt die UN-Mission im Libanon mit dreitausend Soldaten. Das italienische Kontingent ist das größte der UNIFIL-Mission. Die italienischen Soldaten arbeiten daran, den Frieden in der Region zu bewahren. Der Verteidigungsminister besuchte gestern die Truppen. Die internationale Gemeinschaft lobte das italienische Engagement.",
+        source: "https://www.corriere.it",
+        sourceName: "Corriere della Sera"
+      },
+      {
+        category: "Economy",
+        headline: "Italian Tourism Revenue Surpasses Pre-Pandemic Levels",
+        italianSummary: "Il turismo italiano ha superato i livelli pre-pandemia. Le città d'arte hanno registrato numeri record di visitatori. Roma, Firenze e Venezia guidano la ripresa turistica. Gli alberghi segnalano prenotazioni piene fino all'estate. Il settore prevede un anno eccezionale per l'economia.",
+        german: "Der italienische Tourismus übertraf das Vor-Pandemie-Niveau. Kunststädte verzeichneten Rekordbesucherzahlen. Rom, Florenz und Venedig führen die touristische Erholung an. Hotels melden ausgebuchte Reservierungen bis zum Sommer. Die Branche erwartet ein außergewöhnliches Jahr für die Wirtschaft.",
+        source: "https://www.ilsole24ore.com",
+        sourceName: "Il Sole 24 Ore"
       }
     ]
   },
@@ -329,19 +377,43 @@ const DAILY_CONTENT = {
     news: [
       {
         category: "Sports",
-        headline: "Serie A Weekend Preview: Milan Derby",
-        italianSummary: "Questo weekend la Serie A offre il derby di Milano tra Inter e Milan. Entrambe le squadre sono in ottima forma e lottano per il titolo. Gli esperti prevedono una partita molto combattuta. Lo stadio San Siro sarà tutto esaurito. I tifosi di tutta Italia si preparano per l'evento.",
-        german: "Dieses Wochenende bietet die Serie A das Mailänder Derby zwischen Inter und Milan. Beide Mannschaften sind in Topform und kämpfen um den Titel. Experten erwarten ein hart umkämpftes Spiel. Das San Siro Stadion wird ausverkauft sein. Fans aus ganz Italien bereiten sich auf das Event vor.",
+        headline: "Juventus Signs New Star Player from Barcelona",
+        italianSummary: "La Juventus ha annunciato l'acquisto di un nuovo attaccante dal Barcellona. Il trasferimento è costato sessanta milioni di euro. Il giocatore ha firmato un contratto di cinque anni. I tifosi bianconeri accolgono con entusiasmo il nuovo arrivo. L'allenatore lo considera fondamentale per la prossima stagione.",
+        german: "Juventus gab die Verpflichtung eines neuen Stürmers von Barcelona bekannt. Der Transfer kostete sechzig Millionen Euro. Der Spieler unterschrieb einen Fünfjahresvertrag. Die Juventus-Fans begrüßen den Neuzugang mit Begeisterung. Der Trainer hält ihn für grundlegend für die nächste Saison.",
         source: "https://www.gazzetta.it",
         sourceName: "La Gazzetta dello Sport"
       },
       {
-        category: "Science",
-        headline: "Italian Scientists Make Breakthrough in Renewable Energy",
-        italianSummary: "Ricercatori italiani hanno sviluppato una nuova tecnologia per l'energia solare. Il sistema è trenta percento più efficiente dei pannelli tradizionali. L'Università di Bologna ha guidato il progetto. La tecnologia potrebbe essere disponibile sul mercato entro due anni. L'Italia punta a diventare leader europeo nelle energie rinnovabili.",
-        german: "Italienische Forscher haben eine neue Technologie für Solarenergie entwickelt. Das System ist dreißig Prozent effizienter als herkömmliche Panels. Die Universität Bologna leitete das Projekt. Die Technologie könnte innerhalb von zwei Jahren auf dem Markt sein. Italien strebt an, europäischer Marktführer bei erneuerbaren Energien zu werden.",
-        source: "https://www.corriere.it",
-        sourceName: "Corriere della Sera"
+        category: "Sports",
+        headline: "Italian National Team Prepares for Euro 2028 Qualifiers",
+        italianSummary: "La Nazionale italiana si prepara per le qualificazioni a Euro 2028. Il CT ha convocato venticinque giocatori per il ritiro. L'Italia affronterà la Spagna nella prima partita. I tifosi sperano in una ripetizione del successo del 2021. Gli allenamenti inizieranno lunedì prossimo.",
+        german: "Die italienische Nationalmannschaft bereitet sich auf die Qualifikation zur Euro 2028 vor. Der Nationaltrainer berief fünfundzwanzig Spieler für das Trainingslager. Italien trifft im ersten Spiel auf Spanien. Die Fans hoffen auf eine Wiederholung des Erfolgs von 2021. Das Training beginnt nächsten Montag.",
+        source: "https://www.gazzetta.it",
+        sourceName: "La Gazzetta dello Sport"
+      },
+      {
+        category: "Politics",
+        headline: "New Immigration Law Passes in Italian Senate",
+        italianSummary: "Il Senato italiano ha approvato una nuova legge sull'immigrazione. La legge semplifica il processo per i lavoratori qualificati. Le aziende italiane potranno assumere più facilmente dipendenti stranieri. L'opposizione ha criticato alcune disposizioni. La legge entrerà in vigore il primo aprile.",
+        german: "Der italienische Senat verabschiedete ein neues Einwanderungsgesetz. Das Gesetz vereinfacht das Verfahren für qualifizierte Arbeitskräfte. Italienische Unternehmen können leichter ausländische Mitarbeiter einstellen. Die Opposition kritisierte einige Bestimmungen. Das Gesetz tritt am ersten April in Kraft.",
+        source: "https://www.ansa.it",
+        sourceName: "ANSA"
+      },
+      {
+        category: "World",
+        headline: "Pope Francis Announces Historic Visit to China",
+        italianSummary: "Papa Francesco ha annunciato una visita storica in Cina. Sarà il primo Papa a visitare il paese dal Vaticano. Il viaggio è previsto per settembre di quest'anno. I leader religiosi di tutto il mondo hanno accolto con favore la notizia. La visita potrebbe migliorare le relazioni diplomatiche.",
+        german: "Papst Franziskus kündigte einen historischen Besuch in China an. Er wird der erste Papst sein, der das Land aus dem Vatikan besucht. Die Reise ist für September dieses Jahres geplant. Religiöse Führer weltweit begrüßten die Nachricht. Der Besuch könnte die diplomatischen Beziehungen verbessern.",
+        source: "https://www.vaticannews.va",
+        sourceName: "Vatican News"
+      },
+      {
+        category: "Economy",
+        headline: "Italian Central Bank Raises Growth Forecast",
+        italianSummary: "La Banca d'Italia ha alzato le previsioni di crescita economica. Il PIL italiano dovrebbe crescere del due percento quest'anno. L'inflazione sta diminuendo più rapidamente del previsto. Il settore dei servizi guida la ripresa economica. Gli investimenti stranieri in Italia sono in aumento.",
+        german: "Die Bank von Italien erhöhte die Wachstumsprognose. Das italienische BIP soll dieses Jahr um zwei Prozent wachsen. Die Inflation sinkt schneller als erwartet. Der Dienstleistungssektor treibt die wirtschaftliche Erholung an. Ausländische Investitionen in Italien nehmen zu.",
+        source: "https://www.ilsole24ore.com",
+        sourceName: "Il Sole 24 Ore"
       }
     ]
   }
