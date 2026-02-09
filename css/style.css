@@ -820,25 +820,45 @@ body {
 /* --- Vocabulary View --- */
 .vocab-tabs {
   display: flex;
-  gap: var(--space-xs);
+  gap: 4px;
   margin-bottom: var(--space-lg);
-  padding: var(--space-xs);
+  padding: 4px;
   background: var(--bg-secondary);
   border-radius: var(--radius-md);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (min-width: 400px) {
+  .vocab-tabs {
+    gap: var(--space-xs);
+    padding: var(--space-xs);
+  }
 }
 
 .vocab-tab {
   flex: 1;
-  padding: 10px var(--space-md);
+  padding: 10px var(--space-sm);
   border-radius: var(--radius-sm);
   border: none;
   background: transparent;
   color: var(--text-secondary);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: var(--font-sans);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+@media (min-width: 400px) {
+  .vocab-tab {
+    font-size: 0.85rem;
+    padding: 10px var(--space-md);
+  }
 }
 
 .vocab-tab:hover:not(.active) {
