@@ -199,6 +199,7 @@ const I18n = {
       // Popup buttons
       word: 'Word',
       sentence: 'Sentence',
+      speak: 'Speak',
       
       // Misc
       notFound: 'Not found.'
@@ -397,6 +398,7 @@ const I18n = {
       // Popup buttons
       word: 'Wort',
       sentence: 'Satz',
+      speak: 'Vorlesen',
       
       // Misc
       notFound: 'Nicht gefunden.'

@@ -32,6 +32,12 @@ const App = {
     console.log('4. Setting up word tap...');
     this.setupWordTap();
 
+    // Preload speech synthesis voices
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    }
+
     // Determine initial view from hash
     const hash = (location.hash || '#sentences').replace('#', '');
     const validViews = [...this.MAIN_VIEWS, ...this.SUB_VIEWS];
@@ -589,6 +595,11 @@ const App = {
     });
 
     document.getElementById('popup-close').addEventListener('click', () => this.hideWordPopup());
+    document.getElementById('popup-speak').addEventListener('click', () => {
+      if (this._popupData) {
+        this.speakItalian(this._popupData.word);
+      }
+    });
     document.getElementById('word-popup-overlay').addEventListener('click', (e) => {
       if (e.target === e.currentTarget) this.hideWordPopup();
     });
@@ -654,6 +665,29 @@ const App = {
   hideWordPopup() {
     document.getElementById('word-popup-overlay').classList.remove('visible');
     this._popupData = null;
+  },
+
+  // ==========================================
+  // TEXT-TO-SPEECH
+  // ==========================================
+  speakItalian(text) {
+    if (!text) return;
+    
+    // Cancel any ongoing speech
+    window.speechSynthesis.cancel();
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'it-IT';
+    utterance.rate = 0.9; // Slightly slower for learning
+    
+    // Try to find an Italian voice
+    const voices = window.speechSynthesis.getVoices();
+    const italianVoice = voices.find(v => v.lang.startsWith('it'));
+    if (italianVoice) {
+      utterance.voice = italianVoice;
+    }
+    
+    window.speechSynthesis.speak(utterance);
   },
 
   // ==========================================
