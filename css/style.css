@@ -848,10 +848,9 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: var(--font-sans);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   min-width: 0;
+  text-align: center;
+  line-height: 1.2;
 }
 
 @media (min-width: 400px) {

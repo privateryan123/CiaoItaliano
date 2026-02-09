@@ -909,7 +909,6 @@ const Views = {
             <button class="save-btn ${isSaved ? 'saved' : ''}"
               onclick="App.saveSentence('${this.esc(s.italian)}', '${this.esc(s.german)}')"
               title="${I18n.t('saveSentence')}">🔖</button>
-            <span class="sentence-number">${i + 1}</span>
           </div>
           <div class="sentence-italian">${this.makeInteractive(s.italian, s.keywords, s.italian, s.german)}</div>
           <div class="sentence-german">${s.german}</div>

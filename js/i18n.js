@@ -68,7 +68,7 @@ const I18n = {
       numberConverter: 'Number Converter',
       enterNumber: 'Enter any number...',
       convert: 'Convert',
-      prepositions: 'Prep.',
+      prepositions: 'Prepo\u00ADsitions',
       prepositionsDescription: 'Learn Italian prepositions with examples',
       selectPreposition: 'Select a preposition:',
       
@@ -270,7 +270,7 @@ const I18n = {
       numberConverter: 'Zahlenumwandler',
       enterNumber: 'Beliebige Zahl eingeben...',
       convert: 'Umwandeln',
-      prepositions: 'Präpos.',
+      prepositions: 'Präpo\u00ADsitionen',
       prepositionsDescription: 'Italienische Präpositionen mit Beispielen lernen',
       selectPreposition: 'Präposition auswählen:',
       
