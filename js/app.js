@@ -487,6 +487,7 @@ const App = {
     const input = document.getElementById('number-converter-input');
     const resultDiv = document.getElementById('number-converter-result');
     const italianDiv = document.getElementById('number-italian');
+    const valueDiv = document.getElementById('number-value');
     
     const num = parseInt(input.value, 10);
     if (isNaN(num) || num < 0 || num > 999999999999) {
@@ -495,8 +496,43 @@ const App = {
     }
     
     const italian = this.numberToItalian(num);
+    valueDiv.textContent = num.toLocaleString();
     italianDiv.textContent = italian;
     resultDiv.style.display = 'block';
+    
+    // Update save button state
+    const saveBtn = document.getElementById('number-save-btn');
+    if (saveBtn) {
+      const isSaved = Store.isWordSaved(italian);
+      saveBtn.textContent = isSaved ? '✓' : '🔖';
+      saveBtn.style.color = isSaved ? 'var(--accent)' : 'var(--text-secondary)';
+    }
+  },
+
+  async saveConvertedNumber() {
+    const italianDiv = document.getElementById('number-italian');
+    const valueDiv = document.getElementById('number-value');
+    if (!italianDiv || !valueDiv) return;
+    
+    const italian = italianDiv.textContent;
+    const german = valueDiv.textContent;
+    
+    const isSaved = Store.isWordSaved(italian);
+    if (isSaved) {
+      await Store.removeWord(italian);
+      this.showToast(I18n.t('wordRemoved'));
+    } else {
+      await Store.saveWord(italian, german);
+      this.showToast(I18n.t('wordSaved'));
+    }
+    
+    // Update button state
+    const saveBtn = document.getElementById('number-save-btn');
+    if (saveBtn) {
+      const nowSaved = Store.isWordSaved(italian);
+      saveBtn.textContent = nowSaved ? '✓' : '🔖';
+      saveBtn.style.color = nowSaved ? 'var(--accent)' : 'var(--text-secondary)';
+    }
   },
 
   numberToItalian(n) {

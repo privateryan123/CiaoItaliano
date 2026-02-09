@@ -512,22 +512,29 @@ const Views = {
           </div>
           
           <!-- Number Converter -->
-          <div style="margin-bottom: var(--space-md); padding: var(--space-md); background: var(--bg-secondary); border-radius: 12px;">
-            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
+          <div style="margin-bottom: var(--space-md); padding: var(--space-sm); background: var(--bg-secondary); border-radius: 10px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.85rem; color: var(--text-primary);">
               ${I18n.t('numberConverter')}
             </label>
-            <div style="display: flex; gap: 8px;">
+            <div style="display: flex; gap: 6px;">
               <input type="number" id="number-converter-input" 
                 placeholder="${I18n.t('enterNumber')}" 
-                style="flex: 1; padding: 12px; font-size: 1rem; border: 2px solid var(--border-color); border-radius: 12px; background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans);">
+                style="flex: 1; min-width: 0; padding: 8px 10px; font-size: 0.9rem; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans);">
               <button onclick="App.convertNumber()" 
-                style="padding: 12px 20px; background: var(--accent); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">
+                style="padding: 8px 12px; background: var(--accent); color: white; border: none; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap;">
                 ${I18n.t('convert')}
               </button>
             </div>
-            <div id="number-converter-result" style="margin-top: 12px; display: none;">
-              <div style="padding: 12px; background: var(--bg-primary); border-radius: 8px; border-left: 4px solid var(--accent);">
-                <div id="number-italian" style="font-size: 1.2rem; font-weight: 600; color: var(--text-primary);"></div>
+            <div id="number-converter-result" style="margin-top: 10px; display: none;">
+              <div style="padding: 10px; background: var(--bg-primary); border-radius: 8px; border-left: 3px solid var(--accent); display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+                <div>
+                  <div id="number-value" style="font-size: 0.8rem; color: var(--text-tertiary);"></div>
+                  <div id="number-italian" style="font-size: 1rem; font-weight: 600; color: var(--text-primary);"></div>
+                </div>
+                <button id="number-save-btn" onclick="App.saveConvertedNumber()" 
+                  style="padding: 6px 10px; background: transparent; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.75rem; cursor: pointer; color: var(--text-secondary);">
+                  🔖
+                </button>
               </div>
             </div>
           </div>
