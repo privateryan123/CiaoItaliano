@@ -671,14 +671,19 @@ const Views = {
             </div>`;
         } else {
           vocab.words.forEach(w => {
+            const wrUrl = w.wordRefUrl || AI.getWordReferenceUrl(w.italian);
+            const defsHtml = w.definitions && w.definitions.length > 0 
+              ? `<div class="vocab-definitions">${w.definitions.slice(0, 3).join(', ')}</div>` 
+              : '';
             html += `
               <div class="vocab-item">
                 <div>
                   <div class="vocab-italian">${w.italian}</div>
                   <div class="vocab-german">${w.german}</div>
+                  ${defsHtml}
                 </div>
                 <div style="display:flex; gap: 4px; align-items: center;">
-                  <button class="vocab-wr-btn" onclick="window.open('${AI.getWordReferenceUrl(w.italian)}', '_blank')" title="${I18n.t('lookupInWordRef')}">📘</button>
+                  <button class="vocab-wr-btn" onclick="window.open('${wrUrl}', '_blank')" title="${I18n.t('lookupInWordRef')}">📘</button>
                   <button class="vocab-delete" onclick="App.removeWord('${this.esc(w.italian)}')" title="${I18n.t('remove')}">✕</button>
                 </div>
               </div>`;
@@ -931,14 +936,19 @@ const Views = {
           </div>`;
       } else {
         vocab.words.forEach(w => {
+          const wrUrl = w.wordRefUrl || AI.getWordReferenceUrl(w.italian);
+          const defsHtml = w.definitions && w.definitions.length > 0 
+            ? `<div class="vocab-definitions">${w.definitions.slice(0, 3).join(', ')}</div>` 
+            : '';
           html += `
             <div class="vocab-item">
               <div>
                 <div class="vocab-italian">${w.italian}</div>
                 <div class="vocab-german">${w.german}</div>
+                ${defsHtml}
               </div>
               <div style="display:flex; gap: 4px; align-items: center;">
-                <button class="vocab-wr-btn" onclick="window.open('${AI.getWordReferenceUrl(w.italian)}', '_blank')" title="${I18n.t('lookupInWordRef')}">📘</button>
+                <button class="vocab-wr-btn" onclick="window.open('${wrUrl}', '_blank')" title="${I18n.t('lookupInWordRef')}">📘</button>
                 <button class="vocab-delete" onclick="App.removeWord('${this.esc(w.italian)}')" title="${I18n.t('remove')}">✕</button>
               </div>
             </div>`;

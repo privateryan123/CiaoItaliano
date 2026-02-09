@@ -881,6 +881,13 @@ body {
   color: var(--text-secondary);
 }
 
+.vocab-definitions {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+  font-style: italic;
+}
+
 .vocab-delete {
   border: none;
   background: transparent;

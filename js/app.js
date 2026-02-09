@@ -422,12 +422,12 @@ const App = {
     }
   },
 
-  saveTranslation() {
+  async saveTranslation() {
     if (!this._lastTranslation) return;
     const { original, translated, from, to } = this._lastTranslation;
     const italian = from === 'it' ? original : translated;
     const german = from === 'de' ? original : translated;
-    const added = Store.saveSentence(italian, german);
+    const added = await Store.saveSentence(italian, german);
     this.showToast(added ? I18n.t('translationSaved') : I18n.t('alreadySaved'));
   },
 
@@ -510,17 +510,15 @@ const App = {
       if (this._popupData) {
         const word = this._popupData.word;
         
-        // Translate only the single word, not the whole sentence
-        const wordTranslation = await AI.translate(word, 'it', 'de');
-        
-        const added = Store.saveWord(word, wordTranslation);
+        // Save word - API will lookup WordReference and get translation
+        const result = await Store.saveWord(word, null);
         this.hideWordPopup();
-        this.showToast(added ? I18n.t('wordSaved') : I18n.t('alreadySaved'));
+        this.showToast(result ? I18n.t('wordSaved') : I18n.t('alreadySaved'));
       }
     });
-    document.getElementById('popup-save-sentence').addEventListener('click', () => {
+    document.getElementById('popup-save-sentence').addEventListener('click', async () => {
       if (this._popupData) {
-        const added = Store.saveSentence(this._popupData.sentence, this._popupData.translation);
+        const added = await Store.saveSentence(this._popupData.sentence, this._popupData.translation);
         this.hideWordPopup();
         this.showToast(added ? I18n.t('sentenceSaved') : I18n.t('alreadySaved'));
         this.refreshSaveButtons();
@@ -574,33 +572,33 @@ const App = {
   // ==========================================
   // VOCABULARY ACTIONS
   // ==========================================
-  saveSentence(italian, german) {
-    const added = Store.saveSentence(italian, german);
+  async saveSentence(italian, german) {
+    const added = await Store.saveSentence(italian, german);
     this.showToast(added ? I18n.t('sentenceSaved') : I18n.t('alreadySaved'));
     this.refreshSaveButtons();
   },
 
-  saveWord(italian, german) {
-    const added = Store.saveWord(italian, german);
-    this.showToast(added ? I18n.t('wordSaved') : I18n.t('alreadySaved'));
+  async saveWord(italian, german) {
+    const result = await Store.saveWord(italian, german);
+    this.showToast(result ? I18n.t('wordSaved') : I18n.t('alreadySaved'));
   },
 
-  removeSentence(italian) {
-    Store.removeSentence(italian);
+  async removeSentence(italian) {
+    await Store.removeSentence(italian);
     // Check which view is currently active
     if (this.currentView === 'translator') {
-      Views.renderTranslator('sentences');
+      Views.renderTranslator('dictionary', 'sentences');
     } else {
       Views.renderVocabulary('sentences');
     }
     this.showToast(I18n.t('sentenceRemoved'));
   },
 
-  removeWord(italian) {
-    Store.removeWord(italian);
+  async removeWord(italian) {
+    await Store.removeWord(italian);
     // Check which view is currently active
     if (this.currentView === 'translator') {
-      Views.renderTranslator('words');
+      Views.renderTranslator('dictionary', 'words');
     } else {
       Views.renderVocabulary('words');
     }
@@ -848,10 +846,21 @@ const App = {
   // ==========================================
   setLevel(level) {
     const settings = Store.getSettings();
+    const oldLevel = settings.level;
     settings.level = level;
     Store.saveSettings(settings);
     Views.renderSettings();
     this.showToast(`${I18n.t('levelSetTo')} ${level}`);
+    
+    // If level changed, refresh content-related views
+    if (oldLevel !== level) {
+      // The content will be regenerated with the new level next time the API is called
+      // For now, refresh the current view if it's content-related
+      if (this.currentView === 'sentences' || this.currentView === 'story') {
+        // Trigger a re-render to show that content should match the level
+        this.switchView(this.currentView, false);
+      }
+    }
   },
 
   setSentenceCount(n) {

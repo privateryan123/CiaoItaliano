@@ -19,42 +19,151 @@ const Store = {
     localStorage.setItem(this.LANGUAGE_KEY, lang);
   },
 
-  // --- Vocabulary ---
+  // --- Vocabulary (synced with Blob Storage API) ---
+  _vocabCache: null,
+  _vocabLoading: false,
+  _vocabSyncPromise: null,
+
+  // Get vocabulary (uses cache, syncs from API in background)
   getVocabulary() {
+    // Return cache if available, otherwise local storage
+    if (this._vocabCache) {
+      return this._vocabCache;
+    }
     try {
-      return JSON.parse(localStorage.getItem(this.VOCAB_KEY)) || { words: [], sentences: [] };
+      const local = JSON.parse(localStorage.getItem(this.VOCAB_KEY)) || { words: [], sentences: [] };
+      this._vocabCache = local;
+      // Trigger background sync
+      this.syncVocabularyFromServer();
+      return local;
     } catch {
       return { words: [], sentences: [] };
     }
   },
 
-  saveWord(italian, german) {
-    const vocab = this.getVocabulary();
-    // Don't add duplicates
-    if (vocab.words.some(w => w.italian === italian)) return false;
-    vocab.words.unshift({ italian, german, added: new Date().toISOString() });
-    localStorage.setItem(this.VOCAB_KEY, JSON.stringify(vocab));
-    return true;
+  // Sync vocabulary from server
+  async syncVocabularyFromServer() {
+    if (this._vocabLoading) return this._vocabSyncPromise;
+    this._vocabLoading = true;
+    
+    this._vocabSyncPromise = (async () => {
+      try {
+        const response = await fetch('/api/vocabulary');
+        if (response.ok) {
+          const vocab = await response.json();
+          this._vocabCache = vocab;
+          localStorage.setItem(this.VOCAB_KEY, JSON.stringify(vocab));
+          return vocab;
+        }
+      } catch (error) {
+        console.error('Failed to sync vocabulary from server:', error);
+      } finally {
+        this._vocabLoading = false;
+      }
+      return this._vocabCache || { words: [], sentences: [] };
+    })();
+    
+    return this._vocabSyncPromise;
   },
 
-  saveSentence(italian, german) {
+  // Save word to API and local storage
+  async saveWord(italian, german) {
+    const vocab = this.getVocabulary();
+    // Check local cache for duplicates
+    if (vocab.words.some(w => w.italian === italian)) return false;
+    
+    try {
+      const response = await fetch('/api/vocabulary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'word', italian, german })
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        const item = result.item || { italian, german, added: new Date().toISOString() };
+        vocab.words.unshift(item);
+        this._vocabCache = vocab;
+        localStorage.setItem(this.VOCAB_KEY, JSON.stringify(vocab));
+        return item;
+      } else if (response.status === 409) {
+        return false; // Already exists
+      }
+    } catch (error) {
+      console.error('Failed to save word to server:', error);
+      // Fallback to local storage
+      vocab.words.unshift({ italian, german, added: new Date().toISOString() });
+      this._vocabCache = vocab;
+      localStorage.setItem(this.VOCAB_KEY, JSON.stringify(vocab));
+      return true;
+    }
+    return false;
+  },
+
+  // Save sentence to API and local storage
+  async saveSentence(italian, german) {
     const vocab = this.getVocabulary();
     if (vocab.sentences.some(s => s.italian === italian)) return false;
-    vocab.sentences.unshift({ italian, german, added: new Date().toISOString() });
-    localStorage.setItem(this.VOCAB_KEY, JSON.stringify(vocab));
-    return true;
+    
+    try {
+      const response = await fetch('/api/vocabulary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'sentence', italian, german })
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        const item = result.item || { italian, german, added: new Date().toISOString() };
+        vocab.sentences.unshift(item);
+        this._vocabCache = vocab;
+        localStorage.setItem(this.VOCAB_KEY, JSON.stringify(vocab));
+        return true;
+      } else if (response.status === 409) {
+        return false;
+      }
+    } catch (error) {
+      console.error('Failed to save sentence to server:', error);
+      vocab.sentences.unshift({ italian, german, added: new Date().toISOString() });
+      this._vocabCache = vocab;
+      localStorage.setItem(this.VOCAB_KEY, JSON.stringify(vocab));
+      return true;
+    }
+    return false;
   },
 
-  removeWord(italian) {
+  async removeWord(italian) {
     const vocab = this.getVocabulary();
     vocab.words = vocab.words.filter(w => w.italian !== italian);
+    this._vocabCache = vocab;
     localStorage.setItem(this.VOCAB_KEY, JSON.stringify(vocab));
+    
+    try {
+      await fetch('/api/vocabulary', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'word', italian })
+      });
+    } catch (error) {
+      console.error('Failed to delete word from server:', error);
+    }
   },
 
-  removeSentence(italian) {
+  async removeSentence(italian) {
     const vocab = this.getVocabulary();
     vocab.sentences = vocab.sentences.filter(s => s.italian !== italian);
+    this._vocabCache = vocab;
     localStorage.setItem(this.VOCAB_KEY, JSON.stringify(vocab));
+    
+    try {
+      await fetch('/api/vocabulary', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'sentence', italian })
+      });
+    } catch (error) {
+      console.error('Failed to delete sentence from server:', error);
+    }
   },
 
   isWordSaved(italian) {

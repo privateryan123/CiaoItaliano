@@ -7,9 +7,11 @@
 import { BlobServiceClient, ContainerClient } from '@azure/storage-blob';
 
 const CONTAINER_NAME = 'daily-content';
+const VOCABULARY_CONTAINER = 'vocabulary';
 const MAX_DAYS = 30;
 
 let containerClient: ContainerClient | null = null;
+let vocabularyContainerClient: ContainerClient | null = null;
 
 /**
  * Initialize the blob storage client
@@ -26,6 +28,23 @@ function getContainerClient(): ContainerClient {
   containerClient = blobServiceClient.getContainerClient(CONTAINER_NAME);
   
   return containerClient;
+}
+
+/**
+ * Initialize the vocabulary blob storage client
+ */
+function getVocabularyContainerClient(): ContainerClient {
+  if (vocabularyContainerClient) return vocabularyContainerClient;
+
+  const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+  if (!connectionString) {
+    throw new Error('AZURE_STORAGE_CONNECTION_STRING environment variable is not set');
+  }
+
+  const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
+  vocabularyContainerClient = blobServiceClient.getContainerClient(VOCABULARY_CONTAINER);
+  
+  return vocabularyContainerClient;
 }
 
 /**
@@ -157,3 +176,119 @@ export const BlobStorage = {
   getAvailableDates,
   cleanupOldContent
 };
+
+// ==========================================
+// VOCABULARY STORAGE
+// ==========================================
+
+interface VocabularyItem {
+  italian: string;
+  german: string;
+  added: string;
+  wordRefUrl?: string;
+  definitions?: string[];
+}
+
+interface Vocabulary {
+  words: VocabularyItem[];
+  sentences: VocabularyItem[];
+}
+
+/**
+ * Ensure vocabulary container exists
+ */
+async function ensureVocabularyContainer(): Promise<void> {
+  const client = getVocabularyContainerClient();
+  await client.createIfNotExists({ access: 'blob' });
+}
+
+/**
+ * Get vocabulary for a user
+ */
+export async function getVocabulary(userId: string): Promise<Vocabulary> {
+  try {
+    const client = getVocabularyContainerClient();
+    const blobClient = client.getBlobClient(`${userId}.json`);
+    
+    const exists = await blobClient.exists();
+    if (!exists) {
+      return { words: [], sentences: [] };
+    }
+
+    const downloadResponse = await blobClient.download();
+    const content = await streamToString(downloadResponse.readableStreamBody);
+    return JSON.parse(content);
+  } catch (error) {
+    console.error(`Error getting vocabulary for ${userId}:`, error);
+    return { words: [], sentences: [] };
+  }
+}
+
+/**
+ * Save a vocabulary item (word or sentence)
+ */
+export async function saveVocabularyItem(
+  userId: string, 
+  type: 'word' | 'sentence', 
+  item: VocabularyItem
+): Promise<boolean> {
+  try {
+    await ensureVocabularyContainer();
+    const vocab = await getVocabulary(userId);
+    
+    const collection = type === 'word' ? vocab.words : vocab.sentences;
+    
+    // Check for duplicates
+    if (collection.some(i => i.italian === item.italian)) {
+      return false;
+    }
+    
+    // Add to beginning
+    collection.unshift(item);
+    
+    // Save back
+    const client = getVocabularyContainerClient();
+    const blockBlobClient = client.getBlockBlobClient(`${userId}.json`);
+    const data = JSON.stringify(vocab, null, 2);
+    await blockBlobClient.upload(data, data.length, {
+      blobHTTPHeaders: { blobContentType: 'application/json' }
+    });
+    
+    return true;
+  } catch (error) {
+    console.error(`Error saving vocabulary item:`, error);
+    return false;
+  }
+}
+
+/**
+ * Remove a vocabulary item
+ */
+export async function removeVocabularyItem(
+  userId: string, 
+  type: 'word' | 'sentence', 
+  italian: string
+): Promise<boolean> {
+  try {
+    const vocab = await getVocabulary(userId);
+    
+    if (type === 'word') {
+      vocab.words = vocab.words.filter(w => w.italian !== italian);
+    } else {
+      vocab.sentences = vocab.sentences.filter(s => s.italian !== italian);
+    }
+    
+    // Save back
+    const client = getVocabularyContainerClient();
+    const blockBlobClient = client.getBlockBlobClient(`${userId}.json`);
+    const data = JSON.stringify(vocab, null, 2);
+    await blockBlobClient.upload(data, data.length, {
+      blobHTTPHeaders: { blobContentType: 'application/json' }
+    });
+    
+    return true;
+  } catch (error) {
+    console.error(`Error removing vocabulary item:`, error);
+    return false;
+  }
+}

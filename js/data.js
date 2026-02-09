@@ -48,7 +48,7 @@ const DAILY_CONTENT = {
       title: "Il Primo Caffè",
       topic: "Daily Life",
       level: "A1",
-      readingTime: "3 min",
+      readingTime: "6 min",
       pages: [
         [
           {
@@ -82,6 +82,40 @@ const DAILY_CONTENT = {
             italian: "È una bellissima giornata per cominciare la settimana.",
             german: "Es ist ein wunderschöner Tag, um die Woche zu beginnen.",
             note: "«Bellissimo» = very beautiful (superlative). «Cominciare» = to begin."
+          }
+        ],
+        [
+          {
+            italian: "Il telefono squilla. È sua madre che chiama.",
+            german: "Das Telefon klingelt. Es ist seine Mutter, die anruft.",
+            note: "«Squillare» = to ring. «Chiamare» = to call."
+          },
+          {
+            italian: "«Ciao Marco, come stai? Hai dormito bene?»",
+            german: "«Hallo Marco, wie geht es dir? Hast du gut geschlafen?»",
+            note: "«Come stai» = How are you (informal). «Dormire» = to sleep."
+          },
+          {
+            italian: "«Sì, mamma. Ho fatto dei sogni bellissimi.»",
+            german: "«Ja, Mama. Ich hatte wunderschöne Träume.»",
+            note: "«Fare dei sogni» = to have dreams. «Bellissimo» = very beautiful."
+          }
+        ],
+        [
+          {
+            italian: "Dopo la telefonata, Marco si prepara per uscire.",
+            german: "Nach dem Telefonat macht sich Marco fertig zum Ausgehen.",
+            note: "«Prepararsi» = to get ready (reflexive). «Uscire» = to go out."
+          },
+          {
+            italian: "Si veste con una camicia azzurra e pantaloni scuri.",
+            german: "Er zieht ein hellblaues Hemd und dunkle Hosen an.",
+            note: "«Vestirsi» = to dress oneself. «Scuro» = dark."
+          },
+          {
+            italian: "Prima di uscire, dà un'ultima occhiata allo specchio.",
+            german: "Bevor er ausgeht, wirft er einen letzten Blick in den Spiegel.",
+            note: "«Prima di» = before. «Occhiata» = glance. «Specchio» = mirror."
           }
         ]
       ]
@@ -170,7 +204,7 @@ const DAILY_CONTENT = {
       title: "Al Ristorante",
       topic: "Food & Dining",
       level: "A1-A2",
-      readingTime: "4 min",
+      readingTime: "7 min",
       pages: [
         [
           {
@@ -218,9 +252,43 @@ const DAILY_CONTENT = {
             note: "«Squisito» = exquisite/delicious. «Boccone» = bite."
           },
           {
-            italian: "Alla fine, ordinano anche un tiramisù da dividere.",
-            german: "Am Ende bestellen sie auch ein Tiramisù zum Teilen.",
-            note: "«Alla fine» = in the end. «Dividere» = to share/divide."
+            italian: "Il cameriere porta anche del pane fresco con olio d'oliva.",
+            german: "Der Kellner bringt auch frisches Brot mit Olivenöl.",
+            note: "«Pane» = bread. «Olio d'oliva» = olive oil."
+          }
+        ],
+        [
+          {
+            italian: "«Volete vedere il menù dei dolci?» chiede il cameriere.",
+            german: "«Möchten Sie die Dessertkarte sehen?» fragt der Kellner.",
+            note: "«Dolci» = desserts/sweets. «Volere» = to want."
+          },
+          {
+            italian: "Sofia e Marco ordinano un tiramisù da dividere.",
+            german: "Sofia und Marco bestellen ein Tiramisù zum Teilen.",
+            note: "«Ordinare» = to order. «Dividere» = to share/divide."
+          },
+          {
+            italian: "«È stato tutto delizioso. Il conto, per favore.»",
+            german: "«Es war alles köstlich. Die Rechnung, bitte.»",
+            note: "«Delizioso» = delicious. «Il conto» = the bill."
+          }
+        ],
+        [
+          {
+            italian: "Pagano il conto e lasciano una mancia generosa.",
+            german: "Sie bezahlen die Rechnung und geben ein großzügiges Trinkgeld.",
+            note: "«Mancia» = tip. «Generoso» = generous."
+          },
+          {
+            italian: "«Grazie mille! Torneremo sicuramente» dice Marco.",
+            german: "«Vielen Dank! Wir kommen sicher wieder» sagt Marco.",
+            note: "«Tornare» = to return. «Sicuramente» = surely."
+          },
+          {
+            italian: "Escono dal ristorante sotto un cielo stellato.",
+            german: "Sie verlassen das Restaurant unter einem Sternenhimmel.",
+            note: "«Uscire» = to exit. «Stellato» = starry."
           }
         ]
       ]
@@ -309,7 +377,7 @@ const DAILY_CONTENT = {
       title: "Un Viaggio in Treno",
       topic: "Travel",
       level: "A2",
-      readingTime: "5 min",
+      readingTime: "9 min",
       pages: [
         [
           {
@@ -326,11 +394,23 @@ const DAILY_CONTENT = {
             italian: "Controlla il tabellone delle partenze: binario sette.",
             german: "Sie überprüft die Abfahrtstafel: Gleis sieben.",
             note: "«Tabellone» = display board. «Binario» = platform/track."
-          },
+          }
+        ],
+        [
           {
             italian: "Ha ancora dieci minuti. Compra un cornetto e un caffè.",
             german: "Sie hat noch zehn Minuten. Sie kauft ein Croissant und einen Kaffee.",
             note: "«Ancora» = still/yet. «Cornetto» = croissant (Italian style)."
+          },
+          {
+            italian: "Il bar della stazione è sempre affollato la mattina.",
+            german: "Die Bar am Bahnhof ist morgens immer überfüllt.",
+            note: "«Affollato» = crowded. «La mattina» = in the morning."
+          },
+          {
+            italian: "Laura beve il caffè velocemente mentre guarda l'orologio.",
+            german: "Laura trinkt den Kaffee schnell, während sie auf die Uhr schaut.",
+            note: "«Velocemente» = quickly. «Orologio» = clock/watch."
           }
         ],
         [
@@ -354,7 +434,7 @@ const DAILY_CONTENT = {
           {
             italian: "Il treno parte puntuale. Laura guarda il paesaggio dal finestrino.",
             german: "Der Zug fährt pünktlich ab. Laura schaut aus dem Fenster auf die Landschaft.",
-            note: "«Puntuale» = punctual/on time. «Paesaggio» = landscape. «Finestrino» = window (in vehicle)."
+            note: "«Puntuale» = punctual/on time. «Paesaggio» = landscape."
           },
           {
             italian: "Vede colline verdi, piccoli paesi e campi dorati.",
@@ -362,14 +442,77 @@ const DAILY_CONTENT = {
             note: "«Colline» = hills. «Paesi» = villages/towns. «Dorato» = golden."
           },
           {
+            italian: "L'Italia è davvero un paese bellissimo.",
+            german: "Italien ist wirklich ein wunderschönes Land.",
+            note: "«Davvero» = really/truly. «Bellissimo» = very beautiful."
+          }
+        ],
+        [
+          {
+            italian: "Il controllore passa per verificare i biglietti.",
+            german: "Der Schaffner kommt vorbei, um die Fahrkarten zu kontrollieren.",
+            note: "«Controllore» = ticket inspector. «Verificare» = to verify/check."
+          },
+          {
+            italian: "«Biglietto, prego.» Laura gli mostra il suo biglietto elettronico.",
+            german: "«Fahrkarte, bitte.» Laura zeigt ihm ihr elektronisches Ticket.",
+            note: "«Mostrare» = to show. «Elettronico» = electronic."
+          },
+          {
+            italian: "«Tutto in ordine. Buon viaggio, signorina.»",
+            german: "«Alles in Ordnung. Gute Reise, junge Dame.»",
+            note: "«In ordine» = in order. «Signorina» = miss/young lady."
+          }
+        ],
+        [
+          {
+            italian: "Durante il viaggio, Laura legge un libro.",
+            german: "Während der Fahrt liest Laura ein Buch.",
+            note: "«Durante» = during. «Leggere» = to read."
+          },
+          {
+            italian: "È un romanzo italiano di Elena Ferrante.",
+            german: "Es ist ein italienischer Roman von Elena Ferrante.",
+            note: "«Romanzo» = novel. Author reference."
+          },
+          {
+            italian: "Le storie ambientate a Napoli la preparano per il viaggio.",
+            german: "Die in Neapel spielenden Geschichten bereiten sie auf die Reise vor.",
+            note: "«Ambientato» = set (in a place). «Preparare» = to prepare."
+          }
+        ],
+        [
+          {
             italian: "Quattro ore dopo, il treno arriva a Napoli Centrale.",
             german: "Vier Stunden später kommt der Zug in Neapel Centrale an.",
             note: "«Dopo» = after/later. Time expressions: «quattro ore dopo» = four hours later."
           },
           {
+            italian: "Laura prende la sua valigia e scende dal treno.",
+            german: "Laura nimmt ihren Koffer und steigt aus dem Zug.",
+            note: "«Prendere» = to take. «Scendere» = to get off/descend."
+          },
+          {
+            italian: "L'aria è più calda qui che a Milano.",
+            german: "Die Luft ist hier wärmer als in Mailand.",
+            note: "«Più ... che» = more ... than. «Caldo» = warm/hot."
+          }
+        ],
+        [
+          {
             italian: "Giulia l'aspetta sul binario con un grande abbraccio.",
             german: "Giulia erwartet sie auf dem Bahnsteig mit einer großen Umarmung.",
             note: "«Aspettare» = to wait for. «Abbraccio» = hug/embrace."
+          },
+          {
+            italian: "«Finalmente sei qui! Ti ho preparato la pizza!»",
+            german: "«Endlich bist du da! Ich habe dir Pizza gemacht!»",
+            note: "«Finalmente» = finally. «Preparare» = to prepare."
+          },
+          {
+            italian: "Le due amiche escono dalla stazione ridendo insieme.",
+            german: "Die beiden Freundinnen verlassen den Bahnhof und lachen zusammen.",
+            note: "«Ridere» = to laugh. «Insieme» = together."
           }
         ]
       ]
