@@ -1103,14 +1103,27 @@ function getAvailableDates() {
 
 // Format date for display
 function formatDateDisplay(dateStr) {
-  const months = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
+  const lang = Store.getLanguage();
+  const monthsEn = ['January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'];
+  const monthsDe = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
     'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
-  const weekdays = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
+  const weekdaysEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const weekdaysDe = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
+  
+  const months = lang === 'de' ? monthsDe : monthsEn;
+  const weekdays = lang === 'de' ? weekdaysDe : weekdaysEn;
+  
   const [y, m, d] = dateStr.split('-').map(Number);
   const date = new Date(y, m - 1, d);
+  
+  const fullFormat = lang === 'de' 
+    ? `${weekdays[date.getDay()]}, ${d}. ${months[m - 1]} ${y}`
+    : `${weekdays[date.getDay()]}, ${months[m - 1]} ${d}, ${y}`;
+  
   return {
-    full: `${weekdays[date.getDay()]}, ${d}. ${months[m - 1]} ${y}`,
-    short: `${d}. ${months[m - 1]}`,
+    full: fullFormat,
+    short: lang === 'de' ? `${d}. ${months[m - 1]}` : `${months[m - 1]} ${d}`,
     day: d,
     monthShort: months[m - 1].substring(0, 3),
     weekday: weekdays[date.getDay()]
