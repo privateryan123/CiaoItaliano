@@ -12,6 +12,7 @@
   "dependencies": {
     "@azure/functions": "*",
     "@azure/openai": "*",
+    "@azure/storage-blob": "^12.17.0",
     "axios": "^1.6.0",
     "dotenv": "^16.3.1"
   },

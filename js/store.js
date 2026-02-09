@@ -120,8 +120,15 @@ const Store = {
   },
 
   getStoryForDate(dateStr) {
+    // Check localStorage first (user-generated/modified)
     const archive = this.getStoryArchive();
-    return archive[dateStr] || null;
+    if (archive[dateStr]) return archive[dateStr];
+    
+    // Fallback to DAILY_CONTENT
+    if (typeof DAILY_CONTENT !== 'undefined' && DAILY_CONTENT[dateStr]?.story) {
+      return DAILY_CONTENT[dateStr].story;
+    }
+    return null;
   },
 
   setStoryForDate(dateStr, story) {
@@ -152,8 +159,15 @@ const Store = {
   },
 
   getNewsForDate(dateStr) {
+    // Check localStorage first (user-generated/modified)
     const archive = this.getNewsArchive();
-    return archive[dateStr] || null;
+    if (archive[dateStr]) return archive[dateStr];
+    
+    // Fallback to DAILY_CONTENT
+    if (typeof DAILY_CONTENT !== 'undefined' && DAILY_CONTENT[dateStr]?.news) {
+      return DAILY_CONTENT[dateStr].news;
+    }
+    return null;
   },
 
   setNewsForDate(dateStr, newsArticles) {
@@ -184,8 +198,15 @@ const Store = {
   },
 
   getSentencesForDate(dateStr) {
+    // Check localStorage first (user-generated/modified)
     const archive = this.getSentenceArchive();
-    return archive[dateStr] || null;
+    if (archive[dateStr]) return archive[dateStr];
+    
+    // Fallback to DAILY_CONTENT
+    if (typeof DAILY_CONTENT !== 'undefined' && DAILY_CONTENT[dateStr]?.sentences) {
+      return DAILY_CONTENT[dateStr].sentences;
+    }
+    return null;
   },
 
   setSentencesForDate(dateStr, sentences) {
@@ -201,6 +222,55 @@ const Store = {
     } catch (e) {
       return {};
     }
+  },
+
+  // --- Async Content API Methods ---
+  // These methods check ContentAPI (Azure Blob) as a fallback
+  async getSentencesForDateAsync(dateStr) {
+    // Check localStorage first
+    const local = this.getSentencesForDate(dateStr);
+    if (local) return local;
+    
+    // Try ContentAPI (Azure Blob Storage)
+    if (typeof ContentAPI !== 'undefined') {
+      const content = await ContentAPI.getContentWithFallback(dateStr);
+      if (content?.sentences) return content.sentences;
+    }
+    return null;
+  },
+
+  async getStoryForDateAsync(dateStr) {
+    // Check localStorage first
+    const local = this.getStoryForDate(dateStr);
+    if (local) return local;
+    
+    // Try ContentAPI (Azure Blob Storage)
+    if (typeof ContentAPI !== 'undefined') {
+      const content = await ContentAPI.getContentWithFallback(dateStr);
+      if (content?.story) return content.story;
+    }
+    return null;
+  },
+
+  async getNewsForDateAsync(dateStr) {
+    // Check localStorage first
+    const local = this.getNewsForDate(dateStr);
+    if (local) return local;
+    
+    // Try ContentAPI (Azure Blob Storage)
+    if (typeof ContentAPI !== 'undefined') {
+      const content = await ContentAPI.getContentWithFallback(dateStr);
+      if (content?.news) return content.news;
+    }
+    return null;
+  },
+
+  // Save content to both localStorage and Azure
+  async saveContentToCloud(dateStr, content) {
+    if (typeof ContentAPI !== 'undefined') {
+      return ContentAPI.saveContent(dateStr, content);
+    }
+    return false;
   },
 
   // --- Selected Verb ---

@@ -1101,6 +1101,21 @@ function getAvailableDates() {
   return Object.keys(DAILY_CONTENT).sort().reverse();
 }
 
+// Get available dates including Azure storage (async)
+async function getAvailableDatesAsync() {
+  const localDates = Object.keys(DAILY_CONTENT);
+  
+  // Try to get dates from Azure
+  if (typeof ContentAPI !== 'undefined') {
+    const cloudDates = await ContentAPI.fetchAvailableDates();
+    // Merge and deduplicate
+    const allDates = [...new Set([...localDates, ...cloudDates])];
+    return allDates.sort().reverse();
+  }
+  
+  return localDates.sort().reverse();
+}
+
 // Format date for display
 function formatDateDisplay(dateStr) {
   const lang = Store.getLanguage();
