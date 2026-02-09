@@ -480,6 +480,17 @@ const Store = {
     localStorage.setItem(this.SELECTED_SENTENCES_TOPIC_KEY, topicKey);
   },
 
+  // --- Selected Preposition ---
+  SELECTED_PREPOSITION_KEY: 'selected_preposition',
+
+  getSelectedPreposition() {
+    return localStorage.getItem(this.SELECTED_PREPOSITION_KEY) || 'DI';
+  },
+
+  setSelectedPreposition(prepositionKey) {
+    localStorage.setItem(this.SELECTED_PREPOSITION_KEY, prepositionKey);
+  },
+
   // --- Theme ---
   getTheme() {
     return localStorage.getItem(this.THEME_KEY) || 'auto';

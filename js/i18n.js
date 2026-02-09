@@ -15,7 +15,7 @@ const I18n = {
       navSentences: 'Sentences',
       navStory: 'Story',
       navNews: 'News',
-      navVerbs: 'Verbs',
+      navVerbs: 'Practice',
       navTranslate: 'Translate',
       navMore: 'More',
       
@@ -23,7 +23,7 @@ const I18n = {
       subtitleSentences: 'Daily Italian sentences',
       subtitleStory: 'Read the daily story',
       subtitleNews: 'News in Italian',
-      subtitleVerbs: 'Practice verbs & sentences',
+      subtitleVerbs: 'Practice verbs, prepositions & sentences',
       subtitleTranslator: 'Translator & Dictionary',
       subtitleMore: 'More features',
       subtitleLibrary: 'Past lessons',
@@ -65,6 +65,12 @@ const I18n = {
       numbers: 'Numbers',
       months: 'Months',
       weekdays: 'Weekdays',
+      numberConverter: 'Number Converter',
+      enterNumber: 'Enter any number...',
+      convert: 'Convert',
+      prepositions: 'Prepositions',
+      prepositionsDescription: 'Learn Italian prepositions with examples',
+      selectPreposition: 'Select a preposition:',
       
       // Translator View
       translatorDictionary: 'Translator & Dictionary',
@@ -207,7 +213,7 @@ const I18n = {
       navSentences: 'Sätze',
       navStory: 'Story',
       navNews: 'Nachrichten',
-      navVerbs: 'Verben',
+      navVerbs: 'Üben',
       navTranslate: 'Übersetz',
       navMore: 'Mehr',
       
@@ -215,7 +221,7 @@ const I18n = {
       subtitleSentences: 'Tagessätze auf Italienisch',
       subtitleStory: 'Tagesgeschichte lesen',
       subtitleNews: 'Nachrichten auf Italienisch',
-      subtitleVerbs: 'Verben & Sätze üben',
+      subtitleVerbs: 'Verben, Präpositionen & Sätze üben',
       subtitleTranslator: 'Übersetzer & Wörterbuch',
       subtitleMore: 'Weitere Funktionen',
       subtitleLibrary: 'Vergangene Lektionen',
@@ -257,6 +263,12 @@ const I18n = {
       numbers: 'Zahlen',
       months: 'Monate',
       weekdays: 'Wochentage',
+      numberConverter: 'Zahlenumwandler',
+      enterNumber: 'Beliebige Zahl eingeben...',
+      convert: 'Umwandeln',
+      prepositions: 'Präpositionen',
+      prepositionsDescription: 'Italienische Präpositionen mit Beispielen lernen',
+      selectPreposition: 'Präposition auswählen:',
       
       // Translator View
       translatorDictionary: 'Übersetzer & Wörterbuch',

@@ -288,6 +288,9 @@ const Views = {
         <button class="vocab-tab ${tab === 'sentences' ? 'active' : ''}" onclick="App.verbTab('sentences')">
           ${I18n.t('preparedSentences')}
         </button>
+        <button class="vocab-tab ${tab === 'prepositions' ? 'active' : ''}" onclick="App.verbTab('prepositions')">
+          ${I18n.t('prepositions')}
+        </button>
         <button class="vocab-tab ${tab === 'essentials' ? 'active' : ''}" onclick="App.verbTab('essentials')">
           ${I18n.t('essentials')}
         </button>
@@ -400,6 +403,57 @@ const Views = {
             </div>`;
         });
       }
+    } else if (tab === 'prepositions') {
+      // PREPOSITIONS TAB
+      const prepositionKey = Store.getSelectedPreposition() || 'DI';
+      const currentPreposition = PrepositionsData[prepositionKey];
+
+      if (!currentPreposition) {
+        container.innerHTML = html + `<div class="vocab-empty">${I18n.t('notFound')}</div>`;
+        return;
+      }
+
+      html += `
+        <div style="margin-bottom: var(--space-md);">
+          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-sm);">${I18n.t('prepositions')}</h2>
+          <p style="color: var(--text-tertiary); font-size: 0.85rem;">${I18n.t('prepositionsDescription')}</p>
+        </div>
+
+        <div class="card" style="margin-bottom: var(--space-md);">
+          <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
+            ${I18n.t('selectPreposition')}
+          </label>
+          <select id="preposition-selector" onchange="App.changePreposition(this.value)" style="width: 100%; padding: 12px; font-size: 1rem; border: 2px solid var(--border-color); border-radius: 12px; background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); cursor: pointer;">`;
+
+      // Add all prepositions to dropdown
+      Object.keys(PrepositionsData).forEach(key => {
+        const selected = key === prepositionKey ? 'selected' : '';
+        html += `<option value="${key}" ${selected}>${PrepositionsData[key].name}</option>`;
+      });
+
+      html += `
+          </select>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-md);">
+          <h3 style="font-family: var(--font-serif); font-size: 1.1rem; margin: 0;">${currentPreposition.name}</h3>
+          <span class="section-badge">${currentPreposition.sentences.length} ${I18n.t('sentences')}</span>
+        </div>`;
+
+      // Render all sentences for this preposition
+      currentPreposition.sentences.forEach((s, i) => {
+        const isSaved = Store.isSentenceSaved(s.italian);
+        html += `
+          <div class="card sentence-card" style="margin-bottom: var(--space-sm);">
+            <div class="sentence-header">
+              <button class="save-btn ${isSaved ? 'saved' : ''}"
+                onclick="App.saveSentence('${this.esc(s.italian)}', '${this.esc(s.german)}')"
+                title="${I18n.t('saveSentence')}">🔖</button>
+            </div>
+            <div class="sentence-italian">${this.makeInteractive(s.italian, [], s.italian, s.german)}</div>
+            <div class="sentence-german">${s.german}</div>
+          </div>`;
+      });
     } else if (tab === 'essentials') {
       // ESSENTIALS TAB - Numbers, Months, Weekdays
       html += `
@@ -432,6 +486,14 @@ const Views = {
         { it: 'diciannove', de: 'neunzehn', num: '19' },
         { it: 'venti', de: 'zwanzig', num: '20' },
         { it: 'ventuno', de: 'einundzwanzig', num: '21' },
+        { it: 'ventidue', de: 'zweiundzwanzig', num: '22' },
+        { it: 'ventitré', de: 'dreiundzwanzig', num: '23' },
+        { it: 'ventiquattro', de: 'vierundzwanzig', num: '24' },
+        { it: 'venticinque', de: 'fünfundzwanzig', num: '25' },
+        { it: 'ventisei', de: 'sechsundzwanzig', num: '26' },
+        { it: 'ventisette', de: 'siebenundzwanzig', num: '27' },
+        { it: 'ventotto', de: 'achtundzwanzig', num: '28' },
+        { it: 'ventinove', de: 'neunundzwanzig', num: '29' },
         { it: 'trenta', de: 'dreißig', num: '30' },
         { it: 'quaranta', de: 'vierzig', num: '40' },
         { it: 'cinquanta', de: 'fünfzig', num: '50' },
@@ -450,6 +512,28 @@ const Views = {
             <span class="section-icon">🔢</span>
             <span class="section-title">${I18n.t('numbers')}</span>
           </div>
+          
+          <!-- Number Converter -->
+          <div style="margin-bottom: var(--space-md); padding: var(--space-md); background: var(--bg-secondary); border-radius: 12px;">
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
+              ${I18n.t('numberConverter')}
+            </label>
+            <div style="display: flex; gap: 8px;">
+              <input type="number" id="number-converter-input" 
+                placeholder="${I18n.t('enterNumber')}" 
+                style="flex: 1; padding: 12px; font-size: 1rem; border: 2px solid var(--border-color); border-radius: 12px; background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans);">
+              <button onclick="App.convertNumber()" 
+                style="padding: 12px 20px; background: var(--accent); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">
+                ${I18n.t('convert')}
+              </button>
+            </div>
+            <div id="number-converter-result" style="margin-top: 12px; display: none;">
+              <div style="padding: 12px; background: var(--bg-primary); border-radius: 8px; border-left: 4px solid var(--accent);">
+                <div id="number-italian" style="font-size: 1.2rem; font-weight: 600; color: var(--text-primary);"></div>
+              </div>
+            </div>
+          </div>
+          
           <div class="essentials-grid">`;
       
       numbers.forEach(n => {

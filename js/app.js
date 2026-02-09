@@ -453,10 +453,97 @@ const App = {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   },
 
+  changePreposition(prepositionKey) {
+    Store.setSelectedPreposition(prepositionKey);
+    Views.renderVerbs(Store.getSelectedVerb(), 'prepositions');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  },
+
   verbTab(tab) {
     this.currentVerbsTab = tab;
     Views.renderVerbs(Store.getSelectedVerb(), tab);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  },
+
+  // ==========================================
+  // NUMBER CONVERTER
+  // ==========================================
+  convertNumber() {
+    const input = document.getElementById('number-converter-input');
+    const resultDiv = document.getElementById('number-converter-result');
+    const italianDiv = document.getElementById('number-italian');
+    
+    const num = parseInt(input.value, 10);
+    if (isNaN(num) || num < 0 || num > 999999999999) {
+      resultDiv.style.display = 'none';
+      return;
+    }
+    
+    const italian = this.numberToItalian(num);
+    italianDiv.textContent = italian;
+    resultDiv.style.display = 'block';
+  },
+
+  numberToItalian(n) {
+    if (n === 0) return 'zero';
+    
+    const units = ['', 'uno', 'due', 'tre', 'quattro', 'cinque', 'sei', 'sette', 'otto', 'nove'];
+    const teens = ['dieci', 'undici', 'dodici', 'tredici', 'quattordici', 'quindici', 'sedici', 'diciassette', 'diciotto', 'diciannove'];
+    const tens = ['', '', 'venti', 'trenta', 'quaranta', 'cinquanta', 'sessanta', 'settanta', 'ottanta', 'novanta'];
+    
+    const convertUnder1000 = (num) => {
+      if (num === 0) return '';
+      if (num < 10) return units[num];
+      if (num < 20) return teens[num - 10];
+      if (num < 100) {
+        const t = Math.floor(num / 10);
+        const u = num % 10;
+        let result = tens[t];
+        // Drop last vowel before uno/otto
+        if (u === 1 || u === 8) {
+          result = result.slice(0, -1);
+        }
+        result += units[u];
+        return result;
+      }
+      // 100-999
+      const h = Math.floor(num / 100);
+      const rest = num % 100;
+      let result = h === 1 ? 'cento' : units[h] + 'cento';
+      if (rest > 0) {
+        // Drop 'o' from cento before otto/ottanta
+        if (rest >= 80 && rest < 90 || rest === 8) {
+          result = result.slice(0, -1);
+        }
+        result += convertUnder1000(rest);
+      }
+      return result;
+    };
+    
+    if (n < 1000) return convertUnder1000(n);
+    
+    if (n < 1000000) {
+      const thousands = Math.floor(n / 1000);
+      const rest = n % 1000;
+      let result = thousands === 1 ? 'mille' : convertUnder1000(thousands) + 'mila';
+      if (rest > 0) result += convertUnder1000(rest);
+      return result;
+    }
+    
+    if (n < 1000000000) {
+      const millions = Math.floor(n / 1000000);
+      const rest = n % 1000000;
+      let result = millions === 1 ? 'un milione' : convertUnder1000(millions) + ' milioni';
+      if (rest > 0) result += ' ' + this.numberToItalian(rest);
+      return result;
+    }
+    
+    // Billions
+    const billions = Math.floor(n / 1000000000);
+    const rest = n % 1000000000;
+    let result = billions === 1 ? 'un miliardo' : convertUnder1000(billions) + ' miliardi';
+    if (rest > 0) result += ' ' + this.numberToItalian(rest);
+    return result;
   },
 
   // ==========================================
