@@ -33,9 +33,18 @@ const App = {
     this.setupWordTap();
 
     // Preload speech synthesis voices
+    this._italianVoice = null;
     if ('speechSynthesis' in window) {
-      window.speechSynthesis.getVoices();
-      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+      const loadVoices = () => {
+        const voices = window.speechSynthesis.getVoices();
+        // Find best Italian voice (prefer native Italian voices)
+        this._italianVoice = voices.find(v => v.lang === 'it-IT') ||
+                             voices.find(v => v.lang.startsWith('it')) ||
+                             voices.find(v => v.name.toLowerCase().includes('italian'));
+        console.log('Italian voice found:', this._italianVoice?.name || 'none');
+      };
+      loadVoices();
+      window.speechSynthesis.onvoiceschanged = loadVoices;
     }
 
     // Determine initial view from hash
@@ -678,16 +687,28 @@ const App = {
     
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'it-IT';
-    utterance.rate = 0.9; // Slightly slower for learning
+    utterance.rate = 0.85; // Slightly slower for learning
+    utterance.pitch = 1.0;
     
-    // Try to find an Italian voice
-    const voices = window.speechSynthesis.getVoices();
-    const italianVoice = voices.find(v => v.lang.startsWith('it'));
-    if (italianVoice) {
-      utterance.voice = italianVoice;
+    // Use cached Italian voice, or try to find one
+    if (this._italianVoice) {
+      utterance.voice = this._italianVoice;
+    } else {
+      // Try to find Italian voice now
+      const voices = window.speechSynthesis.getVoices();
+      const italianVoice = voices.find(v => v.lang === 'it-IT') ||
+                           voices.find(v => v.lang.startsWith('it')) ||
+                           voices.find(v => v.name.toLowerCase().includes('italian'));
+      if (italianVoice) {
+        utterance.voice = italianVoice;
+        this._italianVoice = italianVoice;
+      }
     }
     
-    window.speechSynthesis.speak(utterance);
+    // Small delay to ensure voice is applied (helps on some browsers)
+    setTimeout(() => {
+      window.speechSynthesis.speak(utterance);
+    }, 50);
   },
 
   // ==========================================
