@@ -994,14 +994,49 @@ const App = {
     Views.renderSettings();
     this.showToast(`${I18n.t('levelSetTo')} ${level}`);
     
-    // If level changed, refresh content-related views
+    // If level changed, regenerate content for today
     if (oldLevel !== level) {
-      // The content will be regenerated with the new level next time the API is called
-      // For now, refresh the current view if it's content-related
-      if (this.currentView === 'sentences' || this.currentView === 'story') {
-        // Trigger a re-render to show that content should match the level
-        this.switchView(this.currentView, false);
+      this.regenerateContentForToday(level);
+    }
+  },
+
+  async regenerateContentForToday(level) {
+    const today = getTodayDateStr();
+    const settings = Store.getSettings();
+    
+    // Clear caches
+    ContentAPI.clearCache();
+    
+    // Show loading toast
+    this.showToast(I18n.t('regeneratingContent') || 'Regenerating content...');
+    
+    try {
+      // Generate new sentences with the new level
+      const newSentences = await AI.generateSentences(settings.sentenceCount, level, settings.topics);
+      Store.setSentencesForDate(today, newSentences);
+      
+      // Generate new story with the new level
+      const newStory = await AI.generateStory(level, settings.topics);
+      Store.setStoryForDate(today, newStory);
+      
+      // Save to blob storage
+      await ContentAPI.saveContent({
+        date: today,
+        sentences: newSentences,
+        story: newStory
+      });
+      
+      // Refresh the current view if it's content-related
+      if (this.currentView === 'sentences') {
+        Views.renderSentences(today, newSentences);
+      } else if (this.currentView === 'story') {
+        Views.renderStory(today, newStory);
       }
+      
+      this.showToast(I18n.t('contentRegenerated') || 'Content regenerated!');
+    } catch (error) {
+      console.error('Failed to regenerate content:', error);
+      this.showToast(I18n.t('regenerationFailed') || 'Failed to regenerate content');
     }
   },
 
