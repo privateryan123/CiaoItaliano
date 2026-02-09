@@ -9,6 +9,18 @@ const Store = {
   THEME_KEY: 'italiano_theme',
   AI_CACHE_KEY: 'italiano_ai_cache',
   LANGUAGE_KEY: 'italiano_language',
+  USER_ID_KEY: 'italiano_user_id',
+
+  // --- User ID (unique per device/browser) ---
+  getUserId() {
+    let userId = localStorage.getItem(this.USER_ID_KEY);
+    if (!userId) {
+      // Generate a random UUID-like ID
+      userId = 'user_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem(this.USER_ID_KEY, userId);
+    }
+    return userId;
+  },
 
   // --- Language ---
   getLanguage() {
@@ -48,7 +60,9 @@ const Store = {
     
     this._vocabSyncPromise = (async () => {
       try {
-        const response = await fetch('/api/vocabulary');
+        const response = await fetch('/api/vocabulary', {
+          headers: { 'x-user-id': this.getUserId() }
+        });
         if (response.ok) {
           const vocab = await response.json();
           this._vocabCache = vocab;
@@ -75,7 +89,10 @@ const Store = {
     try {
       const response = await fetch('/api/vocabulary', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-user-id': this.getUserId()
+        },
         body: JSON.stringify({ type: 'word', italian, german })
       });
       
@@ -108,7 +125,10 @@ const Store = {
     try {
       const response = await fetch('/api/vocabulary', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-user-id': this.getUserId()
+        },
         body: JSON.stringify({ type: 'sentence', italian, german })
       });
       
@@ -141,7 +161,10 @@ const Store = {
     try {
       await fetch('/api/vocabulary', {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-user-id': this.getUserId()
+        },
         body: JSON.stringify({ type: 'word', italian })
       });
     } catch (error) {
@@ -158,7 +181,10 @@ const Store = {
     try {
       await fetch('/api/vocabulary', {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-user-id': this.getUserId()
+        },
         body: JSON.stringify({ type: 'sentence', italian })
       });
     } catch (error) {
