@@ -290,6 +290,13 @@ const App = {
     }
   },
 
+  toggleNewsCard(idx) {
+    const card = document.querySelector(`.news-card[data-news-idx="${idx}"]`);
+    if (card) {
+      card.classList.toggle('expanded');
+    }
+  },
+
   async generateNewsForDate(dateStr) {
     // Generate complete news articles for a specific date
     const allNews = [

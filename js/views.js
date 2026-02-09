@@ -233,11 +233,17 @@ const Views = {
           </div>
         </div>`;
     } else {
-      newsList.forEach(n => {
+      newsList.forEach((n, idx) => {
         html += `
-          <div class="card news-card">
-            <div class="news-category">${n.category}</div>
-            <div class="news-headline">${n.headline}</div>`;
+          <div class="card news-card" onclick="App.toggleNewsCard(${idx})" data-news-idx="${idx}">
+            <div class="news-header">
+              <div>
+                <div class="news-category">${n.category}</div>
+                <div class="news-headline">${n.headline}</div>
+              </div>
+              <span class="news-toggle-icon">▼</span>
+            </div>
+            <div class="news-content">`;
         
         // Display sentence by sentence
         if (n.sentences && n.sentences.length > 0) {
@@ -260,9 +266,10 @@ const Views = {
         }
         
         html += `
-            <a class="news-source" href="${n.url || n.source || '#'}" target="_blank" rel="noopener" style="margin-top: var(--space-sm); display: inline-block;">
-              ANSA.it →
-            </a>
+              <a class="news-source" href="${n.url || n.source || '#'}" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+                ${n.sourceName || 'ANSA.it'} →
+              </a>
+            </div>
           </div>`;
       });
     }
