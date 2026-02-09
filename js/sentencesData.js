@@ -1,6 +1,6 @@
 const SentencesData = {
   VORSTELLUNG: {
-    name: 'Vorstellung – Herkunft, Arbeit, Interessen',
+    name: 'Introduction – Origin, Work, Interests',
     sentences: [
       { italian: 'Vengo da Vienna, ho 47 anni e lavoro da molti anni nel settore IT.', german: 'Ich komme aus Wien, bin 47 Jahre alt und arbeite seit vielen Jahren im IT-Bereich.' },
       { italian: 'Sono nato e cresciuto a Vienna e oggi vivo ancora nei dintorni della città.', german: 'Ich bin in Wien geboren und aufgewachsen und lebe heute noch in der Nähe der Stadt.' },
@@ -27,7 +27,7 @@ const SentencesData = {
     ]
   },
   AUTO: {
-    name: 'Auto, Passione, Formula 1, Marchi Italiani',
+    name: 'Cars – Italian Passion & Formula 1',
     sentences: [
       { italian: 'Le auto sono una mia grande passione da quando ero giovane.', german: 'Autos sind seit meiner Jugend eine große Leidenschaft von mir.' },
       { italian: 'Mi interessano non solo le auto moderne, ma anche quelle storiche.', german: 'Mich interessieren nicht nur moderne Autos, sondern auch historische.' },
@@ -61,7 +61,7 @@ const SentencesData = {
     ]
   },
   FAMIGLIA: {
-    name: 'Familie, Casa, Figli, Cane, Sorella',
+    name: 'Family – Home, Children, Pets',
     sentences: [
       { italian: 'Vivo con mia moglie e i nostri tre figli vicino a Vienna.', german: 'Ich lebe mit meiner Frau und unseren drei Kindern in der Nähe von Wien.' },
       { italian: 'La famiglia per me è sempre al primo posto.', german: 'Die Familie steht für mich immer an erster Stelle.' },
@@ -91,7 +91,7 @@ const SentencesData = {
     ]
   },
   ITALIANO: {
-    name: 'Italiano, Lingua, Komunikation',
+    name: 'Communication – Learning Italian',
     sentences: [
       { italian: 'Ho iniziato a imparare l\'italiano solo da poco.', german: 'Ich habe erst vor Kurzem begonnen, Italienisch zu lernen.' },
       { italian: 'L\'italiano è una lingua bellissima, ma non sempre facile.', german: 'Italienisch ist eine wunderschöne Sprache, aber nicht immer einfach.' },
@@ -153,7 +153,7 @@ const SentencesData = {
     ]
   },
   RISTORANTE: {
-    name: 'Ristorante',
+    name: 'Restaurant',
     sentences: [
       { italian: 'Buonasera, abbiamo un tavolo per due, per favore?', german: 'Guten Abend, haben Sie einen Tisch für zwei?' },
       { italian: 'Potremmo sederci fuori, se possibile?', german: 'Könnten wir draußen sitzen, wenn möglich?' },
@@ -178,7 +178,7 @@ const SentencesData = {
     ]
   },
   VIAGGIO: {
-    name: 'Viaggio / Hotel',
+    name: 'Travel & Hotel',
     sentences: [
       { italian: 'Buongiorno, ho una prenotazione a nome di…', german: 'Guten Morgen, ich habe eine Reservierung auf den Namen …' },
       { italian: 'Siamo arrivati oggi e restiamo per tre notti.', german: 'Wir sind heute angekommen und bleiben drei Nächte.' },
