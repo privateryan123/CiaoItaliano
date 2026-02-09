@@ -14,18 +14,48 @@ const AI = {
     try {
       const res = await fetch(url);
       const data = await res.json();
+      
+      let translation = null;
+      
       if (data.responseStatus === 200 && data.responseData) {
-        return data.responseData.translatedText;
+        translation = data.responseData.translatedText;
       }
-      // Fallback: try matches
-      if (data.matches && data.matches.length > 0) {
-        return data.matches[0].translation;
+      // Fallback: try matches with best quality
+      if ((!translation || !this._isValidTranslation(translation, text)) && data.matches && data.matches.length > 0) {
+        // Sort matches by quality and find best valid one
+        const sortedMatches = data.matches
+          .filter(m => m.translation && this._isValidTranslation(m.translation, text))
+          .sort((a, b) => (b.quality || 0) - (a.quality || 0));
+        if (sortedMatches.length > 0) {
+          translation = sortedMatches[0].translation;
+        }
       }
-      return '⚠️ Keine Übersetzung gefunden.';
+      
+      // Final validation
+      if (translation && this._isValidTranslation(translation, text)) {
+        return translation;
+      }
+      
+      return '⚠️ No translation found';
     } catch (err) {
       console.error('Translation error:', err);
-      return '⚠️ Übersetzungsfehler. Prüfe deine Internetverbindung.';
+      return '⚠️ Translation error';
     }
+  },
+  
+  // Validate translation result
+  _isValidTranslation(translation, original) {
+    if (!translation || typeof translation !== 'string') return false;
+    const t = translation.trim();
+    // Reject empty or very short garbage
+    if (t.length < 1) return false;
+    // Reject if it's just punctuation/special chars
+    if (/^[^\w\s]+$/.test(t)) return false;
+    // Reject if suspiciously short compared to original (likely corrupted)
+    if (original.length >= 3 && t.length === 1) return false;
+    // Reject common garbage patterns
+    if (/^['"`]+[a-z]?$/.test(t)) return false;
+    return true;
   },
 
   // ==========================================
