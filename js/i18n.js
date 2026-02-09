@@ -286,7 +286,7 @@ const I18n = {
     // Update header
     const headerTitle = document.querySelector('.header-title');
     const headerSubtitle = document.getElementById('header-subtitle');
-    if (headerTitle) headerTitle.textContent = this.t('appTitle');
+    if (headerTitle) headerTitle.innerHTML = '<span class="header-flag">🇮🇹</span> ' + this.t('appTitle');
     if (headerSubtitle) headerSubtitle.textContent = this.t('appSubtitle');
 
     // Update navigation
