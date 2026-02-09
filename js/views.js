@@ -157,15 +157,8 @@ const Views = {
 
     let html = '';
     page.forEach((sentence, i) => {
-      const isSaved = Store.isSentenceSaved(sentence.italian);
       html += `
         <div class="story-sentence">
-          <div class="sentence-header">
-            <button class="save-btn ${isSaved ? 'saved' : ''}"
-              onclick="App.saveSentence('${this.esc(sentence.italian)}', '${this.esc(sentence.german)}')"
-              title="${I18n.t('saveSentence')}">🔖</button>
-            <span class="sentence-number">${i + 1}</span>
-          </div>
           <div class="sentence-italian">${this.makeInteractive(sentence.italian, [], sentence.italian, sentence.german)}</div>
           <div class="sentence-german">${sentence.german}</div>
           ${showExplanations && sentence.note ? `<div class="sentence-explanation">${sentence.note}</div>` : ''}
