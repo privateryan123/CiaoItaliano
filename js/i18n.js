@@ -60,6 +60,11 @@ const I18n = {
       learnWithThematic: 'Learn with thematic sentence collections',
       selectTopic: 'Select a topic:',
       sentences: 'sentences',
+      essentials: 'Essentials',
+      essentialsDescription: 'Numbers, months and weekdays in Italian',
+      numbers: 'Numbers',
+      months: 'Months',
+      weekdays: 'Weekdays',
       
       // Translator View
       translatorDictionary: 'Translator & Dictionary',
@@ -244,6 +249,11 @@ const I18n = {
       learnWithThematic: 'Lerne mit thematischen Satzsammlungen',
       selectTopic: 'Thema wählen:',
       sentences: 'Sätze',
+      essentials: 'Grundlagen',
+      essentialsDescription: 'Zahlen, Monate und Wochentage auf Italienisch',
+      numbers: 'Zahlen',
+      months: 'Monate',
+      weekdays: 'Wochentage',
       
       // Translator View
       translatorDictionary: 'Übersetzer & Wörterbuch',

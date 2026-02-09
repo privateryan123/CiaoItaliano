@@ -295,6 +295,9 @@ const Views = {
         <button class="vocab-tab ${tab === 'sentences' ? 'active' : ''}" onclick="App.verbTab('sentences')">
           ${I18n.t('preparedSentences')}
         </button>
+        <button class="vocab-tab ${tab === 'essentials' ? 'active' : ''}" onclick="App.verbTab('essentials')">
+          ${I18n.t('essentials')}
+        </button>
       </div>`;
 
     if (tab === 'verbs') {
@@ -352,7 +355,7 @@ const Views = {
             <div class="sentence-german">${s.german}</div>
           </div>`;
       });
-    } else {
+    } else if (tab === 'sentences') {
       // PREPARED SENTENCES TAB
       html += `
         <div style="margin-bottom: var(--space-md);">
@@ -405,6 +408,138 @@ const Views = {
             </div>`;
         });
       }
+    } else if (tab === 'essentials') {
+      // ESSENTIALS TAB - Numbers, Months, Weekdays
+      html += `
+        <div style="margin-bottom: var(--space-md);">
+          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-sm);">${I18n.t('essentials')}</h2>
+          <p style="color: var(--text-tertiary); font-size: 0.85rem;">${I18n.t('essentialsDescription')}</p>
+        </div>`;
+
+      // Numbers
+      const numbers = [
+        { it: 'zero', de: 'null', num: '0' },
+        { it: 'uno', de: 'eins', num: '1' },
+        { it: 'due', de: 'zwei', num: '2' },
+        { it: 'tre', de: 'drei', num: '3' },
+        { it: 'quattro', de: 'vier', num: '4' },
+        { it: 'cinque', de: 'fünf', num: '5' },
+        { it: 'sei', de: 'sechs', num: '6' },
+        { it: 'sette', de: 'sieben', num: '7' },
+        { it: 'otto', de: 'acht', num: '8' },
+        { it: 'nove', de: 'neun', num: '9' },
+        { it: 'dieci', de: 'zehn', num: '10' },
+        { it: 'undici', de: 'elf', num: '11' },
+        { it: 'dodici', de: 'zwölf', num: '12' },
+        { it: 'tredici', de: 'dreizehn', num: '13' },
+        { it: 'quattordici', de: 'vierzehn', num: '14' },
+        { it: 'quindici', de: 'fünfzehn', num: '15' },
+        { it: 'sedici', de: 'sechzehn', num: '16' },
+        { it: 'diciassette', de: 'siebzehn', num: '17' },
+        { it: 'diciotto', de: 'achtzehn', num: '18' },
+        { it: 'diciannove', de: 'neunzehn', num: '19' },
+        { it: 'venti', de: 'zwanzig', num: '20' },
+        { it: 'ventuno', de: 'einundzwanzig', num: '21' },
+        { it: 'trenta', de: 'dreißig', num: '30' },
+        { it: 'quaranta', de: 'vierzig', num: '40' },
+        { it: 'cinquanta', de: 'fünfzig', num: '50' },
+        { it: 'sessanta', de: 'sechzig', num: '60' },
+        { it: 'settanta', de: 'siebzig', num: '70' },
+        { it: 'ottanta', de: 'achtzig', num: '80' },
+        { it: 'novanta', de: 'neunzig', num: '90' },
+        { it: 'cento', de: 'hundert', num: '100' },
+        { it: 'mille', de: 'tausend', num: '1000' },
+        { it: 'un milione', de: 'eine Million', num: '1.000.000' }
+      ];
+
+      html += `
+        <div class="card" style="margin-bottom: var(--space-md);">
+          <div class="section-header" style="margin-bottom: var(--space-md);">
+            <span class="section-icon">🔢</span>
+            <span class="section-title">${I18n.t('numbers')}</span>
+          </div>
+          <div class="essentials-grid">`;
+      
+      numbers.forEach(n => {
+        html += `
+          <div class="essential-item">
+            <span class="essential-num">${n.num}</span>
+            <span class="essential-it">${n.it}</span>
+            <span class="essential-de">${n.de}</span>
+          </div>`;
+      });
+      
+      html += `
+          </div>
+        </div>`;
+
+      // Months
+      const months = [
+        { it: 'gennaio', de: 'Januar' },
+        { it: 'febbraio', de: 'Februar' },
+        { it: 'marzo', de: 'März' },
+        { it: 'aprile', de: 'April' },
+        { it: 'maggio', de: 'Mai' },
+        { it: 'giugno', de: 'Juni' },
+        { it: 'luglio', de: 'Juli' },
+        { it: 'agosto', de: 'August' },
+        { it: 'settembre', de: 'September' },
+        { it: 'ottobre', de: 'Oktober' },
+        { it: 'novembre', de: 'November' },
+        { it: 'dicembre', de: 'Dezember' }
+      ];
+
+      html += `
+        <div class="card" style="margin-bottom: var(--space-md);">
+          <div class="section-header" style="margin-bottom: var(--space-md);">
+            <span class="section-icon">📅</span>
+            <span class="section-title">${I18n.t('months')}</span>
+          </div>
+          <div class="essentials-list">`;
+      
+      months.forEach((m, i) => {
+        html += `
+          <div class="essential-row">
+            <span class="essential-month-num">${i + 1}</span>
+            <span class="essential-it">${m.it}</span>
+            <span class="essential-de">${m.de}</span>
+          </div>`;
+      });
+      
+      html += `
+          </div>
+        </div>`;
+
+      // Weekdays
+      const weekdays = [
+        { it: 'lunedì', de: 'Montag' },
+        { it: 'martedì', de: 'Dienstag' },
+        { it: 'mercoledì', de: 'Mittwoch' },
+        { it: 'giovedì', de: 'Donnerstag' },
+        { it: 'venerdì', de: 'Freitag' },
+        { it: 'sabato', de: 'Samstag' },
+        { it: 'domenica', de: 'Sonntag' }
+      ];
+
+      html += `
+        <div class="card" style="margin-bottom: var(--space-md);">
+          <div class="section-header" style="margin-bottom: var(--space-md);">
+            <span class="section-icon">📆</span>
+            <span class="section-title">${I18n.t('weekdays')}</span>
+          </div>
+          <div class="essentials-list">`;
+      
+      weekdays.forEach(w => {
+        html += `
+          <div class="essential-row">
+            <span class="essential-it">${w.it}</span>
+            <span class="essential-de">${w.de}</span>
+          </div>`;
+      });
+      
+      html += `
+          </div>
+        </div>`;
     }
 
     container.innerHTML = html;

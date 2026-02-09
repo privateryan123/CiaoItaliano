@@ -2394,3 +2394,92 @@ body {
     transform: translateY(0);
   }
 }
+
+/* ============================================
+   ESSENTIALS (Numbers, Months, Weekdays)
+   ============================================ */
+
+.essentials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: var(--space-sm);
+}
+
+.essential-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.essential-item:hover {
+  background: var(--accent-bg, rgba(219, 112, 80, 0.1));
+}
+
+.essential-num {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  margin-bottom: 2px;
+}
+
+.essential-it {
+  font-weight: 600;
+  color: var(--accent);
+  font-size: 0.95rem;
+}
+
+.essential-de {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.essentials-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.essential-row {
+  display: flex;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  gap: var(--space-md);
+  transition: all 0.2s ease;
+}
+
+.essential-row:hover {
+  background: var(--accent-bg, rgba(219, 112, 80, 0.1));
+}
+
+.essential-month-num {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-tertiary);
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+
+.essential-row .essential-it {
+  flex: 1;
+  text-align: left;
+}
+
+.essential-row .essential-de {
+  flex: 1;
+  text-align: right;
+  margin-top: 0;
+}
