@@ -536,17 +536,17 @@ const App = {
     const wordBtn = document.getElementById('popup-save-word');
     const sentBtn = document.getElementById('popup-save-sentence');
     if (Store.isWordSaved(word)) {
-      wordBtn.textContent = '✓ Wort bereits gespeichert';
+      wordBtn.textContent = '✓ Wort';
       wordBtn.style.opacity = '0.6';
     } else {
-      wordBtn.textContent = '💬 Wort speichern';
+      wordBtn.textContent = '💬 Wort';
       wordBtn.style.opacity = '1';
     }
     if (Store.isSentenceSaved(sentence)) {
-      sentBtn.textContent = '✓ Satz bereits gespeichert';
+      sentBtn.textContent = '✓ Satz';
       sentBtn.style.opacity = '0.6';
     } else {
-      sentBtn.textContent = '🔖 Ganzen Satz speichern';
+      sentBtn.textContent = '🔖 Satz';
       sentBtn.style.opacity = '1';
     }
 
