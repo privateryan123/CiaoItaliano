@@ -63,15 +63,15 @@ const Views = {
         const isSaved = Store.isSentenceSaved(s.italian);
         html += `
           <div class="card sentence-card">
-            <span class="sentence-number">${i + 1}</span>
-            <div class="sentence-italian">${this.makeInteractive(s.italian, s.keywords, s.italian, s.german)}</div>
-            <div class="sentence-german">${s.german}</div>
-            ${showExplanations && s.explanation ? `<div class="sentence-explanation">${s.explanation}</div>` : ''}
-            <div class="card-actions">
+            <div class="sentence-header">
               <button class="save-btn ${isSaved ? 'saved' : ''}"
                 onclick="App.saveSentence('${this.esc(s.italian)}', '${this.esc(s.german)}')"
                 title="${I18n.t('saveSentence')}">🔖</button>
+              <span class="sentence-number">${i + 1}</span>
             </div>
+            <div class="sentence-italian">${this.makeInteractive(s.italian, s.keywords, s.italian, s.german)}</div>
+            <div class="sentence-german">${s.german}</div>
+            ${showExplanations && s.explanation ? `<div class="sentence-explanation">${s.explanation}</div>` : ''}
           </div>`;
       });
     }
@@ -154,18 +154,19 @@ const Views = {
     const totalPages = story.pages.length;
 
     let html = '';
-    page.forEach(sentence => {
+    page.forEach((sentence, i) => {
       const isSaved = Store.isSentenceSaved(sentence.italian);
       html += `
         <div class="story-sentence">
-          <div class="sentence-italian">${this.makeInteractive(sentence.italian, [], sentence.italian, sentence.german)}</div>
-          <div class="sentence-german">${sentence.german}</div>
-          ${showExplanations && sentence.note ? `<div class="sentence-explanation">${sentence.note}</div>` : ''}
-          <div class="card-actions">
+          <div class="sentence-header">
             <button class="save-btn ${isSaved ? 'saved' : ''}"
               onclick="App.saveSentence('${this.esc(sentence.italian)}', '${this.esc(sentence.german)}')"
               title="${I18n.t('saveSentence')}">🔖</button>
+            <span class="sentence-number">${i + 1}</span>
           </div>
+          <div class="sentence-italian">${this.makeInteractive(sentence.italian, [], sentence.italian, sentence.german)}</div>
+          <div class="sentence-german">${sentence.german}</div>
+          ${showExplanations && sentence.note ? `<div class="sentence-explanation">${sentence.note}</div>` : ''}
         </div>`;
     });
 
@@ -331,15 +332,15 @@ const Views = {
         const isSaved = Store.isSentenceSaved(s.italian);
         html += `
           <div class="card sentence-card" style="margin-bottom: var(--space-sm);">
-            <span class="sentence-number">${i + 1}</span>
-            <div class="sentence-italian">${this.makeInteractive(s.italian, [], s.italian, s.german)}</div>
-            <div class="sentence-german">${s.german}</div>
-            <div class="card-actions">
+            <div class="sentence-header">
               <button class="save-btn ${isSaved ? 'saved' : ''}"
                 onclick="App.saveSentence('${this.esc(s.italian)}', '${this.esc(s.german)}')"
-              title="${I18n.t('saveSentence')}">🔖</button>
-          </div>
-        </div>`;
+                title="${I18n.t('saveSentence')}">🔖</button>
+              <span class="sentence-number">${i + 1}</span>
+            </div>
+            <div class="sentence-italian">${this.makeInteractive(s.italian, [], s.italian, s.german)}</div>
+            <div class="sentence-german">${s.german}</div>
+          </div>`;
       });
     } else {
       // PREPARED SENTENCES TAB
@@ -383,14 +384,14 @@ const Views = {
           const isSaved = Store.isSentenceSaved(s.italian);
           html += `
             <div class="card sentence-card" style="margin-bottom: var(--space-sm);">
-              <span class="sentence-number">${i + 1}</span>
-              <div class="sentence-italian">${this.makeInteractive(s.italian, [], s.italian, s.german)}</div>
-              <div class="sentence-german">${s.german}</div>
-              <div class="card-actions">
+              <div class="sentence-header">
                 <button class="save-btn ${isSaved ? 'saved' : ''}"
                   onclick="App.saveSentence('${this.esc(s.italian)}', '${this.esc(s.german)}')"
                   title="${I18n.t('saveSentence')}">🔖</button>
+                <span class="sentence-number">${i + 1}</span>
               </div>
+              <div class="sentence-italian">${this.makeInteractive(s.italian, [], s.italian, s.german)}</div>
+              <div class="sentence-german">${s.german}</div>
             </div>`;
         });
       }
@@ -657,16 +658,17 @@ const Views = {
       const isSaved = Store.isSentenceSaved(s.italian);
       html += `
         <div class="card sentence-card card-compact">
-          <span class="sentence-number">${i + 1}</span>
-          <div class="sentence-italian">${this.makeInteractive(s.italian, s.keywords, s.italian, s.german)}</div>
-          <div class="sentence-german">${s.german}</div>
-          ${showExplanations ? `<div class="sentence-explanation">${s.explanation}</div>` : ''}
-          <div class="card-actions">
+          <div class="sentence-header">
             <button class="save-btn ${isSaved ? 'saved' : ''}"
               onclick="App.saveSentence('${this.esc(s.italian)}', '${this.esc(s.german)}')"
               title="${I18n.t('saveSentence')}">🔖</button>
+            <span class="sentence-number">${i + 1}</span>
           </div>
+          <div class="sentence-italian">${this.makeInteractive(s.italian, s.keywords, s.italian, s.german)}</div>
+          <div class="sentence-german">${s.german}</div>
+          ${showExplanations ? `<div class="sentence-explanation">${s.explanation}</div>` : ''}
         </div>`;
+    });
     });
     html += '</section>';
 
