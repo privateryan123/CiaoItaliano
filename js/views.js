@@ -38,14 +38,14 @@ const Views = {
 
     let html = `
       <div class="story-nav-header">
-        <button class="story-nav-btn" onclick="App.navigateSentences(-1)" title="Vorheriger Tag">
+        <button class="story-nav-btn" onclick="App.navigateSentences(-1)" title="${I18n.t('previousDay')}">
           <span>←</span>
         </button>
         <div style="text-align: center; flex: 1;">
-          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">Tagessätze</h2>
+          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">${I18n.t('dailySentences')}</h2>
           <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;">${dateInfo.full}</p>
         </div>
-        <button class="story-nav-btn" onclick="App.navigateSentences(1)" title="Nächster Tag" ${!canGoForward ? 'disabled' : ''}>
+        <button class="story-nav-btn" onclick="App.navigateSentences(1)" title="${I18n.t('nextDay')}" ${!canGoForward ? 'disabled' : ''}>
           <span>→</span>
         </button>
       </div>`;
@@ -55,7 +55,7 @@ const Views = {
         <div class="vocab-empty">
           <div class="vocab-empty-icon">✏️</div>
           <div class="vocab-empty-text">
-            Keine Sätze für diesen Tag verfügbar.
+            ${I18n.t('noSentencesAvailable')}
           </div>
         </div>`;
     } else {
@@ -70,7 +70,7 @@ const Views = {
             <div class="card-actions">
               <button class="save-btn ${isSaved ? 'saved' : ''}"
                 onclick="App.saveSentence('${this.esc(s.italian)}', '${this.esc(s.german)}')"
-                title="Satz speichern">🔖</button>
+                title="${I18n.t('saveSentence')}">🔖</button>
             </div>
           </div>`;
       });
@@ -104,14 +104,14 @@ const Views = {
 
     let html = `
       <div class="story-nav-header">
-        <button class="story-nav-btn" onclick="App.navigateStory(-1)" title="Vorheriger Tag">
+        <button class="story-nav-btn" onclick="App.navigateStory(-1)" title="${I18n.t('previousDay')}">
           <span>←</span>
         </button>
         <div style="text-align: center; flex: 1;">
-          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">Tagesgeschichte</h2>
+          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">${I18n.t('dailyStory')}</h2>
           <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;">${dateInfo.full}</p>
         </div>
-        <button class="story-nav-btn" onclick="App.navigateStory(1)" title="Nächster Tag">
+        <button class="story-nav-btn" onclick="App.navigateStory(1)" title="${I18n.t('nextDay')}">
           <span>→</span>
         </button>
       </div>`;
@@ -121,8 +121,8 @@ const Views = {
         <div class="vocab-empty">
           <div class="vocab-empty-icon">📖</div>
           <div class="vocab-empty-text">
-            Für diesen Tag gibt es noch keine Geschichte.<br>
-            Nutze die Pfeile, um zu anderen Tagen zu navigieren.
+            ${I18n.t('noStoryAvailable')}<br>
+            ${I18n.t('useArrowsToNavigate')}
           </div>
         </div>`;
     } else {
@@ -164,7 +164,7 @@ const Views = {
           <div class="card-actions">
             <button class="save-btn ${isSaved ? 'saved' : ''}"
               onclick="App.saveSentence('${this.esc(sentence.italian)}', '${this.esc(sentence.german)}')"
-              title="Satz speichern">🔖</button>
+              title="${I18n.t('saveSentence')}">🔖</button>
           </div>
         </div>`;
     });
@@ -175,14 +175,14 @@ const Views = {
         <div class="story-progress-bar">
           <div class="story-progress-fill" style="width: ${progress}%"></div>
         </div>
-        <span class="story-progress-text">Seite ${pageIndex + 1} / ${totalPages}</span>
+        <span class="story-progress-text">${I18n.t('page')} ${pageIndex + 1} / ${totalPages}</span>
       </div>
       <div class="story-nav">
         <button class="story-nav-btn" ${pageIndex === 0 ? 'disabled' : ''}
-          onclick="App.storyPage(${pageIndex - 1})">← Zurück</button>
+          onclick="App.storyPage(${pageIndex - 1})">← ${I18n.t('back')}</button>
         <span class="story-page-indicator"></span>
         <button class="story-nav-btn" ${pageIndex >= totalPages - 1 ? 'disabled' : ''}
-          onclick="App.storyPage(${pageIndex + 1})">Weiter →</button>
+          onclick="App.storyPage(${pageIndex + 1})">${I18n.t('next')} →</button>
       </div>`;
 
     return html;
@@ -210,14 +210,14 @@ const Views = {
 
     let html = `
       <div class="story-nav-header">
-        <button class="story-nav-btn" onclick="App.navigateNews(-1)" title="Vorheriger Tag">
+        <button class="story-nav-btn" onclick="App.navigateNews(-1)" title="${I18n.t('previousDay')}">
           <span>←</span>
         </button>
         <div style="text-align: center; flex: 1;">
-          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">Nachrichten aus Italien</h2>
+          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">${I18n.t('newsFromItaly')}</h2>
           <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;">${dateInfo.full}</p>
         </div>
-        <button class="story-nav-btn" onclick="App.navigateNews(1)" title="Nächster Tag" ${!canGoForward ? 'disabled' : ''}>
+        <button class="story-nav-btn" onclick="App.navigateNews(1)" title="${I18n.t('nextDay')}" ${!canGoForward ? 'disabled' : ''}>
           <span>→</span>
         </button>
       </div>`;
@@ -227,8 +227,8 @@ const Views = {
         <div class="vocab-empty">
           <div class="vocab-empty-icon">🗞️</div>
           <div class="vocab-empty-text">
-            Für diesen Tag gibt es noch keine Nachrichten.<br>
-            Nutze die Pfeile, um zu anderen Tagen zu navigieren.
+            ${I18n.t('noNewsAvailable')}<br>
+            ${I18n.t('useArrowsToNavigate')}
           </div>
         </div>`;
     } else {
@@ -279,10 +279,10 @@ const Views = {
     let html = `
       <div style="display: flex; gap: var(--space-sm); margin-bottom: var(--space-md); border-bottom: 2px solid var(--border-color);">
         <button onclick="App.verbTab('verbs')" style="flex: 1; padding: 12px; font-size: 1rem; border: none; background: none; cursor: pointer; font-weight: 600; color: ${tab === 'verbs' ? 'var(--accent-color)' : 'var(--text-secondary)'}; border-bottom: ${tab === 'verbs' ? '3px solid var(--accent-color)' : 'none'}; margin-bottom: -2px;">
-          Verben
+          ${I18n.t('verbs')}
         </button>
         <button onclick="App.verbTab('sentences')" style="flex: 1; padding: 12px; font-size: 1rem; border: none; background: none; cursor: pointer; font-weight: 600; color: ${tab === 'sentences' ? 'var(--accent-color)' : 'var(--text-secondary)'}; border-bottom: ${tab === 'sentences' ? '3px solid var(--accent-color)' : 'none'}; margin-bottom: -2px;">
-          Vorbereitete Sätze
+          ${I18n.t('preparedSentences')}
         </button>
       </div>`;
 
@@ -292,7 +292,7 @@ const Views = {
       const currentVerb = VerbData[verbKey];
       
       if (!currentVerb) {
-        container.innerHTML = html + '<div class="vocab-empty">Verb nicht gefunden.</div>';
+        container.innerHTML = html + `<div class="vocab-empty">${I18n.t('notFound')}</div>`;
         return;
       }
 
@@ -301,13 +301,13 @@ const Views = {
 
       html += `
         <div style="margin-bottom: var(--space-md);">
-          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-sm);">Verben üben</h2>
-          <p style="color: var(--text-tertiary); font-size: 0.85rem;">Wähle ein Verb und übe mit Beispielsätzen</p>
+          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-sm);">${I18n.t('practiceVerbs')}</h2>
+          <p style="color: var(--text-tertiary); font-size: 0.85rem;">${I18n.t('selectVerbToPractice')}</p>
         </div>
 
         <div class="card" style="margin-bottom: var(--space-md);">
           <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
-            Verb auswählen:
+            ${I18n.t('selectVerb')}
           </label>
           <select id="verb-selector" onchange="App.changeVerb(this.value)" style="width: 100%; padding: 12px; font-size: 1rem; border: 2px solid var(--border-color); border-radius: 12px; background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); cursor: pointer;">`;
       
@@ -323,7 +323,7 @@ const Views = {
 
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-md);">
           <h3 style="font-family: var(--font-serif); font-size: 1.1rem; margin: 0;">${currentVerb.name}</h3>
-          <span class="section-badge">${currentVerb.sentences.length} Sätze</span>
+          <span class="section-badge">${currentVerb.sentences.length} ${I18n.t('sentences')}</span>
         </div>`;
 
       // Render all sentences for this verb
@@ -337,21 +337,21 @@ const Views = {
             <div class="card-actions">
               <button class="save-btn ${isSaved ? 'saved' : ''}"
                 onclick="App.saveSentence('${this.esc(s.italian)}', '${this.esc(s.german)}')"
-                title="Satz speichern">🔖</button>
-            </div>
-          </div>`;
+              title="${I18n.t('saveSentence')}">🔖</button>
+          </div>
+        </div>`;
       });
     } else {
       // PREPARED SENTENCES TAB
       html += `
         <div style="margin-bottom: var(--space-md);">
-          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-sm);">Vorbereitete Sätze</h2>
-          <p style="color: var(--text-tertiary); font-size: 0.85rem;">Lerne mit thematischen Satzsammlungen</p>
+          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-sm);">${I18n.t('preparedSentences')}</h2>
+          <p style="color: var(--text-tertiary); font-size: 0.85rem;">${I18n.t('learnWithThematic')}</p>
         </div>
 
         <div class="card" style="margin-bottom: var(--space-md);">
           <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
-            Thema wählen:
+            ${I18n.t('selectTopic')}
           </label>
           <select id="sentences-topic-selector" onchange="App.changeSentencesTopic(this.value)" style="width: 100%; padding: 12px; font-size: 1rem; border: 2px solid var(--border-color); border-radius: 12px; background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); cursor: pointer;">`;
 
@@ -370,12 +370,12 @@ const Views = {
         </div>`;
 
       if (!currentSentenceTopic) {
-        html += `<div class="vocab-empty" style="padding: var(--space-md);">Thema nicht gefunden.</div>`;
+        html += `<div class="vocab-empty" style="padding: var(--space-md);">${I18n.t('notFound')}</div>`;
       } else {
         html += `
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-md);">
             <h3 style="font-family: var(--font-serif); font-size: 1.1rem; margin: 0;">${currentSentenceTopic.name}</h3>
-            <span class="section-badge">${currentSentenceTopic.sentences.length} Sätze</span>
+            <span class="section-badge">${currentSentenceTopic.sentences.length} ${I18n.t('sentences')}</span>
           </div>`;
 
         // Render all sentences for this topic
@@ -389,7 +389,7 @@ const Views = {
               <div class="card-actions">
                 <button class="save-btn ${isSaved ? 'saved' : ''}"
                   onclick="App.saveSentence('${this.esc(s.italian)}', '${this.esc(s.german)}')"
-                  title="Satz speichern">🔖</button>
+                  title="${I18n.t('saveSentence')}">🔖</button>
               </div>
             </div>`;
         });
@@ -407,7 +407,7 @@ const Views = {
     const vocab = Store.getVocabulary();
 
     let html = `
-      <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-lg);">Übersetzer & Wörterbuch</h2>
+      <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-lg);">${I18n.t('translatorDictionary')}</h2>
 
       <!-- Translation Box -->
       <div class="card">
@@ -416,16 +416,16 @@ const Views = {
           <button class="translator-lang" data-lang="it-de" onclick="App.setTranslationDir('it-de')">🇮🇹 → 🇩🇪</button>
         </div>
         <div class="translator-input-wrap">
-          <textarea class="translator-input" id="translator-input" placeholder="Satz oder Wort eingeben…" rows="3"></textarea>
-          <button class="translator-clear" id="translator-clear" title="Löschen">✕</button>
+          <textarea class="translator-input" id="translator-input" placeholder="${I18n.t('enterSentenceOrWord')}" rows="3"></textarea>
+          <button class="translator-clear" id="translator-clear" title="${I18n.t('clear')}">✕</button>
         </div>
         <button class="translator-btn" id="translator-btn" onclick="App.doTranslate()">
-          <span id="translator-btn-text">Übersetzen</span>
+          <span id="translator-btn-text">${I18n.t('translate')}</span>
         </button>
         <div class="translator-result" id="translator-result" style="display: none;">
           <div class="translator-result-text" id="translator-result-text"></div>
           <div class="translator-result-actions">
-            <button class="save-btn" onclick="App.saveTranslation()" title="In Vokabeln speichern">🔖 Speichern</button>
+            <button class="save-btn" onclick="App.saveTranslation()" title="${I18n.t('saveToVocab')}">🔖 ${I18n.t('save')}</button>
           </div>
         </div>
       </div>
@@ -434,25 +434,25 @@ const Views = {
       <div class="card" style="margin-top: var(--space-md);">
         <div class="section-header" style="margin-bottom: var(--space-sm);">
           <span class="section-icon">📘</span>
-          <span class="section-title">WordReference</span>
+          <span class="section-title">${I18n.t('wordReference')}</span>
         </div>
         <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: var(--space-md); line-height: 1.5;">
-          Detaillierte Wortbedeutungen, Konjugationen und Beispielsätze von WordReference.
+          ${I18n.t('wordRefDescription')}
         </p>
         <div class="translator-input-wrap">
-          <input type="text" class="translator-input" id="wr-input" placeholder="Italienisches Wort eingeben…" style="height: auto; padding: 12px 40px 12px 16px;">
+          <input type="text" class="translator-input" id="wr-input" placeholder="${I18n.t('enterItalianWord')}" style="height: auto; padding: 12px 40px 12px 16px;">
         </div>
         <div class="wr-buttons">
           <button class="translator-btn wr-btn" onclick="App.lookupWordReference()">
-            🇮🇹→🇩🇪 Nachschlagen
+            🇮🇹→🇩🇪 ${I18n.t('lookup')}
           </button>
         </div>
       </div>
 
       <!-- Vocabulary Tabs -->
       <div class="vocab-tabs" style="margin-top: var(--space-md);">
-        <button class="vocab-tab ${tab === 'sentences' ? 'active' : ''}" onclick="App.translatorTab('sentences')">Sätze (${vocab.sentences.length})</button>
-        <button class="vocab-tab ${tab === 'words' ? 'active' : ''}" onclick="App.translatorTab('words')">Wörter (${vocab.words.length})</button>
+        <button class="vocab-tab ${tab === 'sentences' ? 'active' : ''}" onclick="App.translatorTab('sentences')">${I18n.t('sentences')} (${vocab.sentences.length})</button>
+        <button class="vocab-tab ${tab === 'words' ? 'active' : ''}" onclick="App.translatorTab('words')">${I18n.t('words')} (${vocab.words.length})</button>
       </div>`;
 
     if (tab === 'sentences') {
@@ -461,7 +461,7 @@ const Views = {
       <div class="card">
         <div class="section-header" style="margin-bottom: var(--space-md);">
           <span class="section-icon">🔖</span>
-          <span class="section-title">Gespeicherte Sätze</span>
+          <span class="section-title">${I18n.t('savedSentences')}</span>
         </div>`;
 
       if (vocab.sentences.length === 0) {
@@ -469,7 +469,7 @@ const Views = {
           <div class="vocab-empty">
             <div class="vocab-empty-icon">🔖</div>
             <div class="vocab-empty-text">
-              Noch keine Sätze gespeichert.
+              ${I18n.t('noSentencesSaved')}
             </div>
           </div>`;
       } else {
@@ -480,7 +480,7 @@ const Views = {
                 <div class="vocab-italian">${s.italian}</div>
                 <div class="vocab-german">${s.german}</div>
               </div>
-              <button class="vocab-delete" onclick="App.removeSentence('${this.esc(s.italian)}')" title="Entfernen">✕</button>
+              <button class="vocab-delete" onclick="App.removeSentence('${this.esc(s.italian)}')" title="${I18n.t('remove')}">✕</button>
             </div>`;
         });
       }
@@ -492,7 +492,7 @@ const Views = {
       <div class="card">
         <div class="section-header" style="margin-bottom: var(--space-md);">
           <span class="section-icon">💬</span>
-          <span class="section-title">Gespeicherte Wörter</span>
+          <span class="section-title">${I18n.t('savedWords')}</span>
         </div>`;
 
       if (vocab.words.length === 0) {
@@ -500,7 +500,7 @@ const Views = {
           <div class="vocab-empty">
             <div class="vocab-empty-icon">💬</div>
             <div class="vocab-empty-text">
-              Noch keine Wörter gespeichert.
+              ${I18n.t('noWordsSaved')}
             </div>
           </div>`;
       } else {
@@ -512,8 +512,8 @@ const Views = {
                 <div class="vocab-german">${w.german}</div>
               </div>
               <div style="display:flex; gap: 4px; align-items: center;">
-                <button class="vocab-wr-btn" onclick="window.open('${AI.getWordReferenceUrl(w.italian)}', '_blank')" title="In WordReference nachschlagen">📘</button>
-                <button class="vocab-delete" onclick="App.removeWord('${this.esc(w.italian)}')" title="Entfernen">✕</button>
+                <button class="vocab-wr-btn" onclick="window.open('${AI.getWordReferenceUrl(w.italian)}', '_blank')" title="${I18n.t('lookupInWordRef')}">📘</button>
+                <button class="vocab-delete" onclick="App.removeWord('${this.esc(w.italian)}')" title="${I18n.t('remove')}">✕</button>
               </div>
             </div>`;
         });
@@ -558,22 +558,22 @@ const Views = {
     const vocab = Store.getVocabulary();
 
     let html = `
-      <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-lg);">Mehr</h2>
+      <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-lg);">${I18n.t('more')}</h2>
 
       <div class="more-menu">
         <div class="library-item" onclick="App.switchSubView('library')">
           <div class="more-menu-icon">📅</div>
           <div class="library-item-content">
-            <div class="library-item-title">Archiv</div>
-            <div class="library-item-preview">Vergangene Lektionen durchstöbern</div>
+            <div class="library-item-title">${I18n.t('archive')}</div>
+            <div class="library-item-preview">${I18n.t('browsePassedLessons')}</div>
           </div>
           <div class="library-item-arrow">›</div>
         </div>
         <div class="library-item" onclick="App.switchSubView('settings')">
           <div class="more-menu-icon">⚙️</div>
           <div class="library-item-content">
-            <div class="library-item-title">Einstellungen</div>
-            <div class="library-item-preview">Level, Themen, API & Design</div>
+            <div class="library-item-title">${I18n.t('settings')}</div>
+            <div class="library-item-preview">${I18n.t('settingsDescription')}</div>
           </div>
           <div class="library-item-arrow">›</div>
         </div>
@@ -581,7 +581,7 @@ const Views = {
 
       <div style="text-align: center; margin-top: var(--space-2xl); color: var(--text-tertiary); font-size: 0.8rem;">
         <p style="font-family: var(--font-serif); font-size: 1rem; margin-bottom: 4px;">Italiano Ogni Giorno</p>
-        <p>v2.0 · Mit ❤️ für alle, die Italienisch lieben.</p>
+        <p>v2.0 · ${I18n.t('madeWithLove')}</p>
       </div>`;
 
     container.innerHTML = html;
@@ -595,14 +595,14 @@ const Views = {
     const dates = getAvailableDates();
 
     let html = `
-      <button class="back-btn" onclick="App.switchView('more', true)">← Zurück</button>
-      <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-lg);">Archiv</h2>`;
+      <button class="back-btn" onclick="App.switchView('more', true)">← ${I18n.t('backBtn')}</button>
+      <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-lg);">${I18n.t('archive')}</h2>`;
 
     if (dates.length === 0) {
       html += `
         <div class="vocab-empty">
           <div class="vocab-empty-icon">📚</div>
-          <div class="vocab-empty-text">Noch keine vergangenen Tage verfügbar.</div>
+          <div class="vocab-empty-text">${I18n.t('noPastDaysAvailable')}</div>
         </div>`;
     } else {
       html += '<div class="library-grid">';
@@ -617,7 +617,7 @@ const Views = {
             </div>
             <div class="library-item-content">
               <div class="library-item-title">${content.story.title}</div>
-              <div class="library-item-preview">${content.sentences.length} Sätze · ${content.news.length} Nachrichten · ${content.story.level}</div>
+              <div class="library-item-preview">${content.sentences.length} ${I18n.t('sentences')} · ${content.news.length} ${I18n.t('news')} · ${content.story.level}</div>
             </div>
             <div class="library-item-arrow">›</div>
           </div>`;
@@ -633,7 +633,7 @@ const Views = {
     const content = getContentForDate(dateStr);
 
     if (!content) {
-      container.innerHTML = '<p>Inhalt nicht gefunden.</p>';
+      container.innerHTML = `<p>${I18n.t('notFound')}</p>`;
       return;
     }
 
@@ -642,7 +642,7 @@ const Views = {
     const showExplanations = settings.showExplanations;
 
     let html = `
-      <button class="back-btn" onclick="App.showLibrary()">← Zurück zum Archiv</button>
+      <button class="back-btn" onclick="App.showLibrary()">← ${I18n.t('backToArchive')}</button>
       <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 4px;">${dateInfo.full}</h2>
       <p style="color: var(--text-tertiary); font-size: 0.85rem; margin-bottom: var(--space-lg);">${content.greeting}</p>`;
 
@@ -651,7 +651,7 @@ const Views = {
       <section class="section">
         <div class="section-header">
           <span class="section-icon">✏️</span>
-          <span class="section-title">Tagessätze</span>
+          <span class="section-title">${I18n.t('dailySentences')}</span>
         </div>`;
     content.sentences.forEach((s, i) => {
       const isSaved = Store.isSentenceSaved(s.italian);
@@ -664,7 +664,7 @@ const Views = {
           <div class="card-actions">
             <button class="save-btn ${isSaved ? 'saved' : ''}"
               onclick="App.saveSentence('${this.esc(s.italian)}', '${this.esc(s.german)}')"
-              title="Satz speichern">🔖</button>
+              title="${I18n.t('saveSentence')}">🔖</button>
           </div>
         </div>`;
     });
@@ -697,7 +697,7 @@ const Views = {
       <section class="section">
         <div class="section-header">
           <span class="section-icon">🗞️</span>
-          <span class="section-title">Nachrichten</span>
+          <span class="section-title">${I18n.t('news')}</span>
         </div>`;
     content.news.forEach(n => {
       html += `
@@ -722,10 +722,10 @@ const Views = {
     const vocab = Store.getVocabulary();
 
     let html = `
-      <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-lg);">Vokabeln</h2>
+      <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-lg);">${I18n.t('vocabulary')}</h2>
       <div class="vocab-tabs">
-        <button class="vocab-tab ${tab === 'sentences' ? 'active' : ''}" onclick="App.vocabTab('sentences')">Sätze (${vocab.sentences.length})</button>
-        <button class="vocab-tab ${tab === 'words' ? 'active' : ''}" onclick="App.vocabTab('words')">Wörter (${vocab.words.length})</button>
+        <button class="vocab-tab ${tab === 'sentences' ? 'active' : ''}" onclick="App.vocabTab('sentences')">${I18n.t('sentences')} (${vocab.sentences.length})</button>
+        <button class="vocab-tab ${tab === 'words' ? 'active' : ''}" onclick="App.vocabTab('words')">${I18n.t('words')} (${vocab.words.length})</button>
       </div>`;
 
     if (tab === 'sentences') {
@@ -734,8 +734,8 @@ const Views = {
           <div class="vocab-empty">
             <div class="vocab-empty-icon">🔖</div>
             <div class="vocab-empty-text">
-              Noch keine Sätze gespeichert.<br>
-              Tippe auf 🔖 bei einem Satz, um ihn hier zu speichern.
+              ${I18n.t('noSentencesSaved')}<br>
+              ${I18n.t('tapToSaveSentence')}
             </div>
           </div>`;
       } else {
@@ -746,7 +746,7 @@ const Views = {
                 <div class="vocab-italian">${s.italian}</div>
                 <div class="vocab-german">${s.german}</div>
               </div>
-              <button class="vocab-delete" onclick="App.removeSentence('${this.esc(s.italian)}')" title="Entfernen">✕</button>
+              <button class="vocab-delete" onclick="App.removeSentence('${this.esc(s.italian)}')" title="${I18n.t('remove')}">✕</button>
             </div>`;
         });
       }
@@ -756,8 +756,8 @@ const Views = {
           <div class="vocab-empty">
             <div class="vocab-empty-icon">💬</div>
             <div class="vocab-empty-text">
-              Noch keine Wörter gespeichert.<br>
-              Tippe auf ein Wort im Text, um es zu speichern.
+              ${I18n.t('noWordsSaved')}<br>
+              ${I18n.t('tapWordToSave')}
             </div>
           </div>`;
       } else {
@@ -769,8 +769,8 @@ const Views = {
                 <div class="vocab-german">${w.german}</div>
               </div>
               <div style="display:flex; gap: 4px; align-items: center;">
-                <button class="vocab-wr-btn" onclick="window.open('${AI.getWordReferenceUrl(w.italian)}', '_blank')" title="In WordReference nachschlagen">📘</button>
-                <button class="vocab-delete" onclick="App.removeWord('${this.esc(w.italian)}')" title="Entfernen">✕</button>
+                <button class="vocab-wr-btn" onclick="window.open('${AI.getWordReferenceUrl(w.italian)}', '_blank')" title="${I18n.t('lookupInWordRef')}">📘</button>
+                <button class="vocab-delete" onclick="App.removeWord('${this.esc(w.italian)}')" title="${I18n.t('remove')}">✕</button>
               </div>
             </div>`;
         });
@@ -790,28 +790,41 @@ const Views = {
 
     const levels = ['A1', 'A2', 'B1', 'B2'];
     const topics = [
-      { id: 'Alltag', label: '🏠 Alltag' },
-      { id: 'Reisen', label: '✈️ Reisen' },
-      { id: 'Kultur', label: '🎨 Kultur' },
-      { id: 'Beruf', label: '💼 Beruf' },
-      { id: 'Essen', label: '🍝 Essen & Trinken' },
-      { id: 'Sport', label: '⚽ Sport' },
-      { id: 'Familie', label: '👨‍👩‍👧 Familie' },
-      { id: 'Kinder', label: '👶 Kinder' },
-      { id: 'Haus und Garten', label: '🏡 Haus & Garten' },
-      { id: 'Auto', label: '🚗 Auto' },
-      { id: 'Hobbies', label: '🎯 Hobbies' }
+      { id: 'Alltag', key: 'topicEveryday' },
+      { id: 'Reisen', key: 'topicTravel' },
+      { id: 'Kultur', key: 'topicCulture' },
+      { id: 'Beruf', key: 'topicWork' },
+      { id: 'Essen', key: 'topicFood' },
+      { id: 'Sport', key: 'topicSports' },
+      { id: 'Familie', key: 'topicFamily' },
+      { id: 'Kinder', key: 'topicChildren' },
+      { id: 'Haus und Garten', key: 'topicHomeGarden' },
+      { id: 'Auto', key: 'topicCar' },
+      { id: 'Hobbies', key: 'topicHobbies' }
     ];
 
     let html = `
-      <button class="back-btn" onclick="App.switchView('more', true)">← Zurück</button>
-      <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-lg);">Einstellungen</h2>
+      <button class="back-btn" onclick="App.switchView('more', true)">← ${I18n.t('backBtn')}</button>
+      <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-lg);">${I18n.t('settings')}</h2>
+
+      <!-- Language -->
+      <div class="settings-group">
+        <div class="settings-group-title">${I18n.t('language')}</div>
+        <div class="settings-item" onclick="App.setLanguage('en')" style="border-radius: var(--radius-md) var(--radius-md) 0 0;">
+          <span class="settings-item-label">🇬🇧 ${I18n.t('english')}</span>
+          <span class="settings-item-value">${Store.getLanguage() === 'en' ? '✓' : ''}</span>
+        </div>
+        <div class="settings-item" onclick="App.setLanguage('de')" style="border-radius: 0 0 var(--radius-md) var(--radius-md);">
+          <span class="settings-item-label">🇩🇪 ${I18n.t('german')}</span>
+          <span class="settings-item-value">${Store.getLanguage() === 'de' ? '✓' : ''}</span>
+        </div>
+      </div>
 
       <!-- Level -->
       <div class="settings-group">
-        <div class="settings-group-title">Lernniveau</div>
+        <div class="settings-group-title">${I18n.t('learningLevel')}</div>
         <div class="settings-item" style="border-radius: var(--radius-md) var(--radius-md) 0 0;">
-          <span class="settings-item-label">Dein Level</span>
+          <span class="settings-item-label">${I18n.t('yourLevel')}</span>
           <span class="settings-item-value">${settings.level}</span>
         </div>
         <div class="level-options">
@@ -824,9 +837,9 @@ const Views = {
 
       <!-- Sentence Count -->
       <div class="settings-group">
-        <div class="settings-group-title">Sätze pro Tag</div>
+        <div class="settings-group-title">${I18n.t('sentencesPerDay')}</div>
         <div class="settings-item" style="border-radius: var(--radius-md) var(--radius-md) 0 0;">
-          <span class="settings-item-label">Anzahl Tagessätze</span>
+          <span class="settings-item-label">${I18n.t('numberOfSentences')}</span>
           <span class="settings-item-value">${settings.sentenceCount}</span>
         </div>
         <div class="level-options">
@@ -839,47 +852,47 @@ const Views = {
 
       <!-- Topics -->
       <div class="settings-group">
-        <div class="settings-group-title">Themen</div>
+        <div class="settings-group-title">${I18n.t('topics')}</div>
         <div class="settings-item" style="border-radius: var(--radius-md) var(--radius-md) 0 0;">
-          <span class="settings-item-label">Deine Interessen</span>
-          <span class="settings-item-value">${settings.topics.length} ausgewählt</span>
+          <span class="settings-item-label">${I18n.t('yourInterests')}</span>
+          <span class="settings-item-value">${settings.topics.length} ${I18n.t('selected')}</span>
         </div>
         <div class="topic-pills">
           ${topics.map(t => `
             <button class="topic-pill ${settings.topics.includes(t.id) ? 'active' : ''}"
-              onclick="App.toggleTopic('${t.id}')">${t.label}</button>
+              onclick="App.toggleTopic('${t.id}')">${I18n.t(t.key)}</button>
           `).join('')}
         </div>
       </div>
 
       <!-- Explanations -->
       <div class="settings-group">
-        <div class="settings-group-title">Anzeige</div>
+        <div class="settings-group-title">${I18n.t('display')}</div>
         <div class="settings-item" style="border-radius: var(--radius-md);" onclick="App.toggleExplanations()">
-          <span class="settings-item-label">Erklärungen anzeigen</span>
+          <span class="settings-item-label">${I18n.t('showExplanations')}</span>
           <button class="toggle ${settings.showExplanations ? 'active' : ''}" id="toggle-explanations"></button>
         </div>
       </div>
 
       <!-- Theme -->
       <div class="settings-group">
-        <div class="settings-group-title">Erscheinungsbild</div>
+        <div class="settings-group-title">${I18n.t('appearance')}</div>
         <div class="settings-item" onclick="App.setTheme('light')" style="border-radius: var(--radius-md) var(--radius-md) 0 0;">
-          <span class="settings-item-label">☀️ Hell</span>
+          <span class="settings-item-label">☀️ ${I18n.t('light')}</span>
           <span class="settings-item-value">${theme === 'light' ? '✓' : ''}</span>
         </div>
         <div class="settings-item" onclick="App.setTheme('dark')">
-          <span class="settings-item-label">🌙 Dunkel</span>
+          <span class="settings-item-label">🌙 ${I18n.t('dark')}</span>
           <span class="settings-item-value">${theme === 'dark' ? '✓' : ''}</span>
         </div>
         <div class="settings-item" onclick="App.setTheme('auto')" style="border-radius: 0 0 var(--radius-md) var(--radius-md);">
-          <span class="settings-item-label">🔄 Automatisch</span>
+          <span class="settings-item-label">🔄 ${I18n.t('automatic')}</span>
           <span class="settings-item-value">${theme === 'auto' ? '✓' : ''}</span>
         </div>
       </div>
 
       <p style="text-align: center; color: var(--text-tertiary); font-size: 0.8rem; margin-top: var(--space-lg); padding-bottom: var(--space-lg);">
-        v2.0 · Mit ❤️ gemacht für alle, die Italienisch lieben.
+        v2.0 · ${I18n.t('madeWithLove')}
       </p>`;
 
     container.innerHTML = html;

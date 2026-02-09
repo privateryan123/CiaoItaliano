@@ -8,6 +8,16 @@ const Store = {
   SETTINGS_KEY: 'italiano_settings',
   THEME_KEY: 'italiano_theme',
   AI_CACHE_KEY: 'italiano_ai_cache',
+  LANGUAGE_KEY: 'italiano_language',
+
+  // --- Language ---
+  getLanguage() {
+    return localStorage.getItem(this.LANGUAGE_KEY) || 'en';
+  },
+
+  setLanguage(lang) {
+    localStorage.setItem(this.LANGUAGE_KEY, lang);
+  },
 
   // --- Vocabulary ---
   getVocabulary() {

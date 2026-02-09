@@ -20,13 +20,16 @@ const App = {
   init() {
     console.log('=== App.init() starting ===');
     
-    console.log('1. Applying theme...');
+    console.log('1. Initializing I18n...');
+    I18n.init();
+    
+    console.log('2. Applying theme...');
     applyTheme(Store.getTheme());
     
-    console.log('2. Setting up navigation...');
+    console.log('3. Setting up navigation...');
     this.setupNav();
     
-    console.log('3. Setting up word tap...');
+    console.log('4. Setting up word tap...');
     this.setupWordTap();
 
     // Determine initial view from hash
@@ -34,14 +37,14 @@ const App = {
     const validViews = [...this.MAIN_VIEWS, ...this.SUB_VIEWS];
     const initialView = validViews.includes(hash) ? hash : 'sentences';
     
-    console.log('4. Initial view determined:', initialView);
-    console.log('5. Switching to initial view...');
+    console.log('5. Initial view determined:', initialView);
+    console.log('6. Switching to initial view...');
     this.switchView(initialView, false);
-    console.log('6. View switched, updating history...');
+    console.log('7. View switched, updating history...');
     
     history.replaceState({ view: initialView }, '', `#${initialView}`);
 
-    console.log('7. Registering service worker...');
+    console.log('8. Registering service worker...');
     this.registerSW();
 
     window.addEventListener('popstate', (e) => {
@@ -376,14 +379,14 @@ const App = {
     const input = document.getElementById('translator-input');
     const text = (input.value || '').trim();
     if (!text) {
-      this.showToast('Bitte Text eingeben');
+      this.showToast(I18n.t('pleaseEnterText'));
       return;
     }
 
     const btn = document.getElementById('translator-btn');
     const btnText = document.getElementById('translator-btn-text');
     btn.disabled = true;
-    btnText.textContent = 'Übersetze…';
+    btnText.textContent = I18n.currentLang === 'en' ? 'Translating…' : 'Übersetze…';
 
     try {
       const [from, to] = this.translationDir === 'de-it' ? ['de', 'it'] : ['it', 'de'];
@@ -399,13 +402,16 @@ const App = {
       const resultDiv = document.getElementById('translator-result');
       const resultText = document.getElementById('translator-result-text');
       const flag = to === 'it' ? '🇮🇹' : '🇩🇪';
-      resultText.innerHTML = `<span style="color: var(--text-tertiary); font-size: 0.8rem;">${flag} ${to === 'it' ? 'Italienisch' : 'Deutsch'}:</span><br><strong>${result}</strong>`;
+      const langLabel = to === 'it' 
+        ? (I18n.currentLang === 'en' ? 'Italian' : 'Italienisch') 
+        : (I18n.currentLang === 'en' ? 'German' : 'Deutsch');
+      resultText.innerHTML = `<span style="color: var(--text-tertiary); font-size: 0.8rem;">${flag} ${langLabel}:</span><br><strong>${result}</strong>`;
       resultDiv.style.display = 'block';
     } catch (err) {
-      this.showToast('Übersetzung fehlgeschlagen: ' + err.message);
+      this.showToast(I18n.t('translationFailed') + ': ' + err.message);
     } finally {
       btn.disabled = false;
-      btnText.textContent = 'Übersetzen';
+      btnText.textContent = I18n.t('translate');
     }
   },
 
@@ -415,7 +421,7 @@ const App = {
     const italian = from === 'it' ? original : translated;
     const german = from === 'de' ? original : translated;
     const added = Store.saveSentence(italian, german);
-    this.showToast(added ? 'Übersetzung gespeichert! 🔖' : 'Bereits gespeichert');
+    this.showToast(added ? I18n.t('translationSaved') : I18n.t('alreadySaved'));
   },
 
   quickTranslate(text) {
@@ -453,7 +459,7 @@ const App = {
     const input = document.getElementById('wr-input');
     const word = (input.value || '').trim();
     if (!word) {
-      this.showToast('Bitte ein Wort eingeben');
+      this.showToast(I18n.t('pleaseEnterWord'));
       return;
     }
     const url = AI.getWordReferenceUrl(word);
@@ -502,14 +508,14 @@ const App = {
         
         const added = Store.saveWord(word, wordTranslation);
         this.hideWordPopup();
-        this.showToast(added ? 'Wort gespeichert! 💬' : 'Bereits gespeichert');
+        this.showToast(added ? I18n.t('wordSaved') : I18n.t('alreadySaved'));
       }
     });
     document.getElementById('popup-save-sentence').addEventListener('click', () => {
       if (this._popupData) {
         const added = Store.saveSentence(this._popupData.sentence, this._popupData.translation);
         this.hideWordPopup();
-        this.showToast(added ? 'Satz gespeichert! 🔖' : 'Bereits gespeichert');
+        this.showToast(added ? I18n.t('sentenceSaved') : I18n.t('alreadySaved'));
         this.refreshSaveButtons();
       }
     });
@@ -563,13 +569,13 @@ const App = {
   // ==========================================
   saveSentence(italian, german) {
     const added = Store.saveSentence(italian, german);
-    this.showToast(added ? 'Satz gespeichert! 🔖' : 'Bereits gespeichert');
+    this.showToast(added ? I18n.t('sentenceSaved') : I18n.t('alreadySaved'));
     this.refreshSaveButtons();
   },
 
   saveWord(italian, german) {
     const added = Store.saveWord(italian, german);
-    this.showToast(added ? 'Wort gespeichert! 💬' : 'Bereits gespeichert');
+    this.showToast(added ? I18n.t('wordSaved') : I18n.t('alreadySaved'));
   },
 
   removeSentence(italian) {
@@ -580,7 +586,7 @@ const App = {
     } else {
       Views.renderVocabulary('sentences');
     }
-    this.showToast('Satz entfernt');
+    this.showToast(I18n.t('sentenceRemoved'));
   },
 
   removeWord(italian) {
@@ -591,7 +597,7 @@ const App = {
     } else {
       Views.renderVocabulary('words');
     }
-    this.showToast('Wort entfernt');
+    this.showToast(I18n.t('wordRemoved'));
   },
 
   vocabTab(tab) {
@@ -625,7 +631,7 @@ const App = {
     settings.level = level;
     Store.saveSettings(settings);
     Views.renderSettings();
-    this.showToast(`Level auf ${level} gesetzt`);
+    this.showToast(`${I18n.t('levelSetTo')} ${level}`);
   },
 
   setSentenceCount(n) {
@@ -633,7 +639,7 @@ const App = {
     settings.sentenceCount = n;
     Store.saveSettings(settings);
     Views.renderSettings();
-    this.showToast(`${n} Sätze pro Tag`);
+    this.showToast(`${n} ${I18n.t('sentencesPerDaySet')}`);
   },
 
   toggleTopic(topicId) {
@@ -653,14 +659,28 @@ const App = {
     settings.showExplanations = !settings.showExplanations;
     Store.saveSettings(settings);
     Views.renderSettings();
-    this.showToast(settings.showExplanations ? 'Erklärungen eingeblendet' : 'Erklärungen ausgeblendet');
+    const msg = settings.showExplanations 
+      ? (I18n.currentLang === 'en' ? 'Explanations shown' : 'Erklärungen eingeblendet')
+      : (I18n.currentLang === 'en' ? 'Explanations hidden' : 'Erklärungen ausgeblendet');
+    this.showToast(msg);
   },
 
   setTheme(theme) {
     Store.setTheme(theme);
     Views.renderSettings();
-    const labels = { light: 'Hell', dark: 'Dunkel', auto: 'Automatisch' };
-    this.showToast(`Design: ${labels[theme]}`);
+    const labelsEn = { light: 'Light', dark: 'Dark', auto: 'Automatic' };
+    const labelsDe = { light: 'Hell', dark: 'Dunkel', auto: 'Automatisch' };
+    const labels = I18n.currentLang === 'en' ? labelsEn : labelsDe;
+    this.showToast(`${I18n.currentLang === 'en' ? 'Theme' : 'Design'}: ${labels[theme]}`);
+  },
+
+  setLanguage(lang) {
+    I18n.setLanguage(lang);
+    Views.renderSettings();
+    // Refresh current view
+    this.switchView(this.currentView, false);
+    const msg = lang === 'en' ? 'Language: English' : 'Sprache: Deutsch';
+    this.showToast(msg);
   },
 
   // ==========================================
