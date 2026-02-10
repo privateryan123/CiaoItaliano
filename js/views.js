@@ -4,14 +4,17 @@
 
 const Views = {
 
-  // Helper: Format explanation text - bold Italian words in quotes
+  // Helper: Format explanation text - bold Italian words
   formatExplanation(text) {
     if (!text) return '';
-    // Bold text in quotes: "word", 'word', «word»
-    return text
+    // Bold Italian words before "=" (e.g., "Buongiorno = guten Morgen" -> "<strong>Buongiorno</strong> = guten Morgen")
+    let formatted = text.replace(/([A-Za-zÀ-ÿ''\s]+?)\s*=\s*/g, '<strong>$1</strong> = ');
+    // Also bold text in quotes: "word", 'word', «word»
+    formatted = formatted
       .replace(/"([^"]+)"/g, '<strong>"$1"</strong>')
       .replace(/'([^']+)'/g, "<strong>'$1'</strong>")
       .replace(/«([^»]+)»/g, '<strong>«$1»</strong>');
+    return formatted;
   },
 
   // ==========================================
