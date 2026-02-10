@@ -333,11 +333,6 @@ const Views = {
       const showExplanations = settings.showExplanations;
 
       html += `
-        <div style="margin-bottom: var(--space-md);">
-          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-sm);">${I18n.t('practiceVerbs')}</h2>
-          <p style="color: var(--text-tertiary); font-size: 0.85rem;">${I18n.t('selectVerbToPractice')}</p>
-        </div>
-
         <div class="card" style="margin-bottom: var(--space-md);">
           <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
             ${I18n.t('selectVerb')}
@@ -379,11 +374,6 @@ const Views = {
     } else if (tab === 'sentences') {
       // PREPARED SENTENCES TAB
       html += `
-        <div style="margin-bottom: var(--space-md);">
-          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-sm);">${I18n.t('preparedSentences')}</h2>
-          <p style="color: var(--text-tertiary); font-size: 0.85rem;">${I18n.t('learnWithThematic')}</p>
-        </div>
-
         <div class="card" style="margin-bottom: var(--space-md);">
           <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
             ${I18n.t('selectTopic')}
@@ -442,11 +432,6 @@ const Views = {
       }
 
       html += `
-        <div style="margin-bottom: var(--space-md);">
-          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-sm);">${I18n.t('prepositions')}</h2>
-          <p style="color: var(--text-tertiary); font-size: 0.85rem;">${I18n.t('prepositionsDescription')}</p>
-        </div>
-
         <div class="card" style="margin-bottom: var(--space-md);">
           <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
             ${I18n.t('selectPreposition')}
@@ -489,11 +474,6 @@ const Views = {
       });
     } else if (tab === 'essentials') {
       // ESSENTIALS TAB - Numbers, Months, Weekdays
-      html += `
-        <div style="margin-bottom: var(--space-md);">
-          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-sm);">${I18n.t('essentials')}</h2>
-          <p style="color: var(--text-tertiary); font-size: 0.85rem;">${I18n.t('essentialsDescription')}</p>
-        </div>`;
 
       // Numbers
       const numbers = [
@@ -653,6 +633,267 @@ const Views = {
           <div class="essentials-list">`;
       
       weekdays.forEach(w => {
+        html += `
+          <div class="essential-row">
+            <span class="essential-it">${this.makeInteractive(w.it, [], w.it, w.de)}</span>
+            <span class="essential-de">${w.de}</span>
+          </div>`;
+      });
+      
+      html += `
+          </div>
+          </div>
+        </div>`;
+
+      // Time & Sequence
+      const timeSequence = [
+        { it: 'oggi', de: 'heute' },
+        { it: 'domani', de: 'morgen' },
+        { it: 'ieri', de: 'gestern' },
+        { it: 'adesso', de: 'jetzt' },
+        { it: 'ora', de: 'jetzt / Stunde' },
+        { it: 'sempre', de: 'immer' },
+        { it: 'spesso', de: 'oft' },
+        { it: 'a volte', de: 'manchmal' },
+        { it: 'mai', de: 'nie' },
+        { it: 'presto', de: 'früh / bald' },
+        { it: 'tardi', de: 'spät' },
+        { it: 'prima', de: 'vorher / zuerst' },
+        { it: 'dopo', de: 'danach / nach' },
+        { it: 'alla fine', de: 'am Ende / schließlich' }
+      ];
+
+      html += `
+        <div class="card" style="margin-bottom: var(--space-md);">
+          <div class="section-header collapsible-header" onclick="this.parentElement.classList.toggle('collapsed')" style="margin-bottom: var(--space-md); cursor: pointer;">
+            <span class="section-icon">⏰</span>
+            <span class="section-title">${I18n.t('timeSequence')}</span>
+            <span class="collapse-icon" style="margin-left: auto; transition: transform 0.2s;">▼</span>
+          </div>
+          <div class="collapsible-content">
+          <div class="essentials-list">`;
+      
+      timeSequence.forEach(w => {
+        html += `
+          <div class="essential-row">
+            <span class="essential-it">${this.makeInteractive(w.it, [], w.it, w.de)}</span>
+            <span class="essential-de">${w.de}</span>
+          </div>`;
+      });
+      
+      html += `
+          </div>
+          </div>
+        </div>`;
+
+      // Direction & Position
+      const directionPosition = [
+        { it: 'qui', de: 'hier' },
+        { it: 'lì', de: 'dort' },
+        { it: 'là', de: 'dort (weiter weg)' },
+        { it: 'davanti', de: 'vorne / davor' },
+        { it: 'dietro', de: 'hinten / dahinter' },
+        { it: 'sopra', de: 'oben / über' },
+        { it: 'sotto', de: 'unten / unter' },
+        { it: 'dentro', de: 'drinnen / hinein' },
+        { it: 'fuori', de: 'draußen / heraus' },
+        { it: 'vicino', de: 'nah / in der Nähe' },
+        { it: 'lontano', de: 'weit / fern' }
+      ];
+
+      html += `
+        <div class="card" style="margin-bottom: var(--space-md);">
+          <div class="section-header collapsible-header" onclick="this.parentElement.classList.toggle('collapsed')" style="margin-bottom: var(--space-md); cursor: pointer;">
+            <span class="section-icon">🧭</span>
+            <span class="section-title">${I18n.t('directionPosition')}</span>
+            <span class="collapse-icon" style="margin-left: auto; transition: transform 0.2s;">▼</span>
+          </div>
+          <div class="collapsible-content">
+          <div class="essentials-list">`;
+      
+      directionPosition.forEach(w => {
+        html += `
+          <div class="essential-row">
+            <span class="essential-it">${this.makeInteractive(w.it, [], w.it, w.de)}</span>
+            <span class="essential-de">${w.de}</span>
+          </div>`;
+      });
+      
+      html += `
+          </div>
+          </div>
+        </div>`;
+
+      // Core Conversation Glue
+      const conversationGlue = [
+        { it: 'sì', de: 'ja' },
+        { it: 'no', de: 'nein' },
+        { it: 'per favore', de: 'bitte' },
+        { it: 'grazie', de: 'danke' },
+        { it: 'di niente', de: 'gern geschehen' },
+        { it: 'scusa', de: 'Entschuldigung (informell)' },
+        { it: 'mi dispiace', de: 'es tut mir leid' },
+        { it: 'va bene', de: 'okay / in Ordnung' },
+        { it: 'd\'accordo', de: 'einverstanden' },
+        { it: 'forse', de: 'vielleicht' },
+        { it: 'certo', de: 'sicher / natürlich' }
+      ];
+
+      html += `
+        <div class="card" style="margin-bottom: var(--space-md);">
+          <div class="section-header collapsible-header" onclick="this.parentElement.classList.toggle('collapsed')" style="margin-bottom: var(--space-md); cursor: pointer;">
+            <span class="section-icon">💬</span>
+            <span class="section-title">${I18n.t('conversationGlue')}</span>
+            <span class="collapse-icon" style="margin-left: auto; transition: transform 0.2s;">▼</span>
+          </div>
+          <div class="collapsible-content">
+          <div class="essentials-list">`;
+      
+      conversationGlue.forEach(w => {
+        html += `
+          <div class="essential-row">
+            <span class="essential-it">${this.makeInteractive(w.it, [], w.it, w.de)}</span>
+            <span class="essential-de">${w.de}</span>
+          </div>`;
+      });
+      
+      html += `
+          </div>
+          </div>
+        </div>`;
+
+      // People & Roles
+      const peopleRoles = [
+        { it: 'io', de: 'ich' },
+        { it: 'tu', de: 'du' },
+        { it: 'lui', de: 'er' },
+        { it: 'lei', de: 'sie' },
+        { it: 'noi', de: 'wir' },
+        { it: 'voi', de: 'ihr' },
+        { it: 'loro', de: 'sie (Plural)' },
+        { it: 'persona', de: 'Person' },
+        { it: 'gente', de: 'Leute' },
+        { it: 'amico', de: 'Freund' },
+        { it: 'amica', de: 'Freundin' },
+        { it: 'moglie', de: 'Ehefrau' },
+        { it: 'marito', de: 'Ehemann' },
+        { it: 'figli', de: 'Kinder' }
+      ];
+
+      html += `
+        <div class="card" style="margin-bottom: var(--space-md);">
+          <div class="section-header collapsible-header" onclick="this.parentElement.classList.toggle('collapsed')" style="margin-bottom: var(--space-md); cursor: pointer;">
+            <span class="section-icon">👥</span>
+            <span class="section-title">${I18n.t('peopleRoles')}</span>
+            <span class="collapse-icon" style="margin-left: auto; transition: transform 0.2s;">▼</span>
+          </div>
+          <div class="collapsible-content">
+          <div class="essentials-list">`;
+      
+      peopleRoles.forEach(w => {
+        html += `
+          <div class="essential-row">
+            <span class="essential-it">${this.makeInteractive(w.it, [], w.it, w.de)}</span>
+            <span class="essential-de">${w.de}</span>
+          </div>`;
+      });
+      
+      html += `
+          </div>
+          </div>
+        </div>`;
+
+      // Connectors
+      const connectors = [
+        { it: 'e', de: 'und' },
+        { it: 'o', de: 'oder' },
+        { it: 'ma', de: 'aber' },
+        { it: 'perché', de: 'weil / warum' },
+        { it: 'quindi', de: 'also / daher' },
+        { it: 'dunque', de: 'also / folglich' }
+      ];
+
+      html += `
+        <div class="card" style="margin-bottom: var(--space-md);">
+          <div class="section-header collapsible-header" onclick="this.parentElement.classList.toggle('collapsed')" style="margin-bottom: var(--space-md); cursor: pointer;">
+            <span class="section-icon">🔗</span>
+            <span class="section-title">${I18n.t('connectors')}</span>
+            <span class="collapse-icon" style="margin-left: auto; transition: transform 0.2s;">▼</span>
+          </div>
+          <div class="collapsible-content">
+          <div class="essentials-list">`;
+      
+      connectors.forEach(w => {
+        html += `
+          <div class="essential-row">
+            <span class="essential-it">${this.makeInteractive(w.it, [], w.it, w.de)}</span>
+            <span class="essential-de">${w.de}</span>
+          </div>`;
+      });
+      
+      html += `
+          </div>
+          </div>
+        </div>`;
+
+      // Quantities
+      const quantities = [
+        { it: 'molto', de: 'viel / sehr' },
+        { it: 'poco', de: 'wenig' },
+        { it: 'tutto', de: 'alles' },
+        { it: 'niente', de: 'nichts' },
+        { it: 'qualcosa', de: 'etwas' },
+        { it: 'qualcuno', de: 'jemand' },
+        { it: 'più', de: 'mehr' },
+        { it: 'meno', de: 'weniger' }
+      ];
+
+      html += `
+        <div class="card" style="margin-bottom: var(--space-md);">
+          <div class="section-header collapsible-header" onclick="this.parentElement.classList.toggle('collapsed')" style="margin-bottom: var(--space-md); cursor: pointer;">
+            <span class="section-icon">📊</span>
+            <span class="section-title">${I18n.t('quantities')}</span>
+            <span class="collapse-icon" style="margin-left: auto; transition: transform 0.2s;">▼</span>
+          </div>
+          <div class="collapsible-content">
+          <div class="essentials-list">`;
+      
+      quantities.forEach(w => {
+        html += `
+          <div class="essential-row">
+            <span class="essential-it">${this.makeInteractive(w.it, [], w.it, w.de)}</span>
+            <span class="essential-de">${w.de}</span>
+          </div>`;
+      });
+      
+      html += `
+          </div>
+          </div>
+        </div>`;
+
+      // Everyday Adjectives
+      const everydayAdjectives = [
+        { it: 'buono', de: 'gut' },
+        { it: 'cattivo', de: 'schlecht' },
+        { it: 'grande', de: 'groß' },
+        { it: 'piccolo', de: 'klein' },
+        { it: 'facile', de: 'einfach' },
+        { it: 'difficile', de: 'schwierig' },
+        { it: 'sicuro', de: 'sicher' },
+        { it: 'contento', de: 'zufrieden / froh' }
+      ];
+
+      html += `
+        <div class="card" style="margin-bottom: var(--space-md);">
+          <div class="section-header collapsible-header" onclick="this.parentElement.classList.toggle('collapsed')" style="margin-bottom: var(--space-md); cursor: pointer;">
+            <span class="section-icon">🏷️</span>
+            <span class="section-title">${I18n.t('everydayAdjectives')}</span>
+            <span class="collapse-icon" style="margin-left: auto; transition: transform 0.2s;">▼</span>
+          </div>
+          <div class="collapsible-content">
+          <div class="essentials-list">`;
+      
+      everydayAdjectives.forEach(w => {
         html += `
           <div class="essential-row">
             <span class="essential-it">${this.makeInteractive(w.it, [], w.it, w.de)}</span>
