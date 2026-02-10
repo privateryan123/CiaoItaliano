@@ -30,7 +30,7 @@ Liefere das Ergebnis als JSON-Objekt:
   "readingTime": "5 min",
   "pages": [
     [
-      {"italian":"...","german":"...","note":"kurze Erklärung oder Grammatikhinweis auf Deutsch"},
+      {"italian":"...","german":"...","note":"Erkläre KURZ wichtige Verben/Phrasen: «verb» (Infinitiv: X, hier Y-Form). Nur bei interessanten Formen."},
       ...
     ],
     ...

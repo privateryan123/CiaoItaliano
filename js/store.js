@@ -112,7 +112,9 @@ const Store = {
         localStorage.setItem(this.VOCAB_KEY, JSON.stringify(vocab));
         return item;
       } else if (response.status === 409) {
-        return false; // Already exists on server
+        // Already exists on server - sync to update local cache
+        await this.syncVocabularyFromServer();
+        return false;
       }
     } catch (error) {
       console.error('Failed to save word to server:', error);
@@ -152,7 +154,9 @@ const Store = {
         localStorage.setItem(this.VOCAB_KEY, JSON.stringify(vocab));
         return true;
       } else if (response.status === 409) {
-        return false; // Already exists on server
+        // Already exists on server - sync to update local cache
+        await this.syncVocabularyFromServer();
+        return false;
       }
     } catch (error) {
       console.error('Failed to save sentence to server:', error);

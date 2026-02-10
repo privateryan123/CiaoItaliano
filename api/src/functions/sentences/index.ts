@@ -25,7 +25,7 @@ Themen: ${topicStr}
 Für jeden Satz liefere:
 - "italian": den italienischen Satz
 - "german": die deutsche Übersetzung
-- "explanation": eine kurze Erklärung (Grammatik, Nuance oder Verwendung) auf Deutsch
+- "explanation": Erkläre KURZ wichtige Verben und Redewendungen im Satz. Format: «verb» (Infinitiv: X, hier in Y-Form). Beispiel: «ho mangiato» (Infinitiv: mangiare, hier Passato Prossimo). Nur Verben/Phrasen erklären, keine vollständige Grammatik.
 - "keywords": Array mit 1-3 Schlüsselwörtern aus dem italienischen Satz
 
 Antworte NUR mit einem JSON-Array, kein zusätzlicher Text. Beispiel:

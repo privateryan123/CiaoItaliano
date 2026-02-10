@@ -37,6 +37,7 @@ const I18n = {
       nextDay: 'Next day',
       goToToday: 'Today',
       saveSentence: 'Save sentence',
+      speakSentence: 'Speak',
       
       // Story View
       dailyStory: 'Daily Story',
@@ -240,6 +241,7 @@ const I18n = {
       nextDay: 'Nächster Tag',
       goToToday: 'Heute',
       saveSentence: 'Satz speichern',
+      speakSentence: 'Vorlesen',
       
       // Story View
       dailyStory: 'Tagesgeschichte',

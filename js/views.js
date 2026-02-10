@@ -67,6 +67,9 @@ const Views = {
               <button class="save-btn ${isSaved ? 'saved' : ''}"
                 onclick="App.saveSentence('${this.esc(s.italian)}', '${this.esc(s.german)}')"
                 title="${I18n.t('saveSentence')}">🔖</button>
+              <button class="speak-btn"
+                onclick="App.speakItalian('${this.esc(s.italian)}')"
+                title="${I18n.t('speakSentence')}">🔊</button>
             </div>
             <div class="sentence-italian">${this.makeInteractive(s.italian, s.keywords, s.italian, s.german)}</div>
             <div class="sentence-german">${s.german}</div>
@@ -158,7 +161,10 @@ const Views = {
     page.forEach((sentence, i) => {
       html += `
         <div class="story-sentence">
-          <div class="sentence-italian">${this.makeInteractive(sentence.italian, [], sentence.italian, sentence.german)}</div>
+          <div class="sentence-italian-row">
+            <div class="sentence-italian">${this.makeInteractive(sentence.italian, [], sentence.italian, sentence.german)}</div>
+            <button class="speak-btn-inline" onclick="App.speakItalian('${this.esc(sentence.italian)}')" title="${I18n.t('speakSentence')}">🔊</button>
+          </div>
           <div class="sentence-german">${sentence.german}</div>
           ${showExplanations && sentence.note ? `<div class="sentence-explanation">${sentence.note}</div>` : ''}
         </div>`;
@@ -245,8 +251,11 @@ const Views = {
           n.sentences.forEach((s, idx) => {
             html += `
               <div class="news-sentence-pair" style="margin: var(--space-sm) 0; padding: var(--space-sm); background: var(--bg-secondary); border-radius: var(--radius-sm);">
-                <div class="news-italian" style="font-style: italic; margin-bottom: 4px;">
-                  ${this.makeInteractive(s.italian, [], s.italian, s.german)}
+                <div class="sentence-italian-row">
+                  <div class="news-italian" style="font-style: italic; margin-bottom: 4px; flex: 1;">
+                    ${this.makeInteractive(s.italian, [], s.italian, s.german)}
+                  </div>
+                  <button class="speak-btn-inline" onclick="App.speakItalian('${this.esc(s.italian)}'); event.stopPropagation();" title="${I18n.t('speakSentence')}">🔊</button>
                 </div>
                 <div class="news-german" style="color: var(--text-secondary); font-size: 0.9rem;">
                   ${s.german}
@@ -256,7 +265,10 @@ const Views = {
         } else if (n.italianSummary) {
           // Fallback for old format
           html += `
-            <div class="news-italian-summary">${this.makeInteractive(n.italianSummary, [], n.italianSummary, n.german)}</div>
+            <div class="sentence-italian-row">
+              <div class="news-italian-summary" style="flex: 1;">${this.makeInteractive(n.italianSummary, [], n.italianSummary, n.german)}</div>
+              <button class="speak-btn-inline" onclick="App.speakItalian('${this.esc(n.italianSummary)}'); event.stopPropagation();" title="${I18n.t('speakSentence')}">🔊</button>
+            </div>
             <div class="news-german">${n.german}</div>`;
         }
         
@@ -344,6 +356,9 @@ const Views = {
               <button class="save-btn ${isSaved ? 'saved' : ''}"
                 onclick="App.saveSentence('${this.esc(s.italian)}', '${this.esc(s.german)}')"
                 title="${I18n.t('saveSentence')}">🔖</button>
+              <button class="speak-btn"
+                onclick="App.speakItalian('${this.esc(s.italian)}')"
+                title="${I18n.t('speakSentence')}">🔊</button>
             </div>
             <div class="sentence-italian">${this.makeInteractive(s.italian, [], s.italian, s.german)}</div>
             <div class="sentence-german">${s.german}</div>
@@ -395,6 +410,9 @@ const Views = {
                 <button class="save-btn ${isSaved ? 'saved' : ''}"
                   onclick="App.saveSentence('${this.esc(s.italian)}', '${this.esc(s.german)}')"
                   title="${I18n.t('saveSentence')}">🔖</button>
+                <button class="speak-btn"
+                  onclick="App.speakItalian('${this.esc(s.italian)}')"
+                  title="${I18n.t('speakSentence')}">🔊</button>
               </div>
               <div class="sentence-italian">${this.makeInteractive(s.italian, [], s.italian, s.german)}</div>
               <div class="sentence-german">${s.german}</div>
@@ -447,6 +465,9 @@ const Views = {
               <button class="save-btn ${isSaved ? 'saved' : ''}"
                 onclick="App.saveSentence('${this.esc(s.italian)}', '${this.esc(s.german)}')"
                 title="${I18n.t('saveSentence')}">🔖</button>
+              <button class="speak-btn"
+                onclick="App.speakItalian('${this.esc(s.italian)}')"
+                title="${I18n.t('speakSentence')}">🔊</button>
             </div>
             <div class="sentence-italian">${this.makeInteractive(s.italian, [], s.italian, s.german)}</div>
             <div class="sentence-german">${s.german}</div>
@@ -916,6 +937,9 @@ const Views = {
             <button class="save-btn ${isSaved ? 'saved' : ''}"
               onclick="App.saveSentence('${this.esc(s.italian)}', '${this.esc(s.german)}')"
               title="${I18n.t('saveSentence')}">🔖</button>
+            <button class="speak-btn"
+              onclick="App.speakItalian('${this.esc(s.italian)}')"
+              title="${I18n.t('speakSentence')}">🔊</button>
           </div>
           <div class="sentence-italian">${this.makeInteractive(s.italian, s.keywords, s.italian, s.german)}</div>
           <div class="sentence-german">${s.german}</div>
@@ -937,7 +961,10 @@ const Views = {
       page.forEach(sentence => {
         html += `
           <div class="story-sentence">
-            <div class="sentence-italian">${this.makeInteractive(sentence.italian, [], sentence.italian, sentence.german)}</div>
+            <div class="sentence-italian-row">
+              <div class="sentence-italian">${this.makeInteractive(sentence.italian, [], sentence.italian, sentence.german)}</div>
+              <button class="speak-btn-inline" onclick="App.speakItalian('${this.esc(sentence.italian)}')" title="${I18n.t('speakSentence')}">🔊</button>
+            </div>
             <div class="sentence-german">${sentence.german}</div>
             ${showExplanations && sentence.note ? `<div class="sentence-explanation">${sentence.note}</div>` : ''}
           </div>`;
@@ -958,7 +985,10 @@ const Views = {
         <div class="card news-card card-compact">
           <div class="news-category">${n.category}</div>
           <div class="news-headline">${n.headline}</div>
-          <div class="news-italian-summary">${this.makeInteractive(n.italianSummary, [], n.italianSummary, n.german)}</div>
+          <div class="sentence-italian-row">
+            <div class="news-italian-summary" style="flex: 1;">${this.makeInteractive(n.italianSummary, [], n.italianSummary, n.german)}</div>
+            <button class="speak-btn-inline" onclick="App.speakItalian('${this.esc(n.italianSummary)}')" title="${I18n.t('speakSentence')}">🔊</button>
+          </div>
           <div class="news-german">${n.german}</div>
           <a class="news-source" href="${n.source}" target="_blank" rel="noopener">${n.sourceName} →</a>
         </div>`;
@@ -1432,9 +1462,7 @@ const Views = {
     const sit = this.escAttr(sentenceIt || text);
     const sde = this.escAttr(sentenceDe || '');
     return text.replace(/([A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u00FF][A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u00FF'\u2019]*)/g, (match) => {
-      const isKw = keywords && keywords.some(kw => match.toLowerCase().includes(kw.toLowerCase()));
-      const cls = isKw ? 'tappable-word highlight-word' : 'tappable-word';
-      return `<span class="${cls}" data-word="${this.escAttr(match)}" data-sentence="${sit}" data-translation="${sde}">${match}</span>`;
+      return `<span class="tappable-word" data-word="${this.escAttr(match)}" data-sentence="${sit}" data-translation="${sde}">${match}</span>`;
     });
   },
 

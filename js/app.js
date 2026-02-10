@@ -17,7 +17,7 @@ const App = {
   // ==========================================
   // INITIALIZATION
   // ==========================================
-  init() {
+  async init() {
     console.log('=== App.init() starting ===');
     
     console.log('1. Initializing I18n...');
@@ -31,6 +31,9 @@ const App = {
     
     console.log('4. Setting up word tap...');
     this.setupWordTap();
+    
+    console.log('4.5. Syncing vocabulary from server...');
+    await Store.syncVocabularyFromServer();
 
     // Preload speech synthesis voices
     this._italianVoice = null;
@@ -168,6 +171,12 @@ const App = {
         break;
       case 'translator':
         console.log('Rendering translator view...');
+        // Sync vocabulary in background to ensure fresh data
+        Store.syncVocabularyFromServer().then(() => {
+          if (this.currentView === 'translator') {
+            Views.renderTranslator(this.currentTranslatorTab || 'translator', this.currentTranslatorSubTab || 'sentences');
+          }
+        });
         Views.renderTranslator(this.currentTranslatorTab || 'translator', this.currentTranslatorSubTab || 'sentences');
         subtitle.textContent = I18n.t('subtitleTranslator');
         break;
@@ -183,6 +192,12 @@ const App = {
         break;
       case 'vocabulary':
         console.log('Rendering vocabulary view...');
+        // Sync vocabulary in background to ensure fresh data
+        Store.syncVocabularyFromServer().then(() => {
+          if (this.currentView === 'vocabulary') {
+            Views.renderVocabulary(this.currentVocabTab);
+          }
+        });
         Views.renderVocabulary(this.currentVocabTab);
         subtitle.textContent = I18n.t('subtitleVocabulary');
         break;
