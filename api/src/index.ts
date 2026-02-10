@@ -12,5 +12,6 @@ import './functions/translate/index';
 import './functions/vocabulary/index';
 import './functions/content/index';
 import './functions/generate-daily/index';
+import './functions/grammar-check/index';
 
 export {};

@@ -135,17 +135,24 @@ export async function vocabulary(request: HttpRequest): Promise<HttpResponseInit
         ...(definitions.length > 0 && { definitions })
       };
       
-      const success = await saveVocabularyItem(userId, type, item);
+      const result = await saveVocabularyItem(userId, type, item);
       
-      if (success) {
+      if (result.success) {
         return {
           status: 201,
           jsonBody: { success: true, item }
         };
-      } else {
+      } else if (result.duplicate) {
         return {
           status: 409,
           jsonBody: { error: 'Item already exists' }
+        };
+      } else {
+        // Actual error (storage issues, etc.)
+        console.error('Storage error:', result.error);
+        return {
+          status: 500,
+          jsonBody: { error: result.error || 'Storage error' }
         };
       }
     }

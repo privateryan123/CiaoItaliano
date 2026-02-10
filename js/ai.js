@@ -59,6 +59,33 @@ const AI = {
   },
 
   // ==========================================
+  // ITALIAN GRAMMAR CHECK (via Backend OpenAI)
+  // ==========================================
+  async checkItalianGrammar(text) {
+    if (!text || text.trim().length < 2) return null;
+    
+    try {
+      const response = await fetch('/api/grammar-check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text })
+      });
+      
+      if (!response.ok) {
+        // If grammar check API not available, skip silently
+        console.warn('Grammar check API not available');
+        return null;
+      }
+      
+      const result = await response.json();
+      return result;
+    } catch (err) {
+      console.warn('Grammar check error:', err);
+      return null;
+    }
+  },
+
+  // ==========================================
   // OPENAI - Generate Sentences (via Backend)
   // ==========================================
   async generateSentences(count, level, topics) {

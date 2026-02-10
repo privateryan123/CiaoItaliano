@@ -450,19 +450,63 @@ const App = {
 
     const btn = document.getElementById('translator-btn');
     const btnText = document.getElementById('translator-btn-text');
+    const correctionDiv = document.getElementById('translator-correction');
     btn.disabled = true;
     btnText.textContent = I18n.currentLang === 'en' ? 'Translating…' : 'Übersetze…';
+    correctionDiv.style.display = 'none';
 
     try {
       const [from, to] = this.translationDir === 'de-it' ? ['de', 'it'] : ['it', 'de'];
-      const result = await AI.translate(text, from, to);
+      
+      let correctedItalian = null;
+      let correction = null;
+      
+      // If user entered Italian text, check grammar first
+      if (from === 'it') {
+        const grammarCheck = await AI.checkItalianGrammar(text);
+        if (grammarCheck && grammarCheck.hasErrors) {
+          correction = grammarCheck;
+          correctedItalian = grammarCheck.corrected;
+        }
+      }
+      
+      // Translate the text (use corrected version if available for better translation)
+      const textToTranslate = correctedItalian || text;
+      const result = await AI.translate(textToTranslate, from, to);
 
+      // Store translation data - always keep track of which is Italian
       this._lastTranslation = {
         original: text,
         translated: result,
+        correctedItalian: correctedItalian,
+        italian: from === 'it' ? (correctedItalian || text) : result,
+        german: from === 'de' ? text : result,
         from,
         to
       };
+
+      // Show correction if found
+      if (correction) {
+        const corrLabel = I18n.currentLang === 'en' ? 'Correction' : 'Korrektur';
+        correctionDiv.innerHTML = `
+          <div style="padding: 12px; background: var(--warning-bg, #fff3cd); border-radius: 8px; border-left: 4px solid var(--warning, #ffc107); margin-bottom: var(--space-sm);">
+            <div style="font-weight: 600; color: var(--warning-text, #856404); margin-bottom: 4px;">⚠️ ${corrLabel}</div>
+            <div style="margin-bottom: 8px;">
+              <span style="text-decoration: line-through; color: var(--text-tertiary);">${text}</span>
+            </div>
+            <div style="font-weight: 600; color: var(--text-primary);">
+              ✓ ${correction.corrected}
+            </div>
+            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">
+              ${correction.explanation}
+            </div>
+            <button onclick="App.useCorrection('${this.esc(correction.corrected)}')" 
+              style="margin-top: 8px; padding: 6px 12px; background: var(--accent); color: white; border: none; border-radius: 6px; font-size: 0.85rem; cursor: pointer;">
+              ${I18n.currentLang === 'en' ? 'Use corrected version' : 'Korrigierte Version verwenden'}
+            </button>
+          </div>`;
+        correctionDiv.style.display = 'block';
+      }
 
       const resultDiv = document.getElementById('translator-result');
       const resultText = document.getElementById('translator-result-text');
@@ -480,11 +524,23 @@ const App = {
     }
   },
 
+  useCorrection(correctedText) {
+    const input = document.getElementById('translator-input');
+    input.value = correctedText;
+    document.getElementById('translator-correction').style.display = 'none';
+    // Re-translate with corrected text
+    this.doTranslate();
+  },
+
   async saveTranslation() {
     if (!this._lastTranslation) return;
-    const { original, translated, from, to } = this._lastTranslation;
-    const italian = from === 'it' ? original : translated;
-    const german = from === 'de' ? original : translated;
+    const { italian, german } = this._lastTranslation;
+    
+    if (!italian || !german) {
+      this.showToast(I18n.t('translationFailed'));
+      return;
+    }
+    
     const added = await Store.saveSentence(italian, german);
     this.showToast(added ? I18n.t('translationSaved') : I18n.t('alreadySaved'));
   },

@@ -226,12 +226,13 @@ export async function getVocabulary(userId: string): Promise<Vocabulary> {
 
 /**
  * Save a vocabulary item (word or sentence)
+ * Returns: { success: true } | { duplicate: true } | { error: string }
  */
 export async function saveVocabularyItem(
   userId: string, 
   type: 'word' | 'sentence', 
   item: VocabularyItem
-): Promise<boolean> {
+): Promise<{ success?: boolean; duplicate?: boolean; error?: string }> {
   try {
     await ensureVocabularyContainer();
     const vocab = await getVocabulary(userId);
@@ -240,7 +241,7 @@ export async function saveVocabularyItem(
     
     // Check for duplicates
     if (collection.some(i => i.italian === item.italian)) {
-      return false;
+      return { duplicate: true };
     }
     
     // Add to beginning
@@ -254,10 +255,10 @@ export async function saveVocabularyItem(
       blobHTTPHeaders: { blobContentType: 'application/json' }
     });
     
-    return true;
-  } catch (error) {
+    return { success: true };
+  } catch (error: any) {
     console.error(`Error saving vocabulary item:`, error);
-    return false;
+    return { error: error.message || 'Storage error' };
   }
 }
 

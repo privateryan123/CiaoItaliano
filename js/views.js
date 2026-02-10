@@ -678,6 +678,8 @@ const Views = {
         <button class="translator-btn" id="translator-btn" onclick="App.doTranslate()">
           <span id="translator-btn-text">${I18n.t('translate')}</span>
         </button>
+        <div class="translator-correction" id="translator-correction" style="display: none;">
+        </div>
         <div class="translator-result" id="translator-result" style="display: none;">
           <div class="translator-result-text" id="translator-result-text"></div>
           <div class="translator-result-actions">
@@ -805,6 +807,7 @@ const Views = {
       clearBtn.addEventListener('click', () => {
         input.value = '';
         document.getElementById('translator-result').style.display = 'none';
+        document.getElementById('translator-correction').style.display = 'none';
         input.focus();
       });
       input.addEventListener('keydown', (e) => {
