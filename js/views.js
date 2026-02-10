@@ -56,7 +56,7 @@ const Views = {
         </button>
         <div style="text-align: center; flex: 1;">
           <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">${I18n.t('dailySentences')} <span style="font-weight: normal; font-size: 0.9rem; color: var(--text-tertiary);">(${settings.level})</span></h2>
-          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;"><strong>${dateInfo.full}</strong>${!isToday ? ` <button onclick="App.goToTodaySentences()" style="margin-left: 8px; padding: 2px 8px; font-size: 0.8rem; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer;">${I18n.t('goToToday')}</button>` : ''}</p>
+          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;${isToday ? ' text-decoration: underline;' : ''}">${dateInfo.full}${!isToday ? ` <button onclick="App.goToTodaySentences()" style="margin-left: 8px; padding: 2px 8px; font-size: 0.8rem; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer;">${I18n.t('goToToday')}</button>` : ''}</p>
         </div>
         <button class="story-nav-btn" onclick="App.navigateSentences(1)" title="${I18n.t('nextDay')}" ${!canGoForward ? 'disabled' : ''}>
           <span>→</span>
@@ -126,7 +126,7 @@ const Views = {
         </button>
         <div style="text-align: center; flex: 1;">
           <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">${I18n.t('dailyStory')} <span style="font-weight: normal; font-size: 0.9rem; color: var(--text-tertiary);">(${settings.level})</span></h2>
-          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;"><strong>${dateInfo.full}</strong>${!isToday ? ` <button onclick="App.goToTodayStory()" style="margin-left: 8px; padding: 2px 8px; font-size: 0.8rem; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer;">${I18n.t('goToToday')}</button>` : ''}</p>
+          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;${isToday ? ' text-decoration: underline;' : ''}">${dateInfo.full}${!isToday ? ` <button onclick="App.goToTodayStory()" style="margin-left: 8px; padding: 2px 8px; font-size: 0.8rem; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer;">${I18n.t('goToToday')}</button>` : ''}</p>
         </div>
         <button class="story-nav-btn" onclick="App.navigateStory(1)" title="${I18n.t('nextDay')}">
           <span>→</span>
@@ -151,7 +151,6 @@ const Views = {
               <span>📚 ${storyData.topic}</span>
               <span>⏱ ${storyData.readingTime}</span>
               <span>${storyData.pages.length} Seiten</span>
-              <span class="section-badge">${storyData.level}</span>
             </div>
           </div>
           <div id="story-pages">
@@ -470,6 +469,7 @@ const Views = {
         </div>`;
 
       // Render all sentences for this preposition
+      const showExplanations = Store.getSettings().showExplanations;
       currentPreposition.sentences.forEach((s, i) => {
         const isSaved = Store.isSentenceSaved(s.italian);
         html += `
@@ -484,6 +484,7 @@ const Views = {
             </div>
             <div class="sentence-italian">${this.makeInteractive(s.italian, [], s.italian, s.german)}</div>
             <div class="sentence-german">${s.german}</div>
+            ${showExplanations && s.explanation ? `<div class="sentence-explanation">${this.formatExplanation(s.explanation)}</div>` : ''}
           </div>`;
       });
     } else if (tab === 'essentials') {
