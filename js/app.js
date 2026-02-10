@@ -248,6 +248,20 @@ const App = {
     }
   },
 
+  goToTodaySentences() {
+    const today = getTodayDateStr();
+    Store.setCurrentSentenceDate(today);
+    let sentences = Store.getSentencesForDate(today);
+    if (!sentences) {
+      this.generateSentencesForDate(today).then(generatedSentences => {
+        Store.setSentencesForDate(today, generatedSentences);
+        Views.renderSentences(today, generatedSentences);
+      });
+    } else {
+      Views.renderSentences(today, sentences);
+    }
+  },
+
   async generateSentencesForDate(dateStr) {
     const settings = Store.getSettings();
     return AI.generateSentences(settings.sentenceCount, settings.level, settings.topics);
@@ -276,6 +290,20 @@ const App = {
       });
     } else {
       Views.renderStory(newDateStr, story);
+    }
+  },
+
+  goToTodayStory() {
+    const today = getTodayDateStr();
+    Store.setCurrentStoryDate(today);
+    let story = Store.getStoryForDate(today);
+    if (!story) {
+      AI.generateStory(Store.getSettings().level, Store.getSettings().topics).then(storyData => {
+        Store.setStoryForDate(today, storyData);
+        Views.renderStory(today, storyData);
+      });
+    } else {
+      Views.renderStory(today, story);
     }
   },
 

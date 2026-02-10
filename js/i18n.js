@@ -35,6 +35,7 @@ const I18n = {
       noSentencesAvailable: 'No sentences available for this day.',
       previousDay: 'Previous day',
       nextDay: 'Next day',
+      goToToday: 'Today',
       saveSentence: 'Save sentence',
       
       // Story View
@@ -237,6 +238,7 @@ const I18n = {
       noSentencesAvailable: 'Keine Sätze für diesen Tag verfügbar.',
       previousDay: 'Vorheriger Tag',
       nextDay: 'Nächster Tag',
+      goToToday: 'Heute',
       saveSentence: 'Satz speichern',
       
       // Story View

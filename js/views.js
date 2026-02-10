@@ -42,8 +42,8 @@ const Views = {
           <span>←</span>
         </button>
         <div style="text-align: center; flex: 1;">
-          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">${I18n.t('dailySentences')}</h2>
-          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;${isToday ? ' text-decoration: underline;' : ''}">${dateInfo.full}</p>
+          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">${I18n.t('dailySentences')} <span style="font-weight: normal; font-size: 0.9rem; color: var(--text-tertiary);">(${settings.level})</span></h2>
+          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;">${dateInfo.full}${!isToday ? ` <button onclick="App.goToTodaySentences()" style="margin-left: 8px; padding: 2px 8px; font-size: 0.8rem; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer;">${I18n.t('goToToday')}</button>` : ''}</p>
         </div>
         <button class="story-nav-btn" onclick="App.navigateSentences(1)" title="${I18n.t('nextDay')}" ${!canGoForward ? 'disabled' : ''}>
           <span>→</span>
@@ -109,8 +109,8 @@ const Views = {
           <span>←</span>
         </button>
         <div style="text-align: center; flex: 1;">
-          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">${I18n.t('dailyStory')}</h2>
-          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;${isToday ? ' text-decoration: underline;' : ''}">${dateInfo.full}</p>
+          <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">${I18n.t('dailyStory')} <span style="font-weight: normal; font-size: 0.9rem; color: var(--text-tertiary);">(${settings.level})</span></h2>
+          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;">${dateInfo.full}${!isToday ? ` <button onclick="App.goToTodayStory()" style="margin-left: 8px; padding: 2px 8px; font-size: 0.8rem; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer;">${I18n.t('goToToday')}</button>` : ''}</p>
         </div>
         <button class="story-nav-btn" onclick="App.navigateStory(1)" title="${I18n.t('nextDay')}">
           <span>→</span>
