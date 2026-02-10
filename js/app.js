@@ -757,8 +757,15 @@ const App = {
       if (this._popupData) {
         const word = this._popupData.word;
         
-        // Save word - API will lookup WordReference and get translation
-        const result = await Store.saveWord(word, null);
+        // Translate the word first
+        let german = null;
+        try {
+          german = await AI.translate(word, 'it', 'de');
+        } catch (e) {
+          console.warn('Could not translate word:', e);
+        }
+        
+        const result = await Store.saveWord(word, german);
         this.hideWordPopup();
         this.showToast(result ? I18n.t('wordSaved') : I18n.t('alreadySaved'));
       }

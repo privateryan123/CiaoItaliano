@@ -245,6 +245,32 @@ body {
   margin-left: auto;
 }
 
+/* --- Collapsible Sections --- */
+.collapsible-header {
+  user-select: none;
+}
+
+.collapsible-header:hover {
+  opacity: 0.8;
+}
+
+.collapse-icon {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+}
+
+.card.collapsed .collapsible-content {
+  display: none;
+}
+
+.card.collapsed .collapse-icon {
+  transform: rotate(-90deg);
+}
+
+.card.collapsed .collapsible-header {
+  margin-bottom: 0 !important;
+}
+
 /* --- Horizontal Filter Pills --- */
 .filter-pills {
   display: flex;

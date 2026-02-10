@@ -4,6 +4,16 @@
 
 const Views = {
 
+  // Helper: Format explanation text - bold Italian words in quotes
+  formatExplanation(text) {
+    if (!text) return '';
+    // Bold text in quotes: "word", 'word', «word»
+    return text
+      .replace(/"([^"]+)"/g, '<strong>"$1"</strong>')
+      .replace(/'([^']+)'/g, "<strong>'$1'</strong>")
+      .replace(/«([^»]+)»/g, '<strong>«$1»</strong>');
+  },
+
   // ==========================================
   // SENTENCES VIEW
   // ==========================================
@@ -43,7 +53,7 @@ const Views = {
         </button>
         <div style="text-align: center; flex: 1;">
           <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">${I18n.t('dailySentences')} <span style="font-weight: normal; font-size: 0.9rem; color: var(--text-tertiary);">(${settings.level})</span></h2>
-          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;">${dateInfo.full}${!isToday ? ` <button onclick="App.goToTodaySentences()" style="margin-left: 8px; padding: 2px 8px; font-size: 0.8rem; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer;">${I18n.t('goToToday')}</button>` : ''}</p>
+          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;"><strong>${dateInfo.full}</strong>${!isToday ? ` <button onclick="App.goToTodaySentences()" style="margin-left: 8px; padding: 2px 8px; font-size: 0.8rem; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer;">${I18n.t('goToToday')}</button>` : ''}</p>
         </div>
         <button class="story-nav-btn" onclick="App.navigateSentences(1)" title="${I18n.t('nextDay')}" ${!canGoForward ? 'disabled' : ''}>
           <span>→</span>
@@ -73,7 +83,7 @@ const Views = {
             </div>
             <div class="sentence-italian">${this.makeInteractive(s.italian, s.keywords, s.italian, s.german)}</div>
             <div class="sentence-german">${s.german}</div>
-            ${showExplanations && s.explanation ? `<div class="sentence-explanation">${s.explanation}</div>` : ''}
+            ${showExplanations && s.explanation ? `<div class="sentence-explanation">${this.formatExplanation(s.explanation)}</div>` : ''}
           </div>`;
       });
     }
@@ -113,7 +123,7 @@ const Views = {
         </button>
         <div style="text-align: center; flex: 1;">
           <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin: 0;">${I18n.t('dailyStory')} <span style="font-weight: normal; font-size: 0.9rem; color: var(--text-tertiary);">(${settings.level})</span></h2>
-          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;">${dateInfo.full}${!isToday ? ` <button onclick="App.goToTodayStory()" style="margin-left: 8px; padding: 2px 8px; font-size: 0.8rem; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer;">${I18n.t('goToToday')}</button>` : ''}</p>
+          <p style="color: var(--text-tertiary); font-size: 0.9rem; margin-top: 4px;"><strong>${dateInfo.full}</strong>${!isToday ? ` <button onclick="App.goToTodayStory()" style="margin-left: 8px; padding: 2px 8px; font-size: 0.8rem; background: var(--accent); color: white; border: none; border-radius: 4px; cursor: pointer;">${I18n.t('goToToday')}</button>` : ''}</p>
         </div>
         <button class="story-nav-btn" onclick="App.navigateStory(1)" title="${I18n.t('nextDay')}">
           <span>→</span>
@@ -166,7 +176,7 @@ const Views = {
             <button class="speak-btn-inline" onclick="App.speakItalian('${this.esc(sentence.italian)}')" title="${I18n.t('speakSentence')}">🔊</button>
           </div>
           <div class="sentence-german">${sentence.german}</div>
-          ${showExplanations && sentence.note ? `<div class="sentence-explanation">${sentence.note}</div>` : ''}
+          ${showExplanations && sentence.note ? `<div class="sentence-explanation">${this.formatExplanation(sentence.note)}</div>` : ''}
         </div>`;
     });
 
@@ -527,11 +537,12 @@ const Views = {
 
       html += `
         <div class="card" style="margin-bottom: var(--space-md);">
-          <div class="section-header" style="margin-bottom: var(--space-md);">
+          <div class="section-header collapsible-header" onclick="this.parentElement.classList.toggle('collapsed')" style="margin-bottom: var(--space-md); cursor: pointer;">
             <span class="section-icon">🔢</span>
             <span class="section-title">${I18n.t('numbers')}</span>
+            <span class="collapse-icon" style="margin-left: auto; transition: transform 0.2s;">▼</span>
           </div>
-          
+          <div class="collapsible-content">
           <!-- Number Converter -->
           <div style="margin-bottom: var(--space-md); padding: var(--space-sm); background: var(--bg-secondary); border-radius: 10px;">
             <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.85rem; color: var(--text-primary);">
@@ -573,6 +584,7 @@ const Views = {
       
       html += `
           </div>
+          </div>
         </div>`;
 
       // Months
@@ -593,10 +605,12 @@ const Views = {
 
       html += `
         <div class="card" style="margin-bottom: var(--space-md);">
-          <div class="section-header" style="margin-bottom: var(--space-md);">
+          <div class="section-header collapsible-header" onclick="this.parentElement.classList.toggle('collapsed')" style="margin-bottom: var(--space-md); cursor: pointer;">
             <span class="section-icon">📅</span>
             <span class="section-title">${I18n.t('months')}</span>
+            <span class="collapse-icon" style="margin-left: auto; transition: transform 0.2s;">▼</span>
           </div>
+          <div class="collapsible-content">
           <div class="essentials-list">`;
       
       months.forEach((m, i) => {
@@ -609,6 +623,7 @@ const Views = {
       });
       
       html += `
+          </div>
           </div>
         </div>`;
 
@@ -625,10 +640,12 @@ const Views = {
 
       html += `
         <div class="card" style="margin-bottom: var(--space-md);">
-          <div class="section-header" style="margin-bottom: var(--space-md);">
+          <div class="section-header collapsible-header" onclick="this.parentElement.classList.toggle('collapsed')" style="margin-bottom: var(--space-md); cursor: pointer;">
             <span class="section-icon">📆</span>
             <span class="section-title">${I18n.t('weekdays')}</span>
+            <span class="collapse-icon" style="margin-left: auto; transition: transform 0.2s;">▼</span>
           </div>
+          <div class="collapsible-content">
           <div class="essentials-list">`;
       
       weekdays.forEach(w => {
@@ -640,6 +657,7 @@ const Views = {
       });
       
       html += `
+          </div>
           </div>
         </div>`;
     }
@@ -779,11 +797,12 @@ const Views = {
             const defsHtml = w.definitions && w.definitions.length > 0 
               ? `<div class="vocab-definitions">${w.definitions.slice(0, 3).join(', ')}</div>` 
               : '';
+            const germanHtml = w.german ? `<div class="vocab-german">${w.german}</div>` : '';
             html += `
               <div class="vocab-item">
                 <div>
                   <div class="vocab-italian">${w.italian}</div>
-                  <div class="vocab-german">${w.german}</div>
+                  ${germanHtml}
                   ${defsHtml}
                 </div>
                 <div style="display:flex; gap: 4px; align-items: center;">
@@ -946,7 +965,7 @@ const Views = {
           </div>
           <div class="sentence-italian">${this.makeInteractive(s.italian, s.keywords, s.italian, s.german)}</div>
           <div class="sentence-german">${s.german}</div>
-          ${showExplanations ? `<div class="sentence-explanation">${s.explanation}</div>` : ''}
+          ${showExplanations ? `<div class="sentence-explanation">${this.formatExplanation(s.explanation)}</div>` : ''}
         </div>`;
     });
     html += '</section>';
@@ -969,7 +988,7 @@ const Views = {
               <button class="speak-btn-inline" onclick="App.speakItalian('${this.esc(sentence.italian)}')" title="${I18n.t('speakSentence')}">🔊</button>
             </div>
             <div class="sentence-german">${sentence.german}</div>
-            ${showExplanations && sentence.note ? `<div class="sentence-explanation">${sentence.note}</div>` : ''}
+            ${showExplanations && sentence.note ? `<div class="sentence-explanation">${this.formatExplanation(sentence.note)}</div>` : ''}
           </div>`;
       });
       html += '</div>';
@@ -1053,11 +1072,12 @@ const Views = {
           const defsHtml = w.definitions && w.definitions.length > 0 
             ? `<div class="vocab-definitions">${w.definitions.slice(0, 3).join(', ')}</div>` 
             : '';
+          const germanHtml = w.german ? `<div class="vocab-german">${w.german}</div>` : '';
           html += `
             <div class="vocab-item">
               <div>
                 <div class="vocab-italian">${w.italian}</div>
-                <div class="vocab-german">${w.german}</div>
+                ${germanHtml}
                 ${defsHtml}
               </div>
               <div style="display:flex; gap: 4px; align-items: center;">
