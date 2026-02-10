@@ -920,12 +920,14 @@ const App = {
   async showHoverTooltip(element, word, sentence) {
     const tooltip = document.getElementById('hover-tooltip');
     const wordEl = document.getElementById('hover-tooltip-word');
+    const formEl = document.getElementById('hover-tooltip-form');
+    const baseEl = document.getElementById('hover-tooltip-base');
     const translationEl = document.getElementById('hover-tooltip-translation');
     const alternativesEl = document.getElementById('hover-tooltip-alternatives');
 
     // Position tooltip near the word
     const rect = element.getBoundingClientRect();
-    const tooltipWidth = 200; // approximate
+    const tooltipWidth = 280; // approximate
     
     // Calculate position - prefer above the word, fallback to below
     let top = rect.top - 10;
@@ -942,8 +944,10 @@ const App = {
     tooltip.style.top = `${top}px`;
     tooltip.style.transform = 'translateY(-100%)';
 
-    // Show word immediately
+    // Show word immediately with loading state
     wordEl.textContent = word;
+    formEl.textContent = '';
+    baseEl.textContent = '';
     translationEl.innerHTML = '<span class="loading-dots">' + I18n.t('loadingTooltip') + '</span>';
     alternativesEl.textContent = '';
     
@@ -959,11 +963,11 @@ const App = {
       }
     }, 10);
 
-    // Check cache first
-    const cacheKey = word.toLowerCase();
+    // Check cache first (include sentence hash for context-aware caching)
+    const cacheKey = word.toLowerCase() + '|' + (sentence || '').substring(0, 50);
     if (this._translationCache.has(cacheKey)) {
       const cached = this._translationCache.get(cacheKey);
-      this.updateHoverTooltip(cached.translation, cached.alternatives);
+      this.updateHoverTooltip(cached);
       return;
     }
 
@@ -975,22 +979,30 @@ const App = {
       if (this._currentHoverWord !== word) return;
       
       if (lookup && lookup.translation) {
-        this._translationCache.set(cacheKey, {
+        const result = {
+          baseForm: lookup.baseForm || word,
+          baseMeaning: lookup.baseMeaning || '',
+          wordForm: lookup.wordForm || '',
           translation: lookup.translation,
           alternatives: lookup.alternatives || []
-        });
-        this.updateHoverTooltip(lookup.translation, lookup.alternatives || []);
+        };
+        this._translationCache.set(cacheKey, result);
+        this.updateHoverTooltip(result);
       } else {
         // Fallback to Azure translator
         const translated = await AI.translate(word, 'it', 'de');
         if (this._currentHoverWord !== word) return;
         
         if (translated && !translated.startsWith('⚠️')) {
-          this._translationCache.set(cacheKey, {
+          const result = {
+            baseForm: word,
+            baseMeaning: '',
+            wordForm: '',
             translation: translated,
             alternatives: []
-          });
-          this.updateHoverTooltip(translated, []);
+          };
+          this._translationCache.set(cacheKey, result);
+          this.updateHoverTooltip(result);
         } else {
           translationEl.textContent = '—';
         }
@@ -1003,14 +1015,35 @@ const App = {
     }
   },
 
-  updateHoverTooltip(translation, alternatives) {
+  updateHoverTooltip(data) {
+    const wordEl = document.getElementById('hover-tooltip-word');
+    const formEl = document.getElementById('hover-tooltip-form');
+    const baseEl = document.getElementById('hover-tooltip-base');
     const translationEl = document.getElementById('hover-tooltip-translation');
     const alternativesEl = document.getElementById('hover-tooltip-alternatives');
     
-    translationEl.textContent = translation;
+    // Show grammatical form if available
+    if (data.wordForm) {
+      formEl.textContent = '(' + data.wordForm + ')';
+    } else {
+      formEl.textContent = '';
+    }
     
-    if (alternatives && alternatives.length > 0) {
-      alternativesEl.textContent = I18n.t('alsoMeans') + ': ' + alternatives.join(', ');
+    // Show base form and meaning if different from the word
+    if (data.baseForm && data.baseMeaning && data.baseForm.toLowerCase() !== wordEl.textContent.toLowerCase()) {
+      baseEl.textContent = data.baseForm + ' = ' + data.baseMeaning;
+    } else if (data.baseMeaning) {
+      baseEl.textContent = data.baseMeaning;
+    } else {
+      baseEl.textContent = '';
+    }
+    
+    // Show contextual translation
+    translationEl.textContent = data.translation;
+    
+    // Show alternatives
+    if (data.alternatives && data.alternatives.length > 0) {
+      alternativesEl.textContent = I18n.t('alsoMeans') + ': ' + data.alternatives.join(', ');
     } else {
       alternativesEl.textContent = '';
     }

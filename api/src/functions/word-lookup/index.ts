@@ -3,6 +3,7 @@ import axios from 'axios';
 
 /**
  * POST /api/word-lookup - Look up Italian word translation using Azure OpenAI
+ * Returns detailed grammatical analysis including base form and contextual meaning
  */
 export async function wordLookup(request: HttpRequest): Promise<HttpResponseInit> {
   try {
@@ -21,19 +22,27 @@ export async function wordLookup(request: HttpRequest): Promise<HttpResponseInit
       return { status: 500, jsonBody: { error: 'OpenAI not configured' } };
     }
 
-    const contextHint = context ? `\nKontext: "${context}"` : '';
+    const contextHint = context ? `\nSatz-Kontext: "${context}"` : '';
     
-    const prompt = `Übersetze das italienische Wort "${word}" ins Deutsche.${contextHint}
+    const prompt = `Analysiere das italienische Wort "${word}" für einen Deutschsprachigen.${contextHint}
 
-Gib die beste deutsche Übersetzung(en) für dieses Wort.
+Gib mir:
+1. Die Grundform (Infinitiv bei Verben, Singular bei Nomen, männliche Singularform bei Adjektiven)
+2. Die Bedeutung der Grundform auf Deutsch
+3. Die grammatikalische Form des verwendeten Wortes "${word}" (z.B. "1. Person Singular Präsens", "Plural", "weiblich")
+4. Die kontextuelle Übersetzung im Satz
 
 Antworte NUR mit JSON in diesem Format:
 {
-  "translation": "Hauptübersetzung auf Deutsch",
-  "alternatives": ["alternative1", "alternative2"]
+  "baseForm": "Grundform auf Italienisch",
+  "baseMeaning": "Bedeutung der Grundform auf Deutsch",
+  "wordForm": "grammatikalische Erklärung der Form",
+  "translation": "Übersetzung im Kontext",
+  "alternatives": ["alternative Bedeutung 1", "alternative 2"]
 }
 
-Maximal 3 Alternativen. Antworte NUR mit validem JSON.`;
+Wenn das Wort bereits die Grundform ist, setze baseForm gleich dem Wort.
+Maximal 2 Alternativen. Antworte NUR mit validem JSON.`;
 
     const response = await axios.post(
       `${OPENAI_URL}openai/deployments/${OPENAI_DEPLOYMENT}/chat/completions?api-version=2024-02-15-preview`,
@@ -41,11 +50,11 @@ Maximal 3 Alternativen. Antworte NUR mit validem JSON.`;
         messages: [
           { 
             role: 'system', 
-            content: 'Du bist ein Italienisch-Deutsch Wörterbuch. Gib präzise, korrekte Übersetzungen. Antworte immer nur mit validem JSON.' 
+            content: 'Du bist ein Italienisch-Deutsch Wörterbuch und Grammatikexperte. Gib präzise, korrekte grammatikalische Analysen. Antworte immer nur mit validem JSON.' 
           },
           { role: 'user', content: prompt }
         ],
-        max_tokens: 200,
+        max_tokens: 300,
         temperature: 0.2
       },
       {
