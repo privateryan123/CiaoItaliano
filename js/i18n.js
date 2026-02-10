@@ -103,6 +103,7 @@ const I18n = {
       remove: 'Remove',
       lookupInWordRef: 'Look up in WordReference',
       alsoMeans: 'also',
+      hereContext: 'here',
       loadingTooltip: 'Loading',
       
       // Quiz
@@ -316,6 +317,7 @@ const I18n = {
       remove: 'Entfernen',
       lookupInWordRef: 'In WordReference nachschlagen',
       alsoMeans: 'auch',
+      hereContext: 'hier',
       loadingTooltip: 'Laden',
       
       // Quiz

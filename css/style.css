@@ -1462,27 +1462,40 @@ body {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .hover-tooltip-word {
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   color: var(--accent);
 }
 
 .hover-tooltip-form {
-  font-size: 0.75rem;
-  color: var(--text-tertiary);
-  font-style: italic;
+  font-size: 0.7rem;
+  color: var(--text-inverse);
+  background: var(--accent);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.hover-tooltip-form:empty {
+  display: none;
 }
 
 .hover-tooltip-base {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: var(--text-secondary);
   margin-bottom: 8px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border-color);
+  padding: 6px 8px;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  border-left: 3px solid var(--accent);
+}
+
+.hover-tooltip-base strong {
+  color: var(--accent);
 }
 
 .hover-tooltip-base:empty {

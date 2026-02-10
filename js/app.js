@@ -1022,24 +1022,39 @@ const App = {
     const translationEl = document.getElementById('hover-tooltip-translation');
     const alternativesEl = document.getElementById('hover-tooltip-alternatives');
     
+    console.log('Hover tooltip data:', data);
+    
     // Show grammatical form if available
     if (data.wordForm) {
-      formEl.textContent = '(' + data.wordForm + ')';
+      formEl.textContent = data.wordForm;
     } else {
       formEl.textContent = '';
     }
     
-    // Show base form and meaning if different from the word
-    if (data.baseForm && data.baseMeaning && data.baseForm.toLowerCase() !== wordEl.textContent.toLowerCase()) {
-      baseEl.textContent = data.baseForm + ' = ' + data.baseMeaning;
+    // Show base form and meaning (infinitive/base form)
+    if (data.baseForm && data.baseMeaning) {
+      const currentWord = wordEl.textContent.toLowerCase();
+      const baseFormLower = (data.baseForm || '').toLowerCase();
+      
+      if (baseFormLower !== currentWord) {
+        // Word is conjugated/declined - show base form
+        baseEl.innerHTML = '<strong>' + data.baseForm + '</strong> = ' + data.baseMeaning;
+      } else {
+        // Word is already base form - just show meaning
+        baseEl.textContent = data.baseMeaning;
+      }
     } else if (data.baseMeaning) {
       baseEl.textContent = data.baseMeaning;
     } else {
       baseEl.textContent = '';
     }
     
-    // Show contextual translation
-    translationEl.textContent = data.translation;
+    // Show contextual translation with "here:" prefix if base form shown
+    if (data.baseForm && data.baseForm.toLowerCase() !== wordEl.textContent.toLowerCase() && data.translation) {
+      translationEl.innerHTML = '<em>' + I18n.t('hereContext') + ':</em> ' + data.translation;
+    } else {
+      translationEl.textContent = data.translation || '—';
+    }
     
     // Show alternatives
     if (data.alternatives && data.alternatives.length > 0) {

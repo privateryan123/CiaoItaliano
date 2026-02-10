@@ -22,27 +22,36 @@ export async function wordLookup(request: HttpRequest): Promise<HttpResponseInit
       return { status: 500, jsonBody: { error: 'OpenAI not configured' } };
     }
 
-    const contextHint = context ? `\nSatz-Kontext: "${context}"` : '';
+    const contextHint = context ? `\nDer Satz lautet: "${context}"` : '';
     
-    const prompt = `Analysiere das italienische Wort "${word}" für einen Deutschsprachigen.${contextHint}
+    const prompt = `Analysiere das italienische Wort "${word}" für einen Deutschsprachigen, der Italienisch lernt.${contextHint}
 
-Gib mir:
-1. Die Grundform (Infinitiv bei Verben, Singular bei Nomen, männliche Singularform bei Adjektiven)
-2. Die Bedeutung der Grundform auf Deutsch
-3. Die grammatikalische Form des verwendeten Wortes "${word}" (z.B. "1. Person Singular Präsens", "Plural", "weiblich")
-4. Die kontextuelle Übersetzung im Satz
+Ich brauche:
+1. baseForm: Die Grundform (Infinitiv bei Verben, Singular bei Nomen, Grundform bei Adjektiven)
+2. baseMeaning: Was bedeutet die Grundform auf Deutsch?
+3. wordForm: Welche grammatikalische Form ist "${word}"? (z.B. "3. Person Singular Präsens" oder "Plural" oder "Partizip Perfekt")
+4. translation: Wie übersetzt man "${word}" im Kontext dieses Satzes?
+5. alternatives: Gibt es andere Bedeutungen?
 
-Antworte NUR mit JSON in diesem Format:
+Beispiel für "mangia" im Satz "Il bambino mangia la mela":
 {
-  "baseForm": "Grundform auf Italienisch",
-  "baseMeaning": "Bedeutung der Grundform auf Deutsch",
-  "wordForm": "grammatikalische Erklärung der Form",
-  "translation": "Übersetzung im Kontext",
-  "alternatives": ["alternative Bedeutung 1", "alternative 2"]
+  "baseForm": "mangiare",
+  "baseMeaning": "essen",
+  "wordForm": "3. Person Singular Präsens",
+  "translation": "isst",
+  "alternatives": ["frisst (bei Tieren)"]
 }
 
-Wenn das Wort bereits die Grundform ist, setze baseForm gleich dem Wort.
-Maximal 2 Alternativen. Antworte NUR mit validem JSON.`;
+Beispiel für "belle" im Satz "Le case sono belle":
+{
+  "baseForm": "bello",
+  "baseMeaning": "schön",
+  "wordForm": "feminin Plural",
+  "translation": "schön",
+  "alternatives": ["hübsch", "wunderschön"]
+}
+
+Antworte NUR mit validem JSON für "${word}".`;
 
     const response = await axios.post(
       `${OPENAI_URL}openai/deployments/${OPENAI_DEPLOYMENT}/chat/completions?api-version=2024-02-15-preview`,
