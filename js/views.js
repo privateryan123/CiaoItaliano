@@ -673,8 +673,6 @@ const Views = {
     const vocab = Store.getVocabulary();
 
     let html = `
-      <h2 style="font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: var(--space-lg);">${I18n.t('translatorDictionary')}</h2>
-
       <!-- Main Tabs -->
       <div class="vocab-tabs" style="margin-bottom: var(--space-md);">
         <button class="vocab-tab ${tab === 'translator' ? 'active' : ''}" onclick="App.translatorTab('translator')">${I18n.t('translator')}</button>
