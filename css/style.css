@@ -1503,10 +1503,14 @@ body {
 }
 
 .hover-tooltip-translation {
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--text-primary);
   font-weight: 500;
   line-height: 1.4;
+}
+
+.hover-tooltip-translation strong {
+  color: var(--accent);
 }
 
 .hover-tooltip-alternatives {

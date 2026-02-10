@@ -978,13 +978,26 @@ const App = {
       // Check if we're still showing the same word
       if (this._currentHoverWord !== word) return;
       
-      if (lookup && lookup.translation) {
+      console.log('Word lookup result:', lookup);
+      
+      if (lookup && (lookup.translation || lookup.baseMeaning)) {
         const result = {
           baseForm: lookup.baseForm || word,
-          baseMeaning: lookup.baseMeaning || '',
+          baseMeaning: lookup.baseMeaning || lookup.translation || '',
           wordForm: lookup.wordForm || '',
-          translation: lookup.translation,
+          translation: lookup.translation || lookup.baseMeaning || '',
           alternatives: lookup.alternatives || []
+        };
+        this._translationCache.set(cacheKey, result);
+        this.updateHoverTooltip(result);
+      } else if (lookup && lookup.alternatives && lookup.alternatives.length > 0) {
+        // WordReference found alternatives but no main translation
+        const result = {
+          baseForm: lookup.baseForm || word,
+          baseMeaning: lookup.alternatives[0],
+          wordForm: lookup.wordForm || '',
+          translation: lookup.alternatives[0],
+          alternatives: lookup.alternatives.slice(1)
         };
         this._translationCache.set(cacheKey, result);
         this.updateHoverTooltip(result);
@@ -996,7 +1009,7 @@ const App = {
         if (translated && !translated.startsWith('⚠️')) {
           const result = {
             baseForm: word,
-            baseMeaning: '',
+            baseMeaning: translated,
             wordForm: '',
             translation: translated,
             alternatives: []
@@ -1024,36 +1037,35 @@ const App = {
     
     console.log('Hover tooltip data:', data);
     
-    // Show grammatical form if available
-    if (data.wordForm) {
+    const currentWord = wordEl.textContent.toLowerCase().trim();
+    const baseFormLower = (data.baseForm || '').toLowerCase().trim();
+    const isInflected = baseFormLower && baseFormLower !== currentWord;
+    
+    // Show grammatical form if available and word is inflected
+    if (data.wordForm && isInflected) {
       formEl.textContent = data.wordForm;
     } else {
       formEl.textContent = '';
     }
     
-    // Show base form and meaning (infinitive/base form)
-    if (data.baseForm && data.baseMeaning) {
-      const currentWord = wordEl.textContent.toLowerCase();
-      const baseFormLower = (data.baseForm || '').toLowerCase();
-      
-      if (baseFormLower !== currentWord) {
-        // Word is conjugated/declined - show base form
-        baseEl.innerHTML = '<strong>' + data.baseForm + '</strong> = ' + data.baseMeaning;
-      } else {
-        // Word is already base form - just show meaning
-        baseEl.textContent = data.baseMeaning;
-      }
-    } else if (data.baseMeaning) {
-      baseEl.textContent = data.baseMeaning;
+    // Show base form and meaning if word is inflected
+    if (isInflected && data.baseMeaning) {
+      baseEl.innerHTML = '<strong>' + data.baseForm + '</strong> = ' + data.baseMeaning;
     } else {
       baseEl.textContent = '';
     }
     
-    // Show contextual translation with "here:" prefix if base form shown
-    if (data.baseForm && data.baseForm.toLowerCase() !== wordEl.textContent.toLowerCase() && data.translation) {
-      translationEl.innerHTML = '<em>' + I18n.t('hereContext') + ':</em> ' + data.translation;
+    // Show translation
+    if (isInflected && data.translation) {
+      // Show contextual translation with "here:" prefix
+      translationEl.innerHTML = '→ <strong>' + data.translation + '</strong>';
+    } else if (data.translation) {
+      // Word is base form, just show translation
+      translationEl.textContent = data.translation;
+    } else if (data.baseMeaning) {
+      translationEl.textContent = data.baseMeaning;
     } else {
-      translationEl.textContent = data.translation || '—';
+      translationEl.textContent = '—';
     }
     
     // Show alternatives
