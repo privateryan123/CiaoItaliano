@@ -86,6 +86,32 @@ const AI = {
   },
 
   // ==========================================
+  // WORD LOOKUP (via Backend OpenAI)
+  // ==========================================
+  async lookupWord(word, context = null) {
+    if (!word || word.trim().length < 1) return null;
+    
+    try {
+      const response = await fetch('/api/word-lookup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ word: word.trim(), context })
+      });
+      
+      if (!response.ok) {
+        console.warn('Word lookup API error:', response.status);
+        return null;
+      }
+      
+      const result = await response.json();
+      return result;
+    } catch (err) {
+      console.warn('Word lookup error:', err);
+      return null;
+    }
+  },
+
+  // ==========================================
   // OPENAI - Generate Sentences (via Backend)
   // ==========================================
   async generateSentences(count, level, topics) {

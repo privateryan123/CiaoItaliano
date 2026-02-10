@@ -756,13 +756,26 @@ const App = {
     document.getElementById('popup-save-word').addEventListener('click', async () => {
       if (this._popupData) {
         const word = this._popupData.word;
+        const context = this._popupData.sentence; // Use sentence as context for better translation
         
-        // Translate the word first
+        // Look up the word using OpenAI for accurate translation
         let german = null;
         try {
-          german = await AI.translate(word, 'it', 'de');
+          const lookup = await AI.lookupWord(word, context);
+          if (lookup && lookup.translation) {
+            german = lookup.translation;
+          }
         } catch (e) {
-          console.warn('Could not translate word:', e);
+          console.warn('Could not lookup word:', e);
+        }
+        
+        // Fallback to simple translation if lookup fails
+        if (!german) {
+          try {
+            german = await AI.translate(word, 'it', 'de');
+          } catch (e) {
+            console.warn('Could not translate word:', e);
+          }
         }
         
         const result = await Store.saveWord(word, german);
