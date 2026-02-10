@@ -545,7 +545,7 @@ const Views = {
         html += `
           <div class="essential-item">
             <span class="essential-num">${n.num}</span>
-            <span class="essential-it">${n.it}</span>
+            <span class="essential-it">${this.makeInteractive(n.it, [], n.it, n.de)}</span>
             <span class="essential-de">${n.de}</span>
           </div>`;
       });
@@ -582,7 +582,7 @@ const Views = {
         html += `
           <div class="essential-row">
             <span class="essential-month-num">${i + 1}</span>
-            <span class="essential-it">${m.it}</span>
+            <span class="essential-it">${this.makeInteractive(m.it, [], m.it, m.de)}</span>
             <span class="essential-de">${m.de}</span>
           </div>`;
       });
@@ -613,7 +613,7 @@ const Views = {
       weekdays.forEach(w => {
         html += `
           <div class="essential-row">
-            <span class="essential-it">${w.it}</span>
+            <span class="essential-it">${this.makeInteractive(w.it, [], w.it, w.de)}</span>
             <span class="essential-de">${w.de}</span>
           </div>`;
       });
