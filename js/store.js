@@ -11,6 +11,20 @@ const Store = {
   LANGUAGE_KEY: 'italiano_language',
   USER_ID_KEY: 'italiano_user_id',
 
+  // Debug function - call Store.debug() in console
+  debug() {
+    const local = localStorage.getItem(this.VOCAB_KEY);
+    const parsed = local ? JSON.parse(local) : null;
+    console.log('=== Store Debug ===');
+    console.log('User ID:', this.getUserId());
+    console.log('Cache:', this._vocabCache);
+    console.log('LocalStorage raw:', local);
+    console.log('LocalStorage parsed:', parsed);
+    console.log('Words:', parsed?.words?.length || 0);
+    console.log('Sentences:', parsed?.sentences?.length || 0);
+    return { cache: this._vocabCache, localStorage: parsed };
+  },
+
   // --- User ID (unique per device/browser) ---
   getUserId() {
     let userId = localStorage.getItem(this.USER_ID_KEY);
@@ -53,24 +67,53 @@ const Store = {
     }
   },
 
-  // Sync vocabulary from server
+  // Sync vocabulary from server - MERGES with local data, never overwrites
   async syncVocabularyFromServer() {
     if (this._vocabLoading) return this._vocabSyncPromise;
     this._vocabLoading = true;
+    
+    console.log('syncVocabularyFromServer: Starting sync...');
     
     this._vocabSyncPromise = (async () => {
       try {
         const response = await fetch('/api/vocabulary', {
           headers: { 'x-user-id': this.getUserId() }
         });
+        console.log('syncVocabularyFromServer: Response status:', response.status);
         if (response.ok) {
-          const vocab = await response.json();
-          this._vocabCache = vocab;
-          localStorage.setItem(this.VOCAB_KEY, JSON.stringify(vocab));
-          return vocab;
+          const serverVocab = await response.json();
+          console.log('syncVocabularyFromServer: Server vocab:', { words: serverVocab.words?.length, sentences: serverVocab.sentences?.length });
+          
+          // Get local data
+          const localVocab = this._vocabCache || { words: [], sentences: [] };
+          console.log('syncVocabularyFromServer: Local vocab:', { words: localVocab.words?.length, sentences: localVocab.sentences?.length });
+          
+          // MERGE: combine server + local, removing duplicates (prefer local items)
+          const mergedWords = [...(localVocab.words || [])];
+          (serverVocab.words || []).forEach(sw => {
+            if (!mergedWords.some(lw => lw.italian === sw.italian)) {
+              mergedWords.push(sw);
+            }
+          });
+          
+          const mergedSentences = [...(localVocab.sentences || [])];
+          (serverVocab.sentences || []).forEach(ss => {
+            if (!mergedSentences.some(ls => ls.italian === ss.italian)) {
+              mergedSentences.push(ss);
+            }
+          });
+          
+          const merged = { words: mergedWords, sentences: mergedSentences };
+          console.log('syncVocabularyFromServer: Merged vocab:', { words: merged.words.length, sentences: merged.sentences.length });
+          
+          this._vocabCache = merged;
+          localStorage.setItem(this.VOCAB_KEY, JSON.stringify(merged));
+          return merged;
+        } else {
+          console.warn('syncVocabularyFromServer: Server returned error:', response.status);
         }
       } catch (error) {
-        console.error('Failed to sync vocabulary from server:', error);
+        console.error('syncVocabularyFromServer: Failed to sync:', error);
       } finally {
         this._vocabLoading = false;
       }
@@ -88,13 +131,17 @@ const Store = {
 
   // Save word to API and local storage
   async saveWord(italian, german) {
+    console.log('Store.saveWord called:', { italian, german });
+    
     // First check local cache
     const vocab = this.getVocabulary();
     if (vocab.words.some(w => w.italian === italian)) {
+      console.log('Store.saveWord: Already in local cache');
       return false; // Already in local cache
     }
     
     try {
+      console.log('Store.saveWord: Calling API...');
       const response = await fetch('/api/vocabulary', {
         method: 'POST',
         headers: { 
@@ -104,8 +151,11 @@ const Store = {
         body: JSON.stringify({ type: 'word', italian, german })
       });
       
+      console.log('Store.saveWord: API response status:', response.status);
+      
       if (response.ok) {
         const result = await response.json();
+        console.log('Store.saveWord: API success:', result);
         const item = result.item || { italian, german, added: new Date().toISOString() };
         // Update local cache
         if (!vocab.words.some(w => w.italian === italian)) {
@@ -115,36 +165,43 @@ const Store = {
         localStorage.setItem(this.VOCAB_KEY, JSON.stringify(vocab));
         return item;
       } else if (response.status === 409) {
+        console.log('Store.saveWord: Already exists on server (409)');
         // Already exists on server - sync to update local cache
         await this.syncVocabularyFromServer();
         return false;
       } else {
         // Server error (500, etc.) - save locally as fallback
-        console.warn('Server error, saving word locally:', response.status);
+        console.warn('Store.saveWord: Server error, saving locally:', response.status);
         vocab.words.unshift({ italian, german, added: new Date().toISOString() });
         this._vocabCache = vocab;
         localStorage.setItem(this.VOCAB_KEY, JSON.stringify(vocab));
+        console.log('Store.saveWord: Saved locally, new vocab:', { words: vocab.words.length, sentences: vocab.sentences.length });
         return true;
       }
     } catch (error) {
-      console.error('Failed to save word to server, saving locally:', error);
+      console.error('Store.saveWord: Network error, saving locally:', error);
       // Network error - save locally as fallback
       vocab.words.unshift({ italian, german, added: new Date().toISOString() });
       this._vocabCache = vocab;
       localStorage.setItem(this.VOCAB_KEY, JSON.stringify(vocab));
+      console.log('Store.saveWord: Saved locally after error, new vocab:', { words: vocab.words.length, sentences: vocab.sentences.length });
       return true;
     }
   },
 
   // Save sentence to API and local storage
   async saveSentence(italian, german) {
+    console.log('Store.saveSentence called:', { italian, german });
+    
     // First check local cache
     const vocab = this.getVocabulary();
     if (vocab.sentences.some(s => s.italian === italian)) {
+      console.log('Store.saveSentence: Already in local cache');
       return false; // Already in local cache
     }
     
     try {
+      console.log('Store.saveSentence: Calling API...');
       const response = await fetch('/api/vocabulary', {
         method: 'POST',
         headers: { 
@@ -154,8 +211,11 @@ const Store = {
         body: JSON.stringify({ type: 'sentence', italian, german })
       });
       
+      console.log('Store.saveSentence: API response status:', response.status);
+      
       if (response.ok) {
         const result = await response.json();
+        console.log('Store.saveSentence: API success:', result);
         const item = result.item || { italian, german, added: new Date().toISOString() };
         // Update local cache
         if (!vocab.sentences.some(s => s.italian === italian)) {
@@ -165,19 +225,21 @@ const Store = {
         localStorage.setItem(this.VOCAB_KEY, JSON.stringify(vocab));
         return true;
       } else if (response.status === 409) {
+        console.log('Store.saveSentence: Already exists on server (409)');
         // Already exists on server - sync to update local cache
         await this.syncVocabularyFromServer();
         return false;
       } else {
         // Server error (500, etc.) - save locally as fallback
-        console.warn('Server error, saving sentence locally:', response.status);
+        console.warn('Store.saveSentence: Server error, saving locally:', response.status);
         vocab.sentences.unshift({ italian, german, added: new Date().toISOString() });
         this._vocabCache = vocab;
         localStorage.setItem(this.VOCAB_KEY, JSON.stringify(vocab));
+        console.log('Store.saveSentence: Saved locally, new vocab:', { words: vocab.words.length, sentences: vocab.sentences.length });
         return true;
       }
     } catch (error) {
-      console.error('Failed to save sentence to server, saving locally:', error);
+      console.error('Store.saveSentence: Network error, saving locally:', error);
       // Network error - save locally as fallback
       vocab.sentences.unshift({ italian, german, added: new Date().toISOString() });
       this._vocabCache = vocab;

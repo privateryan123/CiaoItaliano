@@ -543,6 +543,11 @@ const App = {
     
     const added = await Store.saveSentence(italian, german);
     this.showToast(added ? I18n.t('translationSaved') : I18n.t('alreadySaved'));
+    
+    // Update dictionary count in tab if visible
+    if (this.currentTranslatorTab === 'dictionary') {
+      Views.renderTranslator('dictionary', this.currentTranslatorSubTab || 'sentences');
+    }
   },
 
   quickTranslate(text) {
@@ -850,14 +855,32 @@ const App = {
   // VOCABULARY ACTIONS
   // ==========================================
   async saveSentence(italian, german) {
+    console.log('saveSentence called:', { italian, german });
     const added = await Store.saveSentence(italian, german);
+    console.log('saveSentence result:', added);
     this.showToast(added ? I18n.t('sentenceSaved') : I18n.t('alreadySaved'));
     this.refreshSaveButtons();
+    
+    // Refresh dictionary view if currently showing it
+    if (this.currentView === 'translator' && this.currentTranslatorTab === 'dictionary') {
+      Views.renderTranslator('dictionary', this.currentTranslatorSubTab || 'sentences');
+    } else if (this.currentView === 'vocabulary') {
+      Views.renderVocabulary(this.currentVocabTab);
+    }
   },
 
   async saveWord(italian, german) {
+    console.log('saveWord called:', { italian, german });
     const result = await Store.saveWord(italian, german);
+    console.log('saveWord result:', result);
     this.showToast(result ? I18n.t('wordSaved') : I18n.t('alreadySaved'));
+    
+    // Refresh dictionary view if currently showing it
+    if (this.currentView === 'translator' && this.currentTranslatorTab === 'dictionary') {
+      Views.renderTranslator('dictionary', this.currentTranslatorSubTab || 'words');
+    } else if (this.currentView === 'vocabulary') {
+      Views.renderVocabulary(this.currentVocabTab);
+    }
   },
 
   async removeSentence(italian) {
