@@ -732,6 +732,9 @@ const App = {
   // WORD TAP & POPUP
   // ==========================================
   _popupData: null,
+  _translationCache: new Map(),
+  _hoverTimeout: null,
+  _currentHoverWord: null,
 
   setupWordTap() {
     document.addEventListener('click', (e) => {
@@ -739,9 +742,13 @@ const App = {
       if (word) {
         e.preventDefault();
         e.stopPropagation();
+        this.hideHoverTooltip(); // Hide tooltip when clicking
         this.showWordPopup(word);
       }
     });
+
+    // Setup hover tooltip
+    this.setupHoverTooltip();
 
     document.getElementById('popup-close').addEventListener('click', () => this.hideWordPopup());
     document.getElementById('popup-speak').addEventListener('click', () => {
@@ -856,6 +863,163 @@ const App = {
   hideWordPopup() {
     document.getElementById('word-popup-overlay').classList.remove('visible');
     this._popupData = null;
+  },
+
+  // ==========================================
+  // HOVER TOOLTIP
+  // ==========================================
+  setupHoverTooltip() {
+    const tooltip = document.getElementById('hover-tooltip');
+    
+    // Use event delegation for hover events
+    document.addEventListener('mouseenter', (e) => {
+      const word = e.target.closest('.tappable-word');
+      if (word) {
+        // Clear any pending hide timeout
+        if (this._hoverTimeout) {
+          clearTimeout(this._hoverTimeout);
+          this._hoverTimeout = null;
+        }
+        
+        const wordText = word.dataset.word;
+        const sentence = word.dataset.sentence || '';
+        
+        // Don't show tooltip if word popup is open
+        if (document.getElementById('word-popup-overlay').classList.contains('visible')) {
+          return;
+        }
+        
+        this._currentHoverWord = wordText;
+        this.showHoverTooltip(word, wordText, sentence);
+      }
+    }, true);
+
+    document.addEventListener('mouseleave', (e) => {
+      const word = e.target.closest('.tappable-word');
+      if (word) {
+        // Delay hiding to allow moving to tooltip
+        this._hoverTimeout = setTimeout(() => {
+          this.hideHoverTooltip();
+        }, 150);
+      }
+    }, true);
+
+    // Keep tooltip visible if hovering over it
+    tooltip.addEventListener('mouseenter', () => {
+      if (this._hoverTimeout) {
+        clearTimeout(this._hoverTimeout);
+        this._hoverTimeout = null;
+      }
+    });
+
+    tooltip.addEventListener('mouseleave', () => {
+      this.hideHoverTooltip();
+    });
+  },
+
+  async showHoverTooltip(element, word, sentence) {
+    const tooltip = document.getElementById('hover-tooltip');
+    const wordEl = document.getElementById('hover-tooltip-word');
+    const translationEl = document.getElementById('hover-tooltip-translation');
+    const alternativesEl = document.getElementById('hover-tooltip-alternatives');
+
+    // Position tooltip near the word
+    const rect = element.getBoundingClientRect();
+    const tooltipWidth = 200; // approximate
+    
+    // Calculate position - prefer above the word, fallback to below
+    let top = rect.top - 10;
+    let left = rect.left + (rect.width / 2) - (tooltipWidth / 2);
+    
+    // Adjust if too close to edges
+    if (left < 10) left = 10;
+    if (left + tooltipWidth > window.innerWidth - 10) {
+      left = window.innerWidth - tooltipWidth - 10;
+    }
+
+    // Set initial position (will adjust after measuring)
+    tooltip.style.left = `${left}px`;
+    tooltip.style.top = `${top}px`;
+    tooltip.style.transform = 'translateY(-100%)';
+
+    // Show word immediately
+    wordEl.textContent = word;
+    translationEl.innerHTML = '<span class="loading-dots">' + I18n.t('loadingTooltip') + '</span>';
+    alternativesEl.textContent = '';
+    
+    tooltip.classList.add('visible');
+
+    // Adjust position if tooltip goes off screen
+    setTimeout(() => {
+      const tooltipRect = tooltip.getBoundingClientRect();
+      if (tooltipRect.top < 10) {
+        // Show below the word instead
+        tooltip.style.top = `${rect.bottom + 10}px`;
+        tooltip.style.transform = 'translateY(0)';
+      }
+    }, 10);
+
+    // Check cache first
+    const cacheKey = word.toLowerCase();
+    if (this._translationCache.has(cacheKey)) {
+      const cached = this._translationCache.get(cacheKey);
+      this.updateHoverTooltip(cached.translation, cached.alternatives);
+      return;
+    }
+
+    // Fetch translation
+    try {
+      const lookup = await AI.lookupWord(word, sentence);
+      
+      // Check if we're still showing the same word
+      if (this._currentHoverWord !== word) return;
+      
+      if (lookup && lookup.translation) {
+        this._translationCache.set(cacheKey, {
+          translation: lookup.translation,
+          alternatives: lookup.alternatives || []
+        });
+        this.updateHoverTooltip(lookup.translation, lookup.alternatives || []);
+      } else {
+        // Fallback to Azure translator
+        const translated = await AI.translate(word, 'it', 'de');
+        if (this._currentHoverWord !== word) return;
+        
+        if (translated && !translated.startsWith('⚠️')) {
+          this._translationCache.set(cacheKey, {
+            translation: translated,
+            alternatives: []
+          });
+          this.updateHoverTooltip(translated, []);
+        } else {
+          translationEl.textContent = '—';
+        }
+      }
+    } catch (e) {
+      console.warn('Hover translation failed:', e);
+      if (this._currentHoverWord === word) {
+        translationEl.textContent = '—';
+      }
+    }
+  },
+
+  updateHoverTooltip(translation, alternatives) {
+    const translationEl = document.getElementById('hover-tooltip-translation');
+    const alternativesEl = document.getElementById('hover-tooltip-alternatives');
+    
+    translationEl.textContent = translation;
+    
+    if (alternatives && alternatives.length > 0) {
+      alternativesEl.textContent = I18n.t('alsoMeans') + ': ' + alternatives.join(', ');
+    } else {
+      alternativesEl.textContent = '';
+    }
+  },
+
+  hideHoverTooltip() {
+    const tooltip = document.getElementById('hover-tooltip');
+    tooltip.classList.remove('visible');
+    this._currentHoverWord = null;
   },
 
   // ==========================================

@@ -102,6 +102,8 @@ const I18n = {
       tapWordToSave: 'Tap on a word in the text to save it.',
       remove: 'Remove',
       lookupInWordRef: 'Look up in WordReference',
+      alsoMeans: 'also',
+      loadingTooltip: 'Loading',
       
       // Quiz
       startQuiz: 'Start Quiz',
@@ -313,6 +315,8 @@ const I18n = {
       tapWordToSave: 'Tippe auf ein Wort im Text, um es zu speichern.',
       remove: 'Entfernen',
       lookupInWordRef: 'In WordReference nachschlagen',
+      alsoMeans: 'auch',
+      loadingTooltip: 'Laden',
       
       // Quiz
       startQuiz: 'Quiz starten',
