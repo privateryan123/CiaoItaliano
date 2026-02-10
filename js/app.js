@@ -758,24 +758,46 @@ const App = {
         const word = this._popupData.word;
         const context = this._popupData.sentence; // Use sentence as context for better translation
         
-        // Look up the word using OpenAI for accurate translation
+        // Show loading state
+        const btn = document.getElementById('popup-save-word');
+        const originalText = btn.textContent;
+        btn.textContent = '⏳';
+        btn.disabled = true;
+        
         let german = null;
+        
+        // Step 1: Try word-lookup API (OpenAI with context) - most accurate
         try {
           const lookup = await AI.lookupWord(word, context);
-          if (lookup && lookup.translation) {
+          if (lookup && lookup.translation && !lookup.translation.startsWith('⚠️')) {
             german = lookup.translation;
+            console.log('Word lookup success:', word, '->', german);
           }
         } catch (e) {
-          console.warn('Could not lookup word:', e);
+          console.warn('Word lookup failed:', e);
         }
         
-        // Fallback to simple translation if lookup fails
-        if (!german) {
+        // Step 2: Fallback to Azure Translator API
+        if (!german || german.startsWith('⚠️')) {
           try {
-            german = await AI.translate(word, 'it', 'de');
+            const translated = await AI.translate(word, 'it', 'de');
+            if (translated && !translated.startsWith('⚠️')) {
+              german = translated;
+              console.log('Translation success:', word, '->', german);
+            }
           } catch (e) {
-            console.warn('Could not translate word:', e);
+            console.warn('Translation failed:', e);
           }
+        }
+        
+        // Restore button state
+        btn.textContent = originalText;
+        btn.disabled = false;
+        
+        // Only save if we got a valid translation
+        if (!german || german.startsWith('⚠️')) {
+          this.showToast('⚠️ ' + I18n.t('translationFailed'));
+          return;
         }
         
         const result = await Store.saveWord(word, german);

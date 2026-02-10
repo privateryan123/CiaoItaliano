@@ -5,10 +5,35 @@
 const AI = {
 
   // ==========================================
-  // TRANSLATION (MyMemory — free, no key needed)
+  // TRANSLATION (Azure Translator via Backend - primary)
   // ==========================================
   async translate(text, from = 'de', to = 'it') {
     if (!text || !text.trim()) return '';
+    
+    // Try Azure Translator (backend) first - most reliable
+    try {
+      const response = await fetch('/api/translate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: text.trim(), sourceLanguage: from, targetLanguage: to })
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        if (result.translatedText && this._isValidTranslation(result.translatedText, text)) {
+          return result.translatedText;
+        }
+      }
+    } catch (err) {
+      console.warn('Azure Translator error, falling back to MyMemory:', err);
+    }
+    
+    // Fallback to MyMemory (free, no key needed)
+    return this._translateMyMemory(text, from, to);
+  },
+  
+  // MyMemory fallback translation
+  async _translateMyMemory(text, from, to) {
     const pair = `${from}|${to}`;
     const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${pair}`;
     try {
@@ -55,6 +80,8 @@ const AI = {
     if (original.length >= 3 && t.length === 1) return false;
     // Reject common garbage patterns
     if (/^['"`]+[a-z]?$/.test(t)) return false;
+    // Reject if it contains error markers
+    if (t.startsWith('⚠️')) return false;
     return true;
   },
 
